@@ -1,0 +1,3 @@
+export const MOVE_PARTICLE = 'MOVE_PARTICLE';
+export const ADD_PARTICLE = 'ADD_PARTICLE';
+export const DELETE_PARTICLE = 'DELETE_PARTICLE';
