@@ -1,6 +1,7 @@
-import * as types from '../constants/ActionTypes';
+import * as actionTypes from '../constants/ActionTypes';
 
 const defaultParticleState = {
+  frameRequestId: 0,
   style: {
     opacity: 0.33,
   },
@@ -112,16 +113,26 @@ const initialState = [
 
 export function particles(state = initialState, action) {
   switch (action.type) {
-    case types.MOVE_PARTICLE:
+    case actionTypes.MOVE_PARTICLE:
       return state.map((particle) => {
         return particle.id === action.id ? iterateParticleState(particle, modifiers) : particle;
       });
-    case types.ADD_PARTICLE:
+    case actionTypes.PARTICLE_MOVE_REQUESTED:
+      return state.map((particle) => {
+        if (particle.id === action.particleId) {
+          return Object.assign({}, particle, {
+            frameRequestId: action.frameRequestId
+          });
+        } else {
+          return particle;
+        }
+      });
+    case actionTypes.ADD_PARTICLE:
       return [
         createParticle(),
         ...state
       ];
-    case types.DELETE_PARTICLE:
+    case actionTypes.DELETE_PARTICLE:
       return state.filter((particle) => particle.id !== action.id);
     default:
       return state;

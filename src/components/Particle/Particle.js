@@ -1,6 +1,5 @@
 import './Particle.scss';
 import React, {Component} from 'react';
-import { requestAnimationFrame, cancelAnimationFrame } from '../../utils/animationFrameHelpers';
 
 class Particle extends Component {
 
@@ -9,19 +8,14 @@ class Particle extends Component {
     this.state = {
       style: this.mapStyles(props)
     };
-    this.scheduleMove();
   }
 
-  scheduleMove() {
-    if (this.frameRequestId) {
-      cancelAnimationFrame(this.frameRequestId);
-    }
-    this.frameRequestId = requestAnimationFrame(this.moveMe.bind(this));
+  componentWillMount() {
+    this.requestMove(this.props);
   }
 
-  moveMe() {
-    this.props.actions.moveParticle(this.props.id);
-    this.scheduleMove();
+  requestMove(props) {
+    props.actions.requestParticleMove(props.id, props.frameRequestId);
   }
 
   componentWillReceiveProps() {

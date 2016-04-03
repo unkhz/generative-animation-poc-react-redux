@@ -24,8 +24,8 @@ class Layer extends Component {
   renderParticles() {
     const { particles } = this.state;
     const { actions } = this.props;
-    return particles.map((particle, index) => {
-      return <Particle key={ index } { ...particle } actions={actions}>
+    return particles.map((particle) => {
+      return <Particle key={ particle.id } { ...particle } actions={actions}>
         <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 51 48"><path fill="#800" stroke="none" d="m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z"/></svg>
       </Particle>;
     });
