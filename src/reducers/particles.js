@@ -1,7 +1,6 @@
 import * as types from '../constants/ActionTypes';
 
 const defaultParticleState = {
-  text: '',
   style: {
     opacity: 0.33,
   },
@@ -90,7 +89,7 @@ function iterateParticleState(state, modifiers, rootState=false) {
 }
 
 var particleId = 0;
-function createParticle(character) {
+function createParticle() {
   particleId++;
   return {
     style: Object.assign({}, defaultParticleState.style),
@@ -119,7 +118,7 @@ export function particles(state = initialState, action) {
       });
     case types.ADD_PARTICLE:
       return [
-        createParticle(action.character),
+        createParticle(),
         ...state
       ];
     case types.DELETE_PARTICLE:

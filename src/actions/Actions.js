@@ -2,8 +2,7 @@ import * as types from '../constants/ActionTypes';
 
 export function addParticle(character) {
   return {
-    type: types.ADD_PARTICLE,
-    character: character
+    type: types.ADD_PARTICLE
   };
 }
 
