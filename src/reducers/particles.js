@@ -1,6 +1,8 @@
+import { rand, constrain } from '../utils/reducerHelpers';
 import * as actionTypes from '../constants/ActionTypes';
 
 const defaultParticleState = {
+  sn: 0,
   frameRequestId: 0,
   style: {
     opacity: 0.33,
@@ -20,7 +22,6 @@ const defaultParticleState = {
     translateX: 0,
     translateY: 0,
     translateZ: 0,
-    perspective: 0,
     opacity: 0,
     general: 0,
     slow: 0,
@@ -36,21 +37,36 @@ const defaultParticleState = {
   }
 };
 
-function constrain(value, min, max) {
-  if (typeof value !== 'number') {
-    throw Error('Cannot constrain ' + typeof value);
-  }
-  return Math.min(max, Math.max(min, value));
+var particleId = 0;
+function createParticle() {
+  particleId++;
+  return {
+    sn: defaultParticleState.sn,
+    frameRequestId: defaultParticleState.frameRequestId,
+    style: Object.assign({}, defaultParticleState.style),
+    transform: Object.assign({}, defaultParticleState.transform),
+    speed: Object.assign({}, defaultParticleState.speed),
+    unit: Object.assign({}, defaultParticleState.unit),
+    id: particleId,
+  };
 }
 
-function rand(slowness) {
-  if (typeof slowness !== 'number') {
-    throw Error('Invalid slowness ' + typeof slowness);
-  }
-  return (Math.random()-0.5) / slowness;
+function reduceParticleState(state, reducers, rootState=false) {
+  return Object.keys(state).reduce((memo, key) => {
+    const value = state[key];
+    const modifier = reducers[key];
+
+    if (typeof value === 'object' && typeof modifier === 'object') {
+      memo[key] = reduceParticleState(value, modifier, rootState ? rootState : state);
+    } else {
+      memo[key] = modifier ? modifier(rootState, value) : value;
+    }
+    return memo;
+  }, {});
 }
 
-const modifiers = {
+const reducers = {
+  sn: (state, value) => (value+1),
   style: {
     opacity: (state, value) => constrain(value + state.speed.opacity, 0.11, 0.44)
   },
@@ -75,32 +91,6 @@ const modifiers = {
   }
 };
 
-function iterateParticleState(state, modifiers, rootState=false) {
-  return Object.keys(state).reduce((memo, key) => {
-    const value = state[key];
-    const modifier = modifiers[key];
-
-    if (typeof value === 'object' && typeof modifier === 'object') {
-      memo[key] = iterateParticleState(value, modifier, rootState ? rootState : state);
-    } else {
-      memo[key] = modifier ? modifier(rootState, value) : value;
-    }
-    return memo;
-  }, {});
-}
-
-var particleId = 0;
-function createParticle() {
-  particleId++;
-  return {
-    style: Object.assign({}, defaultParticleState.style),
-    transform: Object.assign({}, defaultParticleState.transform),
-    speed: Object.assign({}, defaultParticleState.speed),
-    unit: Object.assign({}, defaultParticleState.unit),
-    id: particleId,
-  };
-}
-
 const initialState = [
   createParticle(),
   createParticle(),
@@ -115,7 +105,7 @@ export function particles(state = initialState, action) {
   switch (action.type) {
     case actionTypes.MOVE_PARTICLE:
       return state.map((particle) => {
-        return particle.id === action.id ? iterateParticleState(particle, modifiers) : particle;
+        return particle.id === action.id ? reduceParticleState(particle, reducers) : particle;
       });
     case actionTypes.PARTICLE_MOVE_REQUESTED:
       return state.map((particle) => {

@@ -1,30 +1,35 @@
 import './Particle.scss';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 class Particle extends Component {
 
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
-      style: this.mapStyles(props)
-    };
-  }
-
   componentWillMount() {
-    this.requestMove(this.props);
+    this.requestMove();
   }
 
-  requestMove(props) {
-    props.actions.requestParticleMove(props.id, props.frameRequestId);
+  shouldComponentUpdate(nextProps) {
+    return this.props.sn !== nextProps.sn;
   }
 
-  componentWillReceiveProps() {
-    this.setState({
-      style: this.mapStyles(this.props)
-    });
+  componentDidUpdate() {
+    this.requestMove();
   }
 
-  mapStyles(props) {
+  requestMove() {
+    this.props.actions.requestParticleMove(this.props.id, this.props.frameRequestId);
+  }
+
+  render() {
+    return (
+      <div
+        className="particle"
+        style={this.mapPropsToStyle(this.props)}
+        onClick={this.handleClick.bind(this)}
+      >{this.props.children}</div>
+    );
+  }
+
+  mapPropsToStyle(props) {
     const transform = Object.keys(props.transform).reduce((transform, func) => {
       const value = props.transform[func];
       transform.push(func + '(' + value + props.unit[func] + ')');
@@ -33,11 +38,6 @@ class Particle extends Component {
     return Object.assign({}, props.style, {
       transform
     });
-  }
-
-  render() {
-    const { style } = this.state;
-    return <div className="particle" style={style} onClick={this.handleClick.bind(this)}>{this.props.children}</div>;
   }
 
   handleClick(evt) {

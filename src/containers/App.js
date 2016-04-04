@@ -2,24 +2,23 @@ import 'styles/main';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import * as Actions from '../Actions/Actions';
-import LayerContainer from './LayerContainer';
+import Layer from '../components/Layer/Layer';
 import { connect } from 'react-redux';
 
 class App extends Component {
+
   render() {
-    const props = this.props;
     return (
       <div className="page">
-        <LayerContainer {...props} />
+        <span>{this.props.particles.length}</span>
+        <Layer {...this.props} />
       </div>
     );
   }
 }
 
 function mapStateToProps(state) {
-  return {
-    Layer: state.Layer
-  };
+  return state;
 }
 
 function mapDispatchToProps(dispatch) {
