@@ -1,38 +1,36 @@
 import * as types from '../constants/ActionTypes';
 import { requestAnimationFrame, cancelAnimationFrame } from '../utils/animationFrameHelpers';
 
-export function addParticle(character) {
+export function addParticle() {
   return {
     type: types.ADD_PARTICLE
   };
 }
 
-export function requestParticleMove(particleId, frameRequestId) {
+export function requestParticleMove(frameRequestId) {
   return function(dispatch){
     if (frameRequestId) {
       cancelAnimationFrame(frameRequestId);
     }
 
     let newFrameRequestId = requestAnimationFrame(() => {
-      dispatch(moveParticle(particleId));
+      dispatch(moveParticle());
     });
 
-    dispatch(particleMoveRequested(particleId, newFrameRequestId));
+    dispatch(particleMoveRequested(newFrameRequestId));
   };
 }
 
 export function particleMoveRequested(particleId, frameRequestId) {
   return {
     type: types.PARTICLE_MOVE_REQUESTED,
-    particleId,
     frameRequestId
   };
 }
 
-export function moveParticle(id) {
+export function moveParticle() {
   return {
     type: types.MOVE_PARTICLE,
-    id
   };
 }
 

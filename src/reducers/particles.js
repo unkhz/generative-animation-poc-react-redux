@@ -2,8 +2,6 @@ import { rand, constrain } from '../utils/reducerHelpers';
 import * as actionTypes from '../constants/ActionTypes';
 
 const defaultParticleState = {
-  sn: 0,
-  frameRequestId: 0,
   style: {
     opacity: 0.33,
   },
@@ -41,8 +39,6 @@ var particleId = 0;
 function createParticle() {
   particleId++;
   return {
-    sn: defaultParticleState.sn,
-    frameRequestId: defaultParticleState.frameRequestId,
     style: Object.assign({}, defaultParticleState.style),
     transform: Object.assign({}, defaultParticleState.transform),
     speed: Object.assign({}, defaultParticleState.speed),
@@ -66,7 +62,6 @@ function reduceParticleState(state, reducers, rootState=false) {
 }
 
 const reducers = {
-  sn: (state, value) => (value+1),
   style: {
     opacity: (state, value) => constrain(value + state.speed.opacity, 0.11, 0.44)
   },
@@ -105,17 +100,7 @@ export function particles(state = initialState, action) {
   switch (action.type) {
     case actionTypes.MOVE_PARTICLE:
       return state.map((particle) => {
-        return particle.id === action.id ? reduceParticleState(particle, reducers) : particle;
-      });
-    case actionTypes.PARTICLE_MOVE_REQUESTED:
-      return state.map((particle) => {
-        if (particle.id === action.particleId) {
-          return Object.assign({}, particle, {
-            frameRequestId: action.frameRequestId
-          });
-        } else {
-          return particle;
-        }
+        return reduceParticleState(particle, reducers);
       });
     case actionTypes.ADD_PARTICLE:
       return [

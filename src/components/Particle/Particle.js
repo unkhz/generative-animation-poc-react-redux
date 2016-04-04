@@ -3,22 +3,6 @@ import React, { Component } from 'react';
 
 class Particle extends Component {
 
-  componentWillMount() {
-    this.requestMove();
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return this.props.sn !== nextProps.sn;
-  }
-
-  componentDidUpdate() {
-    this.requestMove();
-  }
-
-  requestMove() {
-    this.props.actions.requestParticleMove(this.props.id, this.props.frameRequestId);
-  }
-
   render() {
     return (
       <div

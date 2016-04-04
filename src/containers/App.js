@@ -10,8 +10,8 @@ class App extends Component {
   render() {
     return (
       <div className="page">
-        <span>{this.props.particles.length}</span>
-        <Layer {...this.props} />
+        <span>{this.props.layer.particles.length}</span>
+        <Layer { ...this.props.layer } actions={ this.props.actions } />
       </div>
     );
   }

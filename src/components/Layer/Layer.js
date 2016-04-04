@@ -4,6 +4,22 @@ import Particle from 'components/Particle/Particle';
 
 class Layer extends Component {
 
+  componentWillMount() {
+    this.requestMove();
+  }
+
+  requestMove() {
+    this.props.actions.requestParticleMove(this.props.frameRequestId);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return nextProps.sn !== this.props.sn;
+  }
+
+  componentDidUpdate() {
+    this.requestMove();
+  }
+
   renderParticleContent() {
     return (
       <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 51 48">

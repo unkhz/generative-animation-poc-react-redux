@@ -25,6 +25,11 @@ When each frame is intentionally incremented so that DOM update is always requir
 the whole benefit of having a virtual DOM is lost and turned into overhead instead.
 So, the intention was not to prove anything, but just to see what happens.
 
-The React/Redux POC gets sluggish with 32 particles, while [a pure JavaScript version](https://embed.plnkr.co/773Cms/)
+After first iteration the React/Redux POC seems sluggish with 32 particles, while
+[a pure JavaScript version](https://embed.plnkr.co/773Cms/) of the same concept
 animates 128 particles effortlessly. This leads to think that when DOM updates
 are constant, breaking out of the virtual DOM might be a good idea.
+
+Quick analysis shows that switching from requesting a separate animation frame for each
+particle to updating all particles within one frame, gives a significant boost to performance. 128
+particles is effortless. Next step is to do this with pure JavaScript for comparison.
