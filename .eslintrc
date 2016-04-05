@@ -1,4 +1,10 @@
 {
+  "plugins": [
+    "babel"
+  ],
+
+  "parser": "babel-eslint",
+
   "rules": {
     "semi":   2,
     "quotes": [2, "single"],
@@ -23,7 +29,14 @@
         },
         "SwitchCase":1
       }
-    ]
+    ],
+    "babel/generator-star-spacing": 1,
+    "babel/new-cap": 0,
+    "babel/array-bracket-spacing": 1,
+    "babel/object-curly-spacing": 0,
+    "babel/object-shorthand": 1,
+    "babel/arrow-parens": 1,
+    "babel/no-await-in-loop": 1
   },
 
   "globals": {},
