@@ -16,12 +16,7 @@ function createLayer() {
   };
 }
 
-const initialState = [
-  createLayer(),
-  createLayer(),
-  createLayer(),
-  createLayer(),
-];
+const initialState = Array.apply(null, {length: 8}).map(() => createLayer());
 
 export function layers(state = initialState, action) {
   switch (action.type) {

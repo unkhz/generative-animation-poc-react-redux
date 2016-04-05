@@ -66,24 +66,7 @@ const reducers = {
   }
 };
 
-const initialState = [
-  createParticle(),
-  createParticle(),
-  createParticle(),
-  createParticle(),
-  createParticle(),
-  createParticle(),
-  createParticle(),
-  createParticle(),
-  createParticle(),
-  createParticle(),
-  createParticle(),
-  createParticle(),
-  createParticle(),
-  createParticle(),
-  createParticle(),
-  createParticle(),
-];
+const initialState = Array.apply(null, {length: 16}).map(() => createParticle());
 
 export function particles(state = initialState, action) {
   switch (action.type) {
