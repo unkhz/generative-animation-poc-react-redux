@@ -1,67 +1,47 @@
-import { rand, constrain } from '../utils/reducerHelpers';
+import { rand, constrain, reduceNestedState } from '../utils/reducerHelpers';
 import * as actionTypes from '../constants/ActionTypes';
 
-const defaultParticleState = {
-  style: {
-    opacity: 0,
-  },
-  transform: {
-    rotateX: 0,
-    rotateY: 0,
-    rotateZ: 0,
-    translateX: 0,
-    translateY: 0,
-    translateZ: 0,
-  },
-  speed: {
-    rotateX: 0,
-    rotateY: 0,
-    rotateZ: 0,
-    translateX: 0,
-    translateY: 0,
-    translateZ: 0,
-    opacity: 0,
-    general: 0,
-    slow: 0,
-  },
-  unit: {
-    translateX: 'px',
-    translateY: 'px',
-    translateZ: 'px',
-    rotateX: 'deg',
-    rotateY: 'deg',
-    rotateZ: 'deg',
-    opacity: '',
-  }
-};
-
-var particleId = 0;
+let particleId = 0;
 function createParticle() {
-  particleId++;
   return {
-    style: Object.assign({}, defaultParticleState.style),
-    transform: Object.assign({}, defaultParticleState.transform),
-    speed: Object.assign({}, defaultParticleState.speed),
-    unit: Object.assign({}, defaultParticleState.unit),
-    id: particleId,
+    id: particleId++,
+    sn: 0,
+    style: {
+      opacity: 0,
+    },
+    transform: {
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0,
+      translateX: 0,
+      translateY: 0,
+      translateZ: 0,
+    },
+    speed: {
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0,
+      translateX: 0,
+      translateY: 0,
+      translateZ: 0,
+      opacity: 0,
+      general: 0,
+      slow: 0,
+    },
+    unit: {
+      translateX: 'px',
+      translateY: 'px',
+      translateZ: 'px',
+      rotateX: 'deg',
+      rotateY: 'deg',
+      rotateZ: 'deg',
+      opacity: '',
+    }
   };
 }
 
-function reduceParticleState(state, reducers, rootState=false) {
-  return Object.keys(state).reduce((memo, key) => {
-    const value = state[key];
-    const modifier = reducers[key];
-
-    if (typeof value === 'object' && typeof modifier === 'object') {
-      memo[key] = reduceParticleState(value, modifier, rootState ? rootState : state);
-    } else {
-      memo[key] = modifier ? modifier(rootState, value) : value;
-    }
-    return memo;
-  }, {});
-}
-
 const reducers = {
+  sn: (state, value) => value+1,
   style: {
     opacity: (state, value) => constrain(value + state.speed.opacity, Math.min(value,0.11), 0.22)
   },
@@ -94,13 +74,22 @@ const initialState = [
   createParticle(),
   createParticle(),
   createParticle(),
+  createParticle(),
+  createParticle(),
+  createParticle(),
+  createParticle(),
+  createParticle(),
+  createParticle(),
+  createParticle(),
+  createParticle(),
+  createParticle(),
 ];
 
 export function particles(state = initialState, action) {
   switch (action.type) {
     case actionTypes.MOVE_PARTICLE:
       return state.map((particle) => {
-        return reduceParticleState(particle, reducers);
+        return reduceNestedState(particle, reducers);
       });
     case actionTypes.ADD_PARTICLE:
       return [

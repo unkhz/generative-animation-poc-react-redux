@@ -3,6 +3,10 @@ import React, { Component } from 'react';
 
 class Particle extends Component {
 
+  shouldComponentUpdate(nextProps) {
+    return nextProps.sn !== this.props.sn;
+  }
+
   render() {
     return (
       <div
@@ -19,9 +23,10 @@ class Particle extends Component {
       transform.push(func + '(' + value + props.unit[func] + ')');
       return transform;
     }, []).join(' ');
-    return Object.assign({}, props.style, {
+    return {
+      ...props.style,
       transform
-    });
+    };
   }
 
   handleClick(evt) {

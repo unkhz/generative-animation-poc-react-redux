@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
-import { layer } from './layer';
+import { layers } from './layers';
+import { particles } from './particles';
 
 export default combineReducers({
-  layer
+  layers,
+  particles
 });

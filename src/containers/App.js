@@ -7,11 +7,37 @@ import { connect } from 'react-redux';
 
 class App extends Component {
 
+  componentWillMount() {
+    this.requestMove();
+  }
+
+  requestMove() {
+    this.props.actions.requestParticleMove(this.props.frameRequestId);
+  }
+
+  componentDidUpdate() {
+  }
+
+  renderLayers() {
+    const { layers } = this.props;
+    return layers.map((layer) => {
+      return (
+        <Layer
+          key={layer.id}
+          { ...layer }
+          particles={ this.props.particles.filter((p) => p.id%layers.length === layer.id) }
+          actions={ this.props.actions }
+        />
+      );
+    });
+  }
+
   render() {
+    let isColorEnabled = this.props.layers[0].isColorEnabled;
     return (
       <div className="page">
-        <span>{this.props.layer.particles.length}</span>
-        <Layer { ...this.props.layer } actions={ this.props.actions } />
+        <span>{this.props.particles.length}</span>
+        {this.renderLayers()}
       </div>
     );
   }

@@ -11,3 +11,17 @@ export function rand(slowness) {
   }
   return (Math.random()-0.5) / slowness;
 }
+
+export function reduceNestedState(state, reducers, rootState=false) {
+  return Object.keys(state).reduce((memo, key) => {
+    const value = state[key];
+    const reducer = reducers[key];
+
+    if (typeof value === 'object' && typeof reducer === 'object') {
+      memo[key] = reduceNestedState(value, reducer, rootState ? rootState : state);
+    } else {
+      memo[key] = reducer ? reducer(rootState, value) : value;
+    }
+    return memo;
+  }, {});
+}

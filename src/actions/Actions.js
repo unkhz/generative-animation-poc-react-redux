@@ -15,6 +15,7 @@ export function requestParticleMove(frameRequestId) {
 
     let newFrameRequestId = requestAnimationFrame(() => {
       dispatch(moveParticle());
+      dispatch(requestParticleMove());
     });
 
     dispatch(particleMoveRequested(newFrameRequestId));
