@@ -3,7 +3,7 @@ import * as actionTypes from '../constants/ActionTypes';
 
 const defaultParticleState = {
   style: {
-    opacity: 0.33,
+    opacity: 0,
   },
   transform: {
     rotateX: 0,
@@ -63,7 +63,7 @@ function reduceParticleState(state, reducers, rootState=false) {
 
 const reducers = {
   style: {
-    opacity: (state, value) => constrain(value + state.speed.opacity, 0.11, 0.44)
+    opacity: (state, value) => constrain(value + state.speed.opacity, Math.min(value,0.11), 0.22)
   },
   transform: {
     translateX: (state, value) => constrain(value + state.speed.translateX, -100, 100),
