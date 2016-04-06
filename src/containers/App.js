@@ -25,11 +25,20 @@ class App extends Component {
     });
   }
 
+  renderHelp() {
+    const count = this.props.particles.filter((p) => !p.isToBeDestroyed).length;
+    if (count === 0) {
+      return <div>scroll to add particles</div>;
+    } else {
+      return <div>{count}</div>;
+    }
+  }
+
   render() {
     let isColorEnabled = this.props.layers[0].isColorEnabled;
     return (
       <div className="page" onWheel={this.onWheel.bind(this)}>
-        <span>{this.props.particles.filter((p) => !p.isToBeDestroyed).length}</span>
+        {this.renderHelp()}
         {this.renderLayers()}
       </div>
     );
