@@ -1,7 +1,7 @@
 {
-  "name": "rr-boilerplate",
-  "description": "React&Redux boilerplate",
-  "author": "Alexander Tarasyuk",
+  "name": "generative-animation-poc-react-redux",
+  "description": "Generative animation POC with React/Redux",
+  "author": "Juhani Pelli",
   "license": "MIT",
   "version": "0.0.1",
   "scripts": {

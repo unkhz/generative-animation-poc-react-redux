@@ -1,9 +1,9 @@
 # Generative animation POC with React/Redux
 
   * React used for view layer / virtual DOM
-  * Redux used for handling updates to individual particle states
+  * Redux used for handling updates to individual particle states
   * Idea of generative animation based on [Distract.js](https://github.com/unkhz/Distract.js)
-  * [rr-boilerplate](https://github.com/a-tarasyuk/rr-boilerplate.git) used for build and scaffolding
+  * [rr-boilerplate](https://github.com/a-tarasyuk/rr-boilerplate.git) used for build and scaffolding
 
 ### Dependencies
 
