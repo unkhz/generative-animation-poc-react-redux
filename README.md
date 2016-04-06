@@ -32,4 +32,6 @@ are constant, breaking out of the virtual DOM might be a good idea.
 
 Quick analysis shows that switching from requesting a separate animation frame for each
 particle to updating all particles within one frame, gives a significant boost to performance. 128
-particles is effortless. Next step is to do this with pure JavaScript for comparison.
+particles is effortless. With 1024 particles the difference is still noticeable to [pure
+Javascript version](https://embed.plnkr.co/cR14fu/) albeit not as drastic as with one frame
+per particle update.
