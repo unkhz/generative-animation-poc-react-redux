@@ -38,7 +38,6 @@ class Layer extends Component {
     return (
       <div
         className="layer"
-        onClick={this.props.actions.addParticle}
       >{this.renderParticles()}</div>
     );
   }

@@ -8,14 +8,7 @@ import { connect } from 'react-redux';
 class App extends Component {
 
   componentWillMount() {
-    this.requestMove();
-  }
-
-  requestMove() {
-    this.props.actions.requestParticleMove(this.props.frameRequestId);
-  }
-
-  componentDidUpdate() {
+    this.props.actions.appMounted();
   }
 
   renderLayers() {
@@ -35,11 +28,17 @@ class App extends Component {
   render() {
     let isColorEnabled = this.props.layers[0].isColorEnabled;
     return (
-      <div className="page">
-        <span>{this.props.particles.length}</span>
+      <div className="page" onWheel={this.onWheel.bind(this)}>
+        <span>{this.props.particles.filter((p) => !p.isToBeDestroyed).length}</span>
         {this.renderLayers()}
       </div>
     );
+  }
+
+  onWheel(evt) {
+    this.props.actions.appScrollWheeled(evt.deltaX, evt.deltaY);
+    evt.stopPropagation();
+    evt.preventDefault();
   }
 }
 

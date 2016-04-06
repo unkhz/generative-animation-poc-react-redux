@@ -12,7 +12,6 @@ class Particle extends Component {
       <div
         className="particle"
         style={this.mapPropsToStyle(this.props)}
-        onClick={this.handleClick.bind(this)}
       >{this.props.children}</div>
     );
   }
@@ -27,11 +26,6 @@ class Particle extends Component {
       ...props.style,
       transform
     };
-  }
-
-  handleClick(evt) {
-    this.props.actions.deleteParticle(this.props.id);
-    evt.stopPropagation();
   }
 }
 
