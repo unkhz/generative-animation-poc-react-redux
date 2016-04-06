@@ -1,9 +1,13 @@
 # Generative animation POC with React/Redux
 
   * React used for view layer / virtual DOM
-  * Redux used for handling updates to individual particle states
+  * Redux used for state management
   * Idea of generative animation based on [Distract.js](https://github.com/unkhz/Distract.js)
   * [rr-boilerplate](https://github.com/a-tarasyuk/rr-boilerplate.git) used for build and scaffolding
+
+### Live demo
+
+http://un.khz.fi/generative-animation-poc-react-redux/
 
 ### Dependencies
 
@@ -18,9 +22,9 @@
 - `npm start`- starts production build and run local web server in port 9999
 - `npm run build` - starts production build *(puts result to `build` folder)*
 
-### Conclusions
+### Findings
 
-First of all, using virtual DOM for generative animation is clearly an idiotic idea.
+First of all, using virtual DOM for generative animation is technically an idiotic idea.
 When each frame is intentionally incremented so that DOM update is always required,
 the whole benefit of having a virtual DOM is lost and turned into overhead instead.
 So, the intention was not to prove anything, but just to see what happens.
