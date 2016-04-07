@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import * as Actions from '../Actions/Actions';
 import Layer from '../components/Layer/Layer';
 import { connect } from 'react-redux';
+import './App.scss';
 
 class App extends Component {
 
@@ -28,9 +29,9 @@ class App extends Component {
   renderHelp() {
     const count = this.props.particles.filter((p) => !p.isToBeDestroyed).length;
     if (count === 0) {
-      return <div>scroll to add particles</div>;
+      return <div className="layer help" data-count={count}><div>scroll to add particles</div></div>;
     } else {
-      return <div>{count}</div>;
+      return <div className="layer help" data-count={count}><div>{count}</div></div>;
     }
   }
 
