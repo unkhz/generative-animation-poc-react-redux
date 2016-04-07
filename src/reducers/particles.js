@@ -2,11 +2,11 @@ import { rand, constrain, reduceNestedState } from '../utils/reducerHelpers';
 import * as actionTypes from '../constants/ActionTypes';
 
 let particleId = 0;
-function createParticle(rules) {
+function createParticle({moveRules}) {
   return {
     id: particleId++,
     sn: 0,
-    isToBeDestroyed: 0,
+    isToBeDestroyed: false,
     style: {
       opacity: 0,
     },
@@ -41,7 +41,7 @@ function createParticle(rules) {
       rotateZ: 'deg',
       opacity: '',
     },
-    ...rules
+    moveRules
   };
 }
 
@@ -80,8 +80,7 @@ function addParticle(state, action) {
     ...state.particles,
     ...Array.apply(null, {length: action.count || 1}).map(() => {
       return createParticle({
-        moveRules: action.moveRules,
-        mouseMoveRules: action.mouseMoveRules
+        moveRules: action.moveRules
       });
     })
   ];

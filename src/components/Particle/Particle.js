@@ -1,5 +1,7 @@
 import './Particle.scss';
 import React, { Component } from 'react';
+import * as shapes from 'constants/Shapes';
+
 
 class Particle extends Component {
 
@@ -28,5 +30,10 @@ class Particle extends Component {
     };
   }
 }
+
+Particle.propTypes = {
+  actions: shapes.actions,
+  ...shapes.particle
+};
 
 export default Particle;

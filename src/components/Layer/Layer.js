@@ -1,5 +1,6 @@
 import './Layer.scss';
 import React, { Component } from 'react';
+import * as shapes from 'constants/Shapes';
 import Particle from 'components/Particle/Particle';
 
 class Layer extends Component {
@@ -41,6 +42,11 @@ class Layer extends Component {
       >{this.renderParticles()}</div>
     );
   }
+};
+
+Layer.propTypes = {
+  actions: shapes.actions,
+  particles: shapes.particles,
 };
 
 export default Layer;

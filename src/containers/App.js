@@ -1,8 +1,9 @@
 import 'styles/main';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
-import * as Actions from '../Actions/Actions';
-import Layer from '../components/Layer/Layer';
+import * as Actions from 'actions/Actions';
+import * as shapes from 'constants/Shapes';
+import Layer from 'components/Layer/Layer';
 import { connect } from 'react-redux';
 import './App.scss';
 
@@ -63,12 +64,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 App.propTypes = {
-  actions: PropTypes.objectOf(PropTypes.func),
-  layers: PropTypes.arrayOf(PropTypes.object),
-  particles: PropTypes.shape({
-    count: PropTypes.number,
-    particles: PropTypes.arrayOf(PropTypes.object)
-  }),
+  actions: shapes.actions,
+  layers: shapes.layers,
+  particles: shapes.particleCollection,
 };
 
 export default connect(
