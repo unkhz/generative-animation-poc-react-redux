@@ -1,5 +1,5 @@
 import 'styles/main';
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import * as Actions from '../Actions/Actions';
 import Layer from '../components/Layer/Layer';
@@ -13,13 +13,13 @@ class App extends Component {
   }
 
   renderLayers() {
-    const { layers } = this.props;
+    const { layers, particles: { particles } } = this.props;
     return layers.map((layer) => {
       return (
         <Layer
           key={layer.id}
           { ...layer }
-          particles={ this.props.particles.filter((p) => p.id%layers.length === layer.id) }
+          particles={ particles.filter((p) => p.id%layers.length === layer.id) }
           actions={ this.props.actions }
         />
       );
@@ -27,7 +27,7 @@ class App extends Component {
   }
 
   renderHelp() {
-    const count = this.props.particles.filter((p) => !p.isToBeDestroyed).length;
+    const { layers, particles: { count, particles } } = this.props;
     if (count === 0) {
       return <div className="layer help" data-count={count}><div>scroll to add particles</div></div>;
     } else {
@@ -36,7 +36,7 @@ class App extends Component {
   }
 
   render() {
-    let isColorEnabled = this.props.layers[0].isColorEnabled;
+    const { layers } = this.props;
     return (
       <div className="page" onWheel={this.onWheel.bind(this)}>
         {this.renderHelp()}
@@ -61,6 +61,15 @@ function mapDispatchToProps(dispatch) {
     actions: bindActionCreators(Actions, dispatch)
   };
 }
+
+App.propTypes = {
+  actions: PropTypes.objectOf(PropTypes.func),
+  layers: PropTypes.arrayOf(PropTypes.object),
+  particles: PropTypes.shape({
+    count: PropTypes.number,
+    particles: PropTypes.arrayOf(PropTypes.object)
+  }),
+};
 
 export default connect(
   mapStateToProps,

@@ -45,44 +45,80 @@ function createParticle(rules) {
   };
 }
 
-export function particles(state = [], action) {
+const initialState = {
+  count: 0,
+  particles: []
+};
+
+export function particles(state = initialState, action) {
   switch (action.type) {
 
     case actionTypes.MOVE_PARTICLE:
-      return state
+      return {
+        ...state,
+        particles: state.particles
         .map((particle) => reduceNestedState(particle, particle.moveRules))
-        .filter((particle) => !particle.isToBeDestroyed || particle.style.opacity > 0);
+        .filter((particle) => !particle.isToBeDestroyed || particle.style.opacity > 0)
+      };
 
     case actionTypes.ADD_PARTICLE:
-      return [
-        ...Array.apply(null, {length: action.count || 1}).map(() => {
-          return createParticle({
-            moveRules: action.moveRules,
-            mouseMoveRules: action.mouseMoveRules
-          });
-        }),
-        ...state
-      ];
+      return addParticle(state, action);
 
     case actionTypes.DELETE_PARTICLE:
-      return state.map((particle) => {
-        if (particle.id === action.id) {
-          particle.isToBeDestroyed = true;
-        }
-        return particle;
-      });
+      return deleteParticle(state, action);
 
     case actionTypes.DELETE_SOME_PARTICLES:
-      let count = action.count;
-      return state.map((particle) => {
-        if (!particle.isToBeDestroyed && count > 0) {
-          count--;
-          particle.isToBeDestroyed = true;
-        }
-        return particle;
-      });
+      return deleteSomeParticles(state, action);
 
     default:
       return state;
   }
+}
+
+function addParticle(state, action) {
+  const particles = [
+    ...state.particles,
+    ...Array.apply(null, {length: action.count || 1}).map(() => {
+      return createParticle({
+        moveRules: action.moveRules,
+        mouseMoveRules: action.mouseMoveRules
+      });
+    })
+  ];
+  return {
+    particles,
+    count: countParticles(particles)
+  };
+}
+
+function deleteParticle(state, action) {
+  const particles = state.particles.map((particle) => {
+    if (particle.id === action.id) {
+      particle.isToBeDestroyed = true;
+    }
+    return particle;
+  });
+  return {
+    particles,
+    count: countParticles(particles)
+  };
+}
+
+function deleteSomeParticles(state, action) {
+  let count = action.count;
+  const particles = state.particles.map((particle) => {
+    if (!particle.isToBeDestroyed && count > 0) {
+      count--;
+      particle.isToBeDestroyed = true;
+    }
+    return particle;
+  });
+  return {
+    particles,
+    count: countParticles(particles)
+  };
+}
+
+function countParticles(particles) {
+  return particles.filter((p) => !p.isToBeDestroyed).length;
 }
