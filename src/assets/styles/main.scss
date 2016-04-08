@@ -17,6 +17,7 @@ html, body {
       user-select: none;           /* non-prefixed version, currently
                                     not supported by any browser */
     }
+    overflow:hidden;
 }
 
 #root {
