@@ -6,13 +6,21 @@ export function appMounted() {
   return requestParticleMove();
 }
 
+export function envResized(width, height) {
+  return {
+    type: types.ENV_RESIZED,
+    width,
+    height
+  };
+}
+
 export function appScrollWheeled(deltaX, deltaY) {
   return function(dispatch){
-    const normalizedValue = Math.min(10, Math.round(deltaY/50));
+    const normalizedValue = 1;
     if (deltaY > 0) {
       dispatch(addParticle(normalizedValue));
     } else {
-      dispatch(deleteSomeParticles(-normalizedValue));
+      dispatch(deleteSomeParticles(normalizedValue));
     }
   };
 }

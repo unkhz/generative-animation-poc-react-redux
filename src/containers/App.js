@@ -11,6 +11,14 @@ class App extends Component {
 
   componentWillMount() {
     this.props.actions.appMounted();
+    window.addEventListener('resize', () => {
+      this.resizeEnv();
+    });
+    this.resizeEnv();
+  }
+
+  resizeEnv() {
+    this.props.actions.envResized(window.innerWidth, window.innerHeight);
   }
 
   renderLayers() {

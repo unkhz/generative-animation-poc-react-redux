@@ -12,16 +12,16 @@ export const particleMoveRules = {
     }
   },
   transform: {
-    translateX: (state, value) => constrain(value + state.speed.translateX, -100, 100),
-    translateY: (state, value) => constrain(value + state.speed.translateY, -100, 100),
-    translateZ: (state, value) => constrain(value + state.speed.translateZ, -100, 100),
+    translateX: (state, value) => constrain(value + state.speed.translateX, -state.env.radius/3, state.env.radius/3),
+    translateY: (state, value) => constrain(value + state.speed.translateY, -state.env.radius/3, state.env.radius/3),
+    translateZ: (state, value) => constrain(value + state.speed.translateZ, -state.env.radius/3, state.env.radius/3),
     rotateX: (state, value) => value + state.speed.rotateX,
     rotateY: (state, value) => value + state.speed.rotateY,
     rotateZ: (state, value) => value + state.speed.rotateZ,
   },
   speed: {
     slow: (state, value) => constrain(value + rand(1000),-0.005,0.005),
-    general: (state, value) => constrain(value + rand(1000),-0.05,0.05),
+    general: (state, value) => constrain(value + rand(100),-0.5,0.5),
     rotateX: (state, value) => constrain(value + state.speed.general + rand(100), -0.5, 0.5),
     rotateY: (state, value) => constrain(value + state.speed.general + rand(100), -0.5, 0.5),
     rotateZ: (state, value) => constrain(value + state.speed.general + rand(100), -0.5, 0.5),

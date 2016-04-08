@@ -12,6 +12,7 @@ export const particle = types.shape({
   sn: types.number.isRequired,
   isToBeDestroyed: types.bool.isRequired,
   style: types.objectOf(types.number).isRequired,
+  env: types.objectOf(types.number).isRequired,
   transform: types.objectOf(types.number).isRequired,
   speed: types.objectOf(types.number).isRequired,
   unit: types.objectOf(types.string).isRequired,

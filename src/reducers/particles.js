@@ -10,6 +10,9 @@ function createParticle({moveRules}) {
     style: {
       opacity: 0,
     },
+    env: {
+      radius: 100
+    },
     transform: {
       rotateX: 0,
       rotateY: 0,
@@ -47,17 +50,33 @@ function createParticle({moveRules}) {
 
 const initialState = {
   count: 0,
+  env: {
+    radius: 100
+  },
   particles: []
 };
 
 export function particles(state = initialState, action) {
   switch (action.type) {
 
+    case actionTypes.ENV_RESIZED:
+      return {
+        ...state,
+        env: {
+          radius: Math.min(action.width, action.height)/2
+        }
+      };
+
     case actionTypes.MOVE_PARTICLE:
       return {
         ...state,
         particles: state.particles
-        .map((particle) => reduceNestedState(particle, particle.moveRules))
+        .map((particle) => {
+          return reduceNestedState({
+            ...particle,
+            env: state.env,
+          }, particle.moveRules);
+        })
         .filter((particle) => !particle.isToBeDestroyed || particle.style.opacity > 0)
       };
 
@@ -78,15 +97,16 @@ export function particles(state = initialState, action) {
 function addParticle(state, action) {
   const particles = [
     ...state.particles,
-    ...Array.apply(null, {length: action.count || 1}).map(() => {
+    ...Array.apply(null, {length: action.count}).map(() => {
       return createParticle({
         moveRules: action.moveRules
       });
     })
   ];
   return {
+    ...state,
     particles,
-    count: countParticles(particles)
+    count: countParticles(particles),
   };
 }
 
@@ -98,8 +118,9 @@ function deleteParticle(state, action) {
     return particle;
   });
   return {
+    ...state,
     particles,
-    count: countParticles(particles)
+    count: countParticles(particles),
   };
 }
 
@@ -113,8 +134,9 @@ function deleteSomeParticles(state, action) {
     return particle;
   });
   return {
+    ...state,
     particles,
-    count: countParticles(particles)
+    count: countParticles(particles),
   };
 }
 
