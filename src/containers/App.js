@@ -44,7 +44,7 @@ class App extends Component {
   render() {
     const { layers } = this.props;
     return (
-      <div className="page">
+      <div className="full-screen-container app">
         {this.renderHelp()}
         {this.renderLayers()}
       </div>

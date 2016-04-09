@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import * as Actions from 'actions/Actions';
 import * as shapes from 'constants/Shapes';
 import { connect } from 'react-redux';
+import Touchable from 'components/Touchable/Touchable';
 
 class Environment extends Component {
 
@@ -55,19 +56,35 @@ class Environment extends Component {
   }
 
   onWheel(evt) {
-    // wheel controls amount of particles
-    if (evt.deltaY > 0) {
-      this.props.actions.addParticle(1);
-    } else {
-      this.props.actions.deleteSomeParticles(1);
-    }
+    this.addOrRemoveParticles(evt.deltaY);
     evt.stopPropagation();
     evt.preventDefault();
   }
 
+  onTouchDrag(evt, delta) {
+    if (delta.length === 1) {
+      this.addOrRemoveParticles(delta[0].deltaY);
+    }
+  }
+
+  addOrRemoveParticles(delta) {
+    if (delta > 0) {
+      this.props.actions.addParticle(1);
+    } else if (delta < 0) {
+      this.props.actions.deleteSomeParticles(1);
+    }
+  }
+
   render() {
-    const { children } = this.props;
-    return Children.only(children);
+    return (
+      <Touchable
+        className="full-screen-container"
+        onTouchDrag={this.onTouchDrag.bind(this)}
+        onTouchMove={(evt) => evt.preventDefault()}
+      >
+        {this.props.children}
+      </Touchable>
+    );
   }
 }
 
