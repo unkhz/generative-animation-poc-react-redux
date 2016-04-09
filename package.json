@@ -1,9 +1,10 @@
 {
   "name": "generative-animation-poc-react-redux",
   "description": "Generative animation POC with React/Redux",
+  "repository": "https://github.com/unkhz/generative-animation-poc-react-redux",
   "author": "Juhani Pelli",
   "license": "MIT",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "clean": "node_modules/.bin/rimraf build/",
     "build": "npm run clean && node_modules/.bin/webpack --config webpack/production.config.babel.js",
@@ -38,7 +39,7 @@
   },
   "dependencies": {
     "classnames": "^2.2.3",
-    "react": "^0.14.8",
+    "react": "^15.0.1",
     "react-redux": "^4.4.1",
     "redux-thunk": "^2.0.1",
     "redux": "^3.3.1"
