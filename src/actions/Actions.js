@@ -14,17 +14,6 @@ export function envResized(width, height) {
   };
 }
 
-export function appScrollWheeled(deltaX, deltaY) {
-  return function(dispatch){
-    const normalizedValue = 1;
-    if (deltaY > 0) {
-      dispatch(addParticle(normalizedValue));
-    } else {
-      dispatch(deleteSomeParticles(normalizedValue));
-    }
-  };
-}
-
 export function toggleAnimation() {
   return {
     type: types.TOGGLE_ANIMATION

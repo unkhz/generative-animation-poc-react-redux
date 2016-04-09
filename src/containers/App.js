@@ -44,17 +44,11 @@ class App extends Component {
   render() {
     const { layers } = this.props;
     return (
-      <div className="page" onWheel={this.onWheel.bind(this)}>
+      <div className="page">
         {this.renderHelp()}
         {this.renderLayers()}
       </div>
     );
-  }
-
-  onWheel(evt) {
-    this.props.actions.appScrollWheeled(evt.deltaX, evt.deltaY);
-    evt.stopPropagation();
-    evt.preventDefault();
   }
 }
 
