@@ -5,6 +5,17 @@ export function constrain(value, min, max) {
   return Math.min(max, Math.max(min, value));
 }
 
+export function gradualConstrain(originalValue, deltaValue, min, max, nudgeAmount) {
+  let modifiedValue =  originalValue + deltaValue;
+  if (modifiedValue > max) {
+    return Math.max(originalValue - nudgeAmount, max);
+  } else if (modifiedValue < min) {
+    return Math.min(originalValue + nudgeAmount, min);
+  } else {
+    return modifiedValue;
+  }
+}
+
 export function rand(slowness) {
   if (typeof slowness !== 'number') {
     throw Error('Invalid slowness ' + typeof slowness);

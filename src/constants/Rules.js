@@ -1,4 +1,4 @@
-import { rand, constrain, reduceNestedState } from '../utils/reducerHelpers';
+import { rand, constrain, reduceNestedState, gradualConstrain } from '../utils/reducerHelpers';
 
 export const particleMoveRules = {
   sn: (state, value) => value+1,
@@ -12,9 +12,12 @@ export const particleMoveRules = {
     }
   },
   transform: {
-    translateX: (state, value) => constrain(value + state.speed.translateX, -state.env.radius/3, state.env.radius/3),
-    translateY: (state, value) => constrain(value + state.speed.translateY, -state.env.radius/3, state.env.radius/3),
-    translateZ: (state, value) => constrain(value + state.speed.translateZ, -state.env.radius/3, state.env.radius/3),
+    scaleX: (state, value) => gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033),
+    scaleY: (state, value) => gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033),
+    scaleZ: (state, value) => gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033),
+    translateX: (state, value) => gradualConstrain(value, state.speed.translateX, -state.env.radius/3, state.env.radius/3, 0.1),
+    translateY: (state, value) => gradualConstrain(value, state.speed.translateY, -state.env.radius/3, state.env.radius/3, 0.1),
+    translateZ: (state, value) => gradualConstrain(value, state.speed.translateZ, -state.env.radius/3, state.env.radius/3, 0.1),
     rotateX: (state, value) => value + state.speed.rotateX,
     rotateY: (state, value) => value + state.speed.rotateY,
     rotateZ: (state, value) => value + state.speed.rotateZ,

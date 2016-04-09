@@ -14,6 +14,9 @@ function createParticle({moveRules}) {
       radius: 100
     },
     transform: {
+      scaleX: 1,
+      scaleY: 1,
+      scaleZ: 1,
       rotateX: 0,
       rotateY: 0,
       rotateZ: 0,
