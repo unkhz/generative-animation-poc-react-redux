@@ -25,6 +25,12 @@ export function appScrollWheeled(deltaX, deltaY) {
   };
 }
 
+export function toggleAnimation() {
+  return {
+    type: types.TOGGLE_ANIMATION
+  };
+}
+
 export function addParticle(count) {
   return {
     type: types.ADD_PARTICLE,

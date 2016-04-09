@@ -50,6 +50,7 @@ function createParticle({moveRules}) {
 
 const initialState = {
   count: 0,
+  isPaused: false,
   env: {
     radius: 100
   },
@@ -68,17 +69,7 @@ export function particles(state = initialState, action) {
       };
 
     case actionTypes.MOVE_PARTICLE:
-      return {
-        ...state,
-        particles: state.particles
-        .map((particle) => {
-          return reduceNestedState({
-            ...particle,
-            env: state.env,
-          }, particle.moveRules);
-        })
-        .filter((particle) => !particle.isToBeDestroyed || particle.style.opacity > 0)
-      };
+      return moveParticle(state, action);
 
     case actionTypes.ADD_PARTICLE:
       return addParticle(state, action);
@@ -89,9 +80,33 @@ export function particles(state = initialState, action) {
     case actionTypes.DELETE_SOME_PARTICLES:
       return deleteSomeParticles(state, action);
 
+    case actionTypes.TOGGLE_ANIMATION:
+      return {
+        ...state,
+        isPaused: !state.isPaused
+      };
+
     default:
       return state;
   }
+}
+
+function moveParticle(state, action) {
+  let particles = state.particles;
+
+  if (!state.isPaused) {
+    particles = state.particles.map((particle) => {
+      return reduceNestedState({
+        ...particle,
+        env: state.env,
+      }, particle.moveRules);
+    });
+  }
+
+  return {
+    ...state,
+    particles: particles.filter((particle) => !particle.isToBeDestroyed || particle.style.opacity > 0)
+  };
 }
 
 function addParticle(state, action) {

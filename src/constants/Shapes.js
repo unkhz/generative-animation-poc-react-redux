@@ -4,6 +4,8 @@ export const actions = types.objectOf(types.func).isRequired;
 
 export const particleCollection = types.shape({
   count: types.number.isRequired,
+  isPaused: types.bool.isRequired,
+  env: types.objectOf(types.number).isRequired,
   particles,
 }).isRequired;
 

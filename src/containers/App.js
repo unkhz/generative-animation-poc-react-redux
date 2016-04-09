@@ -11,14 +11,6 @@ class App extends Component {
 
   componentWillMount() {
     this.props.actions.appMounted();
-    window.addEventListener('resize', () => {
-      this.resizeEnv();
-    });
-    this.resizeEnv();
-  }
-
-  resizeEnv() {
-    this.props.actions.envResized(window.innerWidth, window.innerHeight);
   }
 
   renderLayers() {
@@ -38,7 +30,12 @@ class App extends Component {
   renderHelp() {
     const { layers, particles: { count, particles } } = this.props;
     if (count === 0) {
-      return <div className="layer help" data-count={count}><div>scroll to add particles</div></div>;
+      return (
+        <div className="help" data-count={count}><div>
+          scroll to add particles<br/>
+          space to pause
+        </div></div>
+      );
     } else {
       return <div className="layer help" data-count={count}><div>{count}</div></div>;
     }
