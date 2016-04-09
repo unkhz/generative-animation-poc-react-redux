@@ -9,6 +9,14 @@ import './App.scss';
 
 class App extends Component {
 
+  static get propTypes() {
+    return {
+      actions: shapes.actions,
+      layers: shapes.layers,
+      particles: shapes.particleCollection,
+    };
+  };
+
   componentWillMount() {
     this.props.actions.appMounted();
   }
@@ -61,12 +69,6 @@ function mapDispatchToProps(dispatch) {
     actions: bindActionCreators(Actions, dispatch)
   };
 }
-
-App.propTypes = {
-  actions: shapes.actions,
-  layers: shapes.layers,
-  particles: shapes.particleCollection,
-};
 
 export default connect(
   mapStateToProps,

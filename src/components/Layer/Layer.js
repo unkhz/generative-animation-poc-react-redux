@@ -5,6 +5,13 @@ import Particle from 'components/Particle/Particle';
 
 class Layer extends Component {
 
+  static get propTypes() {
+    return {
+      actions: shapes.actions,
+      particles: shapes.particles,
+    };
+  };
+
   shouldComponentUpdate(nextProps) {
     return nextProps.sn !== this.props.sn;
   }
@@ -42,11 +49,6 @@ class Layer extends Component {
       >{this.renderParticles()}</div>
     );
   }
-};
-
-Layer.propTypes = {
-  actions: shapes.actions,
-  particles: shapes.particles,
 };
 
 export default Layer;

@@ -4,6 +4,13 @@ import * as shapes from 'constants/Shapes';
 
 
 class Particle extends Component {
+  
+  static get propTypes() {
+    return {
+      actions: shapes.actions,
+      ...shapes.particle
+    };
+  }
 
   shouldComponentUpdate(nextProps) {
     return nextProps.sn !== this.props.sn;
@@ -30,10 +37,5 @@ class Particle extends Component {
     };
   }
 }
-
-Particle.propTypes = {
-  actions: shapes.actions,
-  ...shapes.particle
-};
 
 export default Particle;
