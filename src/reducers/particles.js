@@ -1,8 +1,9 @@
-import { rand, constrain, reduceNestedState } from '../utils/reducerHelpers';
-import * as actionTypes from '../constants/ActionTypes';
+import { rand, constrain, reduceNestedState } from 'utils/reducerHelpers';
+import * as actionTypes from 'constants/ActionTypes';
+import {RulesType, ParticleType, ParticleCollectionType, ActionType} from 'constants/Types';
 
 let particleId = 0;
-function createParticle({moveRules}) {
+function createParticle({moveRules}: {[id: string]: RulesType}): ParticleType {
   return {
     id: particleId++,
     sn: 0,
@@ -60,7 +61,7 @@ const initialState = {
   particles: []
 };
 
-export function particles(state = initialState, action) {
+export function particles(state: ParticleCollectionType = initialState, action: ActionType): ParticleCollectionType {
   switch (action.type) {
 
     case actionTypes.ENV_RESIZED:
@@ -94,11 +95,11 @@ export function particles(state = initialState, action) {
   }
 }
 
-function moveParticle(state, action) {
+function moveParticle(state: ParticleCollectionType, action: ActionType): ParticleCollectionType {
   let particles = state.particles;
 
   if (!state.isPaused) {
-    particles = state.particles.map((particle) => {
+    particles = state.particles.map((particle: ParticleType): ParticleType[] => {
       return reduceNestedState({
         ...particle,
         env: state.env,
@@ -108,14 +109,14 @@ function moveParticle(state, action) {
 
   return {
     ...state,
-    particles: particles.filter((particle) => !particle.isToBeDestroyed || particle.style.opacity > 0)
+    particles: particles.filter((particle: ParticleType) => !particle.isToBeDestroyed || particle.style.opacity > 0)
   };
 }
 
-function addParticle(state, action) {
+function addParticle(state: ParticleCollectionType, action: ActionType): ParticleCollectionType {
   const particles = [
     ...state.particles,
-    ...Array.apply(null, {length: action.count}).map(() => {
+    ...Array.apply(null, {length: action.count}).map((): ParticleType  => {
       return createParticle({
         moveRules: action.moveRules
       });
@@ -128,8 +129,8 @@ function addParticle(state, action) {
   };
 }
 
-function deleteParticle(state, action) {
-  const particles = state.particles.map((particle) => {
+function deleteParticle(state: ParticleCollectionType, action: ActionType): ParticleCollectionType {
+  const particles = state.particles.map((particle: ParticleType): ParticleType => {
     if (particle.id === action.id) {
       particle.isToBeDestroyed = true;
     }
@@ -142,9 +143,9 @@ function deleteParticle(state, action) {
   };
 }
 
-function deleteSomeParticles(state, action) {
+function deleteSomeParticles(state: ParticleCollectionType, action: ActionType): ParticleCollectionType {
   let count = action.count;
-  const particles = state.particles.map((particle) => {
+  const particles = state.particles.map((particle: ParticleType): ParticleType => {
     if (!particle.isToBeDestroyed && count > 0) {
       count--;
       particle.isToBeDestroyed = true;
@@ -158,6 +159,6 @@ function deleteSomeParticles(state, action) {
   };
 }
 
-function countParticles(particles) {
-  return particles.filter((p) => !p.isToBeDestroyed).length;
+function countParticles(particles: ParticleType[]): number {
+  return particles.filter((p: ParticleType) => !p.isToBeDestroyed).length;
 }

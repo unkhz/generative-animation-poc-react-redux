@@ -1,9 +1,10 @@
 import { rand, constrain, reduceNestedState } from '../utils/reducerHelpers';
 import * as actionTypes from '../constants/ActionTypes';
 import { particles } from './particles';
+import type {LayerType, ActionType} from 'constants/Types';
 
 let layerId = 0;
-function createLayer() {
+function createLayer(): LayerType {
   return {
     id: layerId++,
     sn: 0,
@@ -18,17 +19,17 @@ function createLayer() {
 
 const initialState = Array.apply(null, {length: 8}).map(() => createLayer());
 
-export function layers(state = initialState, action) {
+export function layers(state: LayerType[] = initialState, action: ActionType): LayerType[] {
   switch (action.type) {
     case actionTypes.MOVE_PARTICLE:
-      return state.map((layer) => {
+      return state.map((layer: LayerType): LayerType => {
         return {
           ...layer,
           sn: layer.sn+1
         };
       });
     case actionTypes.PARTICLE_MOVE_REQUESTED:
-      return state.map((layer) => {
+      return state.map((layer: LayerType): LayerType => {
         return {
           ...layer,
           frameRequestId: action.frameRequestId,

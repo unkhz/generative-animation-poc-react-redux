@@ -1,18 +1,28 @@
 import React, {PropTypes, Component} from 'react';
 
+type TouchablePropsType = {
+  onTouchStart: () => void,
+  onTouchMove: () => void,
+  onTouchDrag: () => void,
+  onTouchEnd: () => void,
+  onTouchCancel: () => void,
+};
+
+type TouchableStateType = {
+  touches: TouchList,
+  delta: TouchableDeltaType,
+}
+
+export type TouchableDeltaType = {
+  clientX: number[],
+  clientY: number[],
+  deltaX: number[],
+  deltaY: number[],
+};
+
 class Touchable extends Component {
 
-  static get propTypes() {
-    return {
-      onTouchStart: PropTypes.func,
-      onTouchMove: PropTypes.func,
-      onTouchDrag: PropTypes.func,
-      onTouchEnd: PropTypes.func,
-      onTouchCancel: PropTypes.func,
-    };
-  }
-
-  static get defaultProps() {
+  static get defaultProps(): TouchablePropsType {
     return {
       onTouchStart: () => undefined,
       onTouchMove: () => undefined,
@@ -22,18 +32,18 @@ class Touchable extends Component {
     };
   }
 
-  static get defaultState() {
+  static get defaultState(): TouchableStateType {
     return {
       touches: [],
       delta: []
     };
   }
 
-  shouldComoponentUpdate() {
+  shouldComoponentUpdate(): boolean {
     return false;
   }
 
-  render() {
+  render(): Node {
     return (
       <div
         {...this.props}
@@ -47,12 +57,12 @@ class Touchable extends Component {
     );
   }
 
-  onTouchStart(evt) {
+  onTouchStart(evt: Event) {
     this.initStateFromEvent(evt);
     this.props.onTouchStart(evt);
   }
 
-  onTouchMove(evt) {
+  onTouchMove(evt: Event) {
     this.props.onTouchMove(evt);
     const delta = this.getDelta(evt);
     if (this.props.onTouchDrag) {
@@ -63,23 +73,23 @@ class Touchable extends Component {
     });
   }
 
-  onTouchEnd(evt) {
+  onTouchEnd(evt: Event) {
     this.props.onTouchEnd(evt);
     this.initStateFromEvent(evt);
   }
 
-  onTouchCancel(evt) {
+  onTouchCancel(evt: Event) {
     this.props.onTouchCancel(evt);
     this.initStateFromEvent(evt);
   }
 
-  getDelta(evt) {
+  getDelta(evt: Event): TouchableDeltaType {
     const evtTouches = Array.prototype.slice.call(evt.touches);
     const stateTouches = this.state.touches;
     const stateDelta = this.state.delta;
-    const clientX = evtTouches.map((touch, id) => touch.clientX - stateTouches[id].clientX);
-    const clientY = evtTouches.map((touch, id) => touch.clientY - stateTouches[id].clientY);
-    const delta = evtTouches.map((touch, id) => this.createDelta(
+    const clientX = evtTouches.map((touch: Touch, id: number) => touch.clientX - stateTouches[id].clientX);
+    const clientY = evtTouches.map((touch: Touch, id: number) => touch.clientY - stateTouches[id].clientY);
+    const delta = evtTouches.map((touch: Touch, id: number) => this.createDelta(
       clientX[id],
       clientY[id],
       clientX[id] - stateDelta[id].clientX,
@@ -88,15 +98,15 @@ class Touchable extends Component {
     return delta;
   }
 
-  initStateFromEvent(evt) {
+  initStateFromEvent(evt: Event) {
     const touches = Array.prototype.slice.call(evt.touches);
     this.setState({
       touches,
-      delta: touches.map((touch) => this.createDelta(touch.clientX, touch.clientY, 0, 0)),
+      delta: touches.map((touch: Touch, id: number) => this.createDelta(touch.clientX, touch.clientY, 0, 0)),
     });
   }
 
-  createDelta(clientX, clientY, deltaX, deltaY) {
+  createDelta(clientX: number, clientY: number, deltaX: number, deltaY: number): TouchableDeltaType {
     return {clientX, clientY, deltaX, deltaY};
   }
 

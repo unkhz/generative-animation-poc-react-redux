@@ -1,13 +1,24 @@
 import React, { Component, Children } from 'react';
 import { bindActionCreators } from 'redux';
 import * as Actions from 'actions/Actions';
-import * as shapes from 'constants/Shapes';
 import { connect } from 'react-redux';
 import Touchable from 'components/Touchable/Touchable';
+import type {TouchableDeltaType} from 'components/Touchable/Touchable';
+import type {ActionMapType} from 'constants/Types';
+
+type EventHandleType = {
+  target: Object,
+  event: string,
+  callback: func
+};
+
+type EnvironmentPropsType = {
+  actions: ActionMapType
+};
 
 class Environment extends Component {
 
-  componentWillMount() {
+  componentWillMount(nextProps: EnvironmentPropsType) {
     this.state = {
       eventListeners: []
     };
@@ -23,7 +34,7 @@ class Environment extends Component {
     this.removeAllEventListeners();
   }
 
-  listenToEvent(target, event, callback) {
+  listenToEvent(target: Object, event: string, callback: func) {
     target.addEventListener(event, callback);
     this.setState({
       eventListeners: this.state.eventListeners.push({
@@ -35,7 +46,7 @@ class Environment extends Component {
   }
 
   removeAllEventListeners() {
-    this.state.eventListeners.forEach((handle) => {
+    this.state.eventListeners.forEach((handle: EventHandleType) => {
       handle.target.removeEventlistener(handle.event, handle.callback);
     });
     this.setState({
@@ -48,26 +59,26 @@ class Environment extends Component {
     this.props.actions.envResized(window.innerWidth, window.innerHeight);
   }
 
-  onKeyPress(evt) {
+  onKeyPress(evt: Event) {
     // space toggles animation
     if (evt.keyCode === 32) {
       this.props.actions.toggleAnimation();
     }
   }
 
-  onWheel(evt) {
+  onWheel(evt: Event) {
     this.addOrRemoveParticles(evt.deltaY);
     evt.stopPropagation();
     evt.preventDefault();
   }
 
-  onTouchDrag(evt, delta) {
+  onTouchDrag(evt: Event, delta: TouchableDeltaType) {
     if (delta.length === 1) {
       this.addOrRemoveParticles(delta[0].deltaY);
     }
   }
 
-  addOrRemoveParticles(delta) {
+  addOrRemoveParticles(delta: TouchableDeltaType) {
     if (delta > 0) {
       this.props.actions.addParticle(1);
     } else if (delta < 0) {
@@ -75,12 +86,12 @@ class Environment extends Component {
     }
   }
 
-  render() {
+  render(): Node {
     return (
       <Touchable
         className="full-screen-container"
         onTouchDrag={this.onTouchDrag.bind(this)}
-        onTouchMove={(evt) => evt.preventDefault()}
+        onTouchMove={(evt: Event) => evt.preventDefault()}
       >
         {this.props.children}
       </Touchable>
@@ -88,15 +99,11 @@ class Environment extends Component {
   }
 }
 
-Environment.propTypes = {
-  actions: shapes.actions
-};
-
-function mapStateToProps(state) {
+function mapStateToProps(state: Object): Object {
   return state;
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: func): Object {
   return {
     actions: bindActionCreators(Actions, dispatch)
   };

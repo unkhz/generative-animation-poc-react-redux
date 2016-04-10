@@ -33,7 +33,8 @@ export const CONFIG = {
       components: `${ APP_PATH }/components`,
       reducers: `${ APP_PATH }/reducers`,
       containers: `${ APP_PATH }/containers`,
-      styles: `${ APP_PATH }/assets/styles`
+      styles: `${ APP_PATH }/assets/styles`,
+      utils: `${ APP_PATH }/utils`,
     }
   },
 

@@ -2,40 +2,38 @@ import 'styles/main';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import * as Actions from 'actions/Actions';
-import * as shapes from 'constants/Shapes';
+import type {ActionMapType, LayerType, ParticleCollectionType, ParticleType} from 'constants/Types';
 import Layer from 'components/Layer/Layer';
 import { connect } from 'react-redux';
 import './App.scss';
 
-class App extends Component {
+type AppPropsType = {
+  actions: ActionMapType,
+  layers: LayerType[],
+  particles: ParticleCollectionType,
+}
 
-  static get propTypes() {
-    return {
-      actions: shapes.actions,
-      layers: shapes.layers,
-      particles: shapes.particleCollection,
-    };
-  };
+class App extends Component {
 
   componentWillMount() {
     this.props.actions.appMounted();
   }
 
-  renderLayers() {
+  renderLayers(): Node {
     const { layers, particles: { particles } } = this.props;
-    return layers.map((layer) => {
+    return layers.map((layer: LayerType): Node[] => {
       return (
         <Layer
           key={layer.id}
           { ...layer }
-          particles={ particles.filter((p) => p.id%layers.length === layer.id) }
+          particles={ particles.filter((p: ParticleType) => p.id%layers.length === layer.id) }
           actions={ this.props.actions }
         />
       );
     });
   }
 
-  renderHelp() {
+  renderHelp(): Node {
     const { layers, particles: { count, particles } } = this.props;
     if (count === 0) {
       return (
@@ -49,7 +47,7 @@ class App extends Component {
     }
   }
 
-  render() {
+  render(): Node {
     const { layers } = this.props;
     return (
       <div className="full-screen-container app">
@@ -60,11 +58,11 @@ class App extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: Object): Object {
   return state;
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: func): Object {
   return {
     actions: bindActionCreators(Actions, dispatch)
   };

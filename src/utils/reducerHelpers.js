@@ -1,11 +1,8 @@
-export function constrain(value, min, max) {
-  if (typeof value !== 'number') {
-    throw Error('Cannot constrain ' + typeof value);
-  }
+export function constrain(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
 
-export function gradualConstrain(originalValue, deltaValue, min, max, nudgeAmount) {
+export function gradualConstrain(originalValue: number, deltaValue: number, min: number, max: number, nudgeAmount: number): number {
   let modifiedValue =  originalValue + deltaValue;
   if (modifiedValue > max) {
     return Math.max(originalValue - nudgeAmount, max);
@@ -16,15 +13,15 @@ export function gradualConstrain(originalValue, deltaValue, min, max, nudgeAmoun
   }
 }
 
-export function rand(slowness) {
+export function rand(slowness: number): number {
   if (typeof slowness !== 'number') {
     throw Error('Invalid slowness ' + typeof slowness);
   }
   return (Math.random()-0.5) / slowness;
 }
 
-export function reduceNestedState(state, reducers, rootState=false) {
-  return Object.keys(state).reduce((memo, key) => {
+export function reduceNestedState(state: Object, reducers: RulesType, rootState: Object = false): Object {
+  return Object.keys(state).reduce((memo: Object, key: string): Object => {
     const value = state[key];
     const reducer = reducers[key];
 

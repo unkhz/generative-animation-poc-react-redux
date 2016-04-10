@@ -1,26 +1,24 @@
 import './Layer.scss';
 import React, { Component } from 'react';
-import * as shapes from 'constants/Shapes';
+import type {ActionMapType, ParticleType, ColorType} from 'constants/Types';
 import Particle from 'components/Particle/Particle';
+
+type LayerPropsType = {
+  actions: ActionMapType,
+  particles: ParticleType[],
+}
 
 class Layer extends Component {
 
-  static get propTypes() {
-    return {
-      actions: shapes.actions,
-      particles: shapes.particles,
-    };
-  };
-
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps: Object): boolean {
     return nextProps.sn !== this.props.sn;
   }
 
-  renderColorValue(color) {
+  renderColorValue(color: ColorType): string {
     return `rgb(${Math.round(color.r)},${Math.round(color.g)},${Math.round(color.b)})`;
   }
 
-  renderParticleContent() {
+  renderParticleContent(): Node {
     const { color } = this.props;
     return (
       <svg width="300" height="300" viewBox="0 0 51 48" color-rendering="optimizeSpeed" shape-rendering="optimizeSpeed">
@@ -29,9 +27,9 @@ class Layer extends Component {
     );
   }
 
-  renderParticles() {
+  renderParticles(): Node {
     const { particles, actions } = this.props;
-    return particles.map((particle) => {
+    return particles.map((particle: ParticleType): ParticleType[] => {
       return (
         <Particle
           key={ particle.id }
@@ -42,7 +40,7 @@ class Layer extends Component {
     });
   }
 
-  render() {
+  render(): Node {
     return (
       <div
         className="layer"

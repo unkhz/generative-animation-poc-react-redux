@@ -1,22 +1,15 @@
 import './Particle.scss';
 import React, { Component } from 'react';
-import * as shapes from 'constants/Shapes';
+import type {ParticleType} from 'constants/Types';
 
 
 class Particle extends Component {
-  
-  static get propTypes() {
-    return {
-      actions: shapes.actions,
-      ...shapes.particle
-    };
-  }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps: ParticleType): boolean {
     return nextProps.sn !== this.props.sn;
   }
 
-  render() {
+  render(): Node {
     return (
       <div
         className="particle"
@@ -25,8 +18,8 @@ class Particle extends Component {
     );
   }
 
-  mapPropsToStyle(props) {
-    const transform = Object.keys(props.transform).reduce((transform, func) => {
+  mapPropsToStyle(props: ParticleType): Node {
+    const transform = Object.keys(props.transform).reduce((transform: string[], func: func): string[] => {
       const value = props.transform[func];
       transform.push(func + '(' + value + props.unit[func] + ')');
       return transform;

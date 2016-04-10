@@ -1,9 +1,12 @@
-import { rand, constrain, reduceNestedState, gradualConstrain } from '../utils/reducerHelpers';
+import { rand, constrain, reduceNestedState, gradualConstrain } from 'utils/reducerHelpers';
+import type {ParticleType} from 'constants/Types';
+
+type ValueType = number | string;
 
 export const particleMoveRules = {
-  sn: (state, value) => value+1,
+  sn: (state: ParticleType, value: ValueType) => value+1,
   style: {
-    opacity: (state, value) => {
+    opacity: (state: ParticleType, value: ValueType): ValueType => {
       if (state.isToBeDestroyed) {
         return Math.max(value - 0.005, 0);
       } else {
@@ -12,25 +15,25 @@ export const particleMoveRules = {
     }
   },
   transform: {
-    scaleX: (state, value) => gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033),
-    scaleY: (state, value) => gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033),
-    scaleZ: (state, value) => gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033),
-    translateX: (state, value) => gradualConstrain(value, state.speed.translateX, -state.env.radius/3, state.env.radius/3, 0.1),
-    translateY: (state, value) => gradualConstrain(value, state.speed.translateY, -state.env.radius/3, state.env.radius/3, 0.1),
-    translateZ: (state, value) => gradualConstrain(value, state.speed.translateZ, -state.env.radius/3, state.env.radius/3, 0.1),
-    rotateX: (state, value) => value + state.speed.rotateX,
-    rotateY: (state, value) => value + state.speed.rotateY,
-    rotateZ: (state, value) => value + state.speed.rotateZ,
+    scaleX: (state: ParticleType, value: ValueType) => gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033),
+    scaleY: (state: ParticleType, value: ValueType) => gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033),
+    scaleZ: (state: ParticleType, value: ValueType) => gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033),
+    translateX: (state: ParticleType, value: ValueType) => gradualConstrain(value, state.speed.translateX, -state.env.radius/3, state.env.radius/3, 0.1),
+    translateY: (state: ParticleType, value: ValueType) => gradualConstrain(value, state.speed.translateY, -state.env.radius/3, state.env.radius/3, 0.1),
+    translateZ: (state: ParticleType, value: ValueType) => gradualConstrain(value, state.speed.translateZ, -state.env.radius/3, state.env.radius/3, 0.1),
+    rotateX: (state: ParticleType, value: ValueType) => value + state.speed.rotateX,
+    rotateY: (state: ParticleType, value: ValueType) => value + state.speed.rotateY,
+    rotateZ: (state: ParticleType, value: ValueType) => value + state.speed.rotateZ,
   },
   speed: {
-    slow: (state, value) => constrain(value + rand(1000),-0.005,0.005),
-    general: (state, value) => constrain(value + rand(100),-0.5,0.5),
-    rotateX: (state, value) => constrain(value + state.speed.general + rand(100), -0.5, 0.5),
-    rotateY: (state, value) => constrain(value + state.speed.general + rand(100), -0.5, 0.5),
-    rotateZ: (state, value) => constrain(value + state.speed.general + rand(100), -0.5, 0.5),
-    translateX: (state, value) => constrain(value + state.speed.general + rand(100), -0.5, 0.5),
-    translateY: (state, value) => constrain(value + state.speed.general + rand(100), -0.5, 0.5),
-    translateZ: (state, value) => constrain(value + state.speed.slow + rand(1000), -0.005, 0.005),
-    opacity: (state, value) => constrain(value + state.speed.slow + rand(1000), -0.005, 0.005),
+    slow: (state: ParticleType, value: ValueType) => constrain(value + rand(1000),-0.005,0.005),
+    general: (state: ParticleType, value: ValueType) => constrain(value + rand(100),-0.5,0.5),
+    rotateX: (state: ParticleType, value: ValueType) => constrain(value + state.speed.general + rand(100), -0.5, 0.5),
+    rotateY: (state: ParticleType, value: ValueType) => constrain(value + state.speed.general + rand(100), -0.5, 0.5),
+    rotateZ: (state: ParticleType, value: ValueType) => constrain(value + state.speed.general + rand(100), -0.5, 0.5),
+    translateX: (state: ParticleType, value: ValueType) => constrain(value + state.speed.general + rand(100), -0.5, 0.5),
+    translateY: (state: ParticleType, value: ValueType) => constrain(value + state.speed.general + rand(100), -0.5, 0.5),
+    translateZ: (state: ParticleType, value: ValueType) => constrain(value + state.speed.slow + rand(1000), -0.005, 0.005),
+    opacity: (state: ParticleType, value: ValueType) => constrain(value + state.speed.slow + rand(1000), -0.005, 0.005),
   }
 };

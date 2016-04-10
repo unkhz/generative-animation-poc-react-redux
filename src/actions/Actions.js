@@ -1,35 +1,36 @@
-import * as types from '../constants/ActionTypes';
-import * as rules from '../constants/Rules';
-import { requestAnimationFrame, cancelAnimationFrame } from '../utils/animationFrameHelpers';
+import type {ActionType, ThunkType} from 'constants/Types';
+import * as actionTypes from 'constants/ActionTypes';
+import * as rules from 'constants/Rules';
+import { requestAnimationFrame, cancelAnimationFrame } from 'utils/animationFrameHelpers';
 
-export function appMounted() {
+export function appMounted(): ActionType|ThunkType {
   return requestParticleMove();
 }
 
-export function envResized(width, height) {
+export function envResized(width: number, height: number): ActionType|ThunkType {
   return {
-    type: types.ENV_RESIZED,
+    type: actionTypes.ENV_RESIZED,
     width,
     height
   };
 }
 
-export function toggleAnimation() {
+export function toggleAnimation(): ActionType|ThunkType {
   return {
-    type: types.TOGGLE_ANIMATION
+    type: actionTypes.TOGGLE_ANIMATION
   };
 }
 
-export function addParticle(count) {
+export function addParticle(count: number): ActionType|ThunkType {
   return {
-    type: types.ADD_PARTICLE,
+    type: actionTypes.ADD_PARTICLE,
     moveRules: rules.particleMoveRules,
     count
   };
 }
 
-export function requestParticleMove(frameRequestId) {
-  return function(dispatch){
+export function requestParticleMove(frameRequestId: Number): ActionType|ThunkType {
+  return function(dispatch: func){
     if (frameRequestId) {
       cancelAnimationFrame(frameRequestId);
     }
@@ -43,30 +44,30 @@ export function requestParticleMove(frameRequestId) {
   };
 }
 
-export function particleMoveRequested(frameRequestId) {
+export function particleMoveRequested(frameRequestId: number): ActionType|ThunkType {
   return {
-    type: types.PARTICLE_MOVE_REQUESTED,
+    type: actionTypes.PARTICLE_MOVE_REQUESTED,
     frameRequestId
   };
 }
 
-export function moveParticle() {
+export function moveParticle(): ActionType|ThunkType {
   return {
-    type: types.MOVE_PARTICLE,
+    type: actionTypes.MOVE_PARTICLE,
   };
 }
 
 
-export function deleteParticle(id) {
+export function deleteParticle(id: number): ActionType|ThunkType {
   return {
-    type: types.DELETE_PARTICLE,
+    type: actionTypes.DELETE_PARTICLE,
     id
   };
 }
 
-export function deleteSomeParticles(count) {
+export function deleteSomeParticles(count: number): ActionType|ThunkType {
   return {
-    type: types.DELETE_SOME_PARTICLES,
+    type: actionTypes.DELETE_SOME_PARTICLES,
     count
   };
 }
