@@ -6,7 +6,7 @@ export const requestAnimationFrame = window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||
   window.oRequestAnimationFrame ||
   window.msRequestAnimationFrame ||
-  ((cb: func) => setTimeout(cb,1));
+  ((cb: Function) => setTimeout(cb,1));
 
 /**
  * Cross-browser cancelAnimationFrame

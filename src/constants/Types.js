@@ -1,5 +1,5 @@
 export type ActionType = {type: string}
-export type ThunkType = func
+export type ThunkType = Function
 export type ActionMapType = {[id: string]: ActionType|ThunkType}
 
 export type ParticleCollectionType = {
@@ -18,7 +18,7 @@ export type ParticleType = {
   transform: {[id: string]: number},
   speed: {[id: string]: number},
   unit: {[id: string]: string},
-  moveRules: {[id: string]: func | object},
+  moveRules: {[id: string]: Function | object},
 }
 
 export type LayerType = {
@@ -34,4 +34,4 @@ export type ColorType = {
   b: number
 }
 
-export type RulesType = {[id: string]: func|RulesType}
+export type RulesType = {[id: string]: Function | RulesType}

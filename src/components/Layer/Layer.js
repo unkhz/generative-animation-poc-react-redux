@@ -18,7 +18,7 @@ class Layer extends Component {
     return `rgb(${Math.round(color.r)},${Math.round(color.g)},${Math.round(color.b)})`;
   }
 
-  renderParticleContent(): Node {
+  renderParticleContent(): React.Element {
     const { color } = this.props;
     return (
       <svg width="300" height="300" viewBox="0 0 51 48" color-rendering="optimizeSpeed" shape-rendering="optimizeSpeed">
@@ -27,9 +27,9 @@ class Layer extends Component {
     );
   }
 
-  renderParticles(): Node {
+  renderParticles(): React.Element[] {
     const { particles, actions } = this.props;
-    return particles.map((particle: ParticleType): ParticleType[] => {
+    return particles.map((particle: ParticleType): React.Element => {
       return (
         <Particle
           key={ particle.id }
@@ -40,7 +40,7 @@ class Layer extends Component {
     });
   }
 
-  render(): Node {
+  render(): React.Element {
     return (
       <div
         className="layer"

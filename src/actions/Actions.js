@@ -44,7 +44,7 @@ export function requestParticleMove(frameRequestId: Number): ActionType|ThunkTyp
   };
 }
 
-export function particleMoveRequested(frameRequestId: number): ActionType|ThunkType {
+export function particleMoveRequested(frameRequestId?: number): ActionType|ThunkType {
   return {
     type: actionTypes.PARTICLE_MOVE_REQUESTED,
     frameRequestId

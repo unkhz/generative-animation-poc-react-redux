@@ -10,14 +10,14 @@ type TouchablePropsType = {
 
 type TouchableStateType = {
   touches: TouchList,
-  delta: TouchableDeltaType,
+  delta: TouchableDeltaType[],
 }
 
 export type TouchableDeltaType = {
-  clientX: number[],
-  clientY: number[],
-  deltaX: number[],
-  deltaY: number[],
+  clientX: number,
+  clientY: number,
+  deltaX: number,
+  deltaY: number,
 };
 
 class Touchable extends Component {
@@ -35,7 +35,12 @@ class Touchable extends Component {
   static get defaultState(): TouchableStateType {
     return {
       touches: [],
-      delta: []
+      delta: {
+        clientX: [],
+        clientY: [],
+        deltaX: [],
+        deltaY: []
+      }
     };
   }
 
@@ -43,7 +48,7 @@ class Touchable extends Component {
     return false;
   }
 
-  render(): Node {
+  render(): React.Element {
     return (
       <div
         {...this.props}

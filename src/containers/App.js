@@ -19,9 +19,9 @@ class App extends Component {
     this.props.actions.appMounted();
   }
 
-  renderLayers(): Node {
+  renderLayers(): React.Element {
     const { layers, particles: { particles } } = this.props;
-    return layers.map((layer: LayerType): Node[] => {
+    return layers.map((layer: LayerType): React.Element => {
       return (
         <Layer
           key={layer.id}
@@ -33,7 +33,7 @@ class App extends Component {
     });
   }
 
-  renderHelp(): Node {
+  renderHelp(): React.Element {
     const { layers, particles: { count, particles } } = this.props;
     if (count === 0) {
       return (
@@ -47,7 +47,7 @@ class App extends Component {
     }
   }
 
-  render(): Node {
+  render(): React.Element {
     const { layers } = this.props;
     return (
       <div className="full-screen-container app">
@@ -62,7 +62,7 @@ function mapStateToProps(state: Object): Object {
   return state;
 }
 
-function mapDispatchToProps(dispatch: func): Object {
+function mapDispatchToProps(dispatch: Function): Object {
   return {
     actions: bindActionCreators(Actions, dispatch)
   };

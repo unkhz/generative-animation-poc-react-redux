@@ -1,3 +1,5 @@
+import type {RulesType} from 'constant/Types';
+
 export function constrain(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
@@ -20,7 +22,7 @@ export function rand(slowness: number): number {
   return (Math.random()-0.5) / slowness;
 }
 
-export function reduceNestedState(state: Object, reducers: RulesType, rootState: Object = false): Object {
+export function reduceNestedState(state: Object, reducers: RulesType, rootState?: Object): Object {
   return Object.keys(state).reduce((memo: Object, key: string): Object => {
     const value = state[key];
     const reducer = reducers[key];

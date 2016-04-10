@@ -4,4 +4,4 @@ import Reducers from '../reducers';
 
 const create = applyMiddleware(Thunk)(createStore);
 
-export default () => create(Reducers, {});
+export default (): Function => create(Reducers, {});

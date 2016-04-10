@@ -9,7 +9,7 @@ import type {ActionMapType} from 'constants/Types';
 type EventHandleType = {
   target: Object,
   event: string,
-  callback: func
+  callback: Function
 };
 
 type EnvironmentPropsType = {
@@ -34,7 +34,7 @@ class Environment extends Component {
     this.removeAllEventListeners();
   }
 
-  listenToEvent(target: Object, event: string, callback: func) {
+  listenToEvent(target: Object, event: string, callback: Function) {
     target.addEventListener(event, callback);
     this.setState({
       eventListeners: this.state.eventListeners.push({
@@ -86,7 +86,7 @@ class Environment extends Component {
     }
   }
 
-  render(): Node {
+  render(): React.Element {
     return (
       <Touchable
         className="full-screen-container"
@@ -103,7 +103,7 @@ function mapStateToProps(state: Object): Object {
   return state;
 }
 
-function mapDispatchToProps(dispatch: func): Object {
+function mapDispatchToProps(dispatch: Function): Object {
   return {
     actions: bindActionCreators(Actions, dispatch)
   };

@@ -9,7 +9,7 @@ class Particle extends Component {
     return nextProps.sn !== this.props.sn;
   }
 
-  render(): Node {
+  render(): React.Element {
     return (
       <div
         className="particle"
@@ -18,8 +18,8 @@ class Particle extends Component {
     );
   }
 
-  mapPropsToStyle(props: ParticleType): Node {
-    const transform = Object.keys(props.transform).reduce((transform: string[], func: func): string[] => {
+  mapPropsToStyle(props: ParticleType): React.Element {
+    const transform = Object.keys(props.transform).reduce((transform: string[], func: string): string[] => {
       const value = props.transform[func];
       transform.push(func + '(' + value + props.unit[func] + ')');
       return transform;
