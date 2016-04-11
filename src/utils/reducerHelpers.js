@@ -1,4 +1,5 @@
-import type {RulesType} from 'constant/Types';
+// @flow
+import type {RulesType} from 'constants/Types';
 
 export function constrain(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));

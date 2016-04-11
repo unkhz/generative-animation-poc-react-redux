@@ -1,0 +1,29 @@
+[options]
+esproposal.class_instance_fields=ignore
+esproposal.class_static_fields=ignore
+esproposal.decorators=ignore
+strip_root=true
+module.ignore_non_literal_requires=true
+module.system=node
+module.name_mapper='^actions\/\(.*\)$' -> '<PROJECT_ROOT>/src/actions/\1'
+module.name_mapper='^styles\/\(.*\)$' -> '<PROJECT_ROOT>/src/assets/styles/\1'
+module.name_mapper='^images\/\(.*\)$' -> '<PROJECT_ROOT>/src/assets/images/\1'
+module.name_mapper='^components\/\(.*\)$' -> '<PROJECT_ROOT>/src/components/\1'
+module.name_mapper='^constants\/\(.*\)$' -> '<PROJECT_ROOT>/src/constants/\1'
+module.name_mapper='^containers\/\(.*\)$' -> '<PROJECT_ROOT>/src/containers/\1'
+module.name_mapper='^reducers\/\(.*\)$' -> '<PROJECT_ROOT>/src/reducers/\1'
+module.name_mapper='^store\/\(.*\)$' -> '<PROJECT_ROOT>/src/store/\1'
+module.name_mapper='^utils\/\(.*\)$' -> '<PROJECT_ROOT>/src/utils/\1'
+module.name_mapper='^constants\/\(.*\)$' -> '<PROJECT_ROOT>/src/constants/\1'
+module.file_ext=.js
+module.file_ext=.json
+module.file_ext=.scss
+suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
+
+[include]
+./src/.*
+
+[ignore]
+.*/node_modules/fbjs/.*
+.*/node_modules/config-chain/.*
+.*/node_modules/npmconf/.*

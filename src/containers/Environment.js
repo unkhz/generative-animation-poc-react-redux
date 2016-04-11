@@ -1,6 +1,6 @@
 import React, { Component, Children } from 'react';
 import { bindActionCreators } from 'redux';
-import * as Actions from 'actions/Actions';
+import * as Actions from 'actions/Actions';
 import { connect } from 'react-redux';
 import Touchable from 'components/Touchable/Touchable';
 import type {TouchableDeltaType} from 'components/Touchable/Touchable';
@@ -59,7 +59,7 @@ class Environment extends Component {
     this.props.actions.envResized(window.innerWidth, window.innerHeight);
   }
 
-  onKeyPress(evt: Event) {
+  onKeyPress(evt: KeyboardEvent) {
     // space toggles animation
     if (evt.keyCode === 32) {
       this.props.actions.toggleAnimation();

@@ -1,3 +1,4 @@
+// @flow
 import { rand, constrain, reduceNestedState } from '../utils/reducerHelpers';
 import * as actionTypes from '../constants/ActionTypes';
 import { particles } from './particles';
@@ -17,6 +18,7 @@ function createLayer(): LayerType {
   };
 }
 
+// $FlowFixMe: Can't cope with Array.apply
 const initialState = Array.apply(null, {length: 8}).map(() => createLayer());
 
 export function layers(state: LayerType[] = initialState, action: ActionType): LayerType[] {

@@ -1,3 +1,4 @@
+// @flow
 import './Particle.scss';
 import React, { Component } from 'react';
 import type {ParticleType} from 'constants/Types';

@@ -1,3 +1,4 @@
+// @flow
 /**
  * Cross-browser requestAnimationFrame
  */

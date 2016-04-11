@@ -1,7 +1,8 @@
-import 'styles/main';
+// @flow
+import 'styles/main.scss';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
-import * as Actions from 'actions/Actions';
+import * as Actions from 'actions/Actions';
 import type {ActionMapType, LayerType, ParticleCollectionType, ParticleType} from 'constants/Types';
 import Layer from 'components/Layer/Layer';
 import { connect } from 'react-redux';

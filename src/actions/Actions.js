@@ -1,3 +1,4 @@
+// @flow
 import type {ActionType, ThunkType} from 'constants/Types';
 import * as actionTypes from 'constants/ActionTypes';
 import * as rules from 'constants/Rules';
@@ -29,8 +30,8 @@ export function addParticle(count: number): ActionType|ThunkType {
   };
 }
 
-export function requestParticleMove(frameRequestId: Number): ActionType|ThunkType {
-  return function(dispatch: func){
+export function requestParticleMove(frameRequestId?: Number): ActionType|ThunkType {
+  return function(dispatch: Function){
     if (frameRequestId) {
       cancelAnimationFrame(frameRequestId);
     }

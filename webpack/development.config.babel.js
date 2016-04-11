@@ -2,6 +2,7 @@ import { CONFIG, APP_PATH } from './config';
 import merge from './helpers/merge';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import WebpackNotifierPlugin from 'webpack-notifier';
+import FlowStatusWebpackPlugin from 'flow-status-webpack-plugin';
 
 export default merge({
   debug: true,
@@ -10,6 +11,9 @@ export default merge({
   plugins: [
     new ExtractTextPlugin('bundle.css'),
     new WebpackNotifierPlugin(),
+    new FlowStatusWebpackPlugin({
+      restartFlow: false
+    })
   ],
 
   devServer: {

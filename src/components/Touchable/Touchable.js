@@ -1,4 +1,4 @@
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
 
 type TouchablePropsType = {
   onTouchStart: () => void,
@@ -22,27 +22,18 @@ export type TouchableDeltaType = {
 
 class Touchable extends Component {
 
-  static get defaultProps(): TouchablePropsType {
-    return {
-      onTouchStart: () => undefined,
-      onTouchMove: () => undefined,
-      onTouchDrag: () => undefined,
-      onTouchEnd: () => undefined,
-      onTouchCancel: () => undefined,
-    };
-  }
+  static defaultProps: TouchablePropsType = {
+    onTouchStart: () => undefined,
+    onTouchMove: () => undefined,
+    onTouchDrag: () => undefined,
+    onTouchEnd: () => undefined,
+    onTouchCancel: () => undefined,
+  };
 
-  static get defaultState(): TouchableStateType {
-    return {
-      touches: [],
-      delta: {
-        clientX: [],
-        clientY: [],
-        deltaX: [],
-        deltaY: []
-      }
-    };
-  }
+  static defaultState: TouchableStateType = {
+    touches: [],
+    delta: [],
+  };
 
   shouldComoponentUpdate(): boolean {
     return false;

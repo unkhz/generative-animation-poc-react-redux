@@ -1,3 +1,4 @@
+// @flow
 import { rand, constrain, reduceNestedState } from 'utils/reducerHelpers';
 import * as actionTypes from 'constants/ActionTypes';
 import {RulesType, ParticleType, ParticleCollectionType, ActionType} from 'constants/Types';
@@ -99,7 +100,7 @@ function moveParticle(state: ParticleCollectionType, action: ActionType): Partic
   let particles = state.particles;
 
   if (!state.isPaused) {
-    particles = state.particles.map((particle: ParticleType): ParticleType[] => {
+    particles = state.particles.map((particle: ParticleType): ParticleType => {
       return reduceNestedState({
         ...particle,
         env: state.env,
@@ -116,6 +117,7 @@ function moveParticle(state: ParticleCollectionType, action: ActionType): Partic
 function addParticle(state: ParticleCollectionType, action: ActionType): ParticleCollectionType {
   const particles = [
     ...state.particles,
+    // $FlowFixMe: Can't cope with Array.apply
     ...Array.apply(null, {length: action.count}).map((): ParticleType  => {
       return createParticle({
         moveRules: action.moveRules
