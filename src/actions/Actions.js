@@ -4,10 +4,6 @@ import * as actionTypes from 'constants/ActionTypes';
 import * as rules from 'constants/Rules';
 import { requestAnimationFrame, cancelAnimationFrame } from 'utils/animationFrameHelpers';
 
-export function appMounted(): ActionType|ThunkType {
-  return requestParticleMove();
-}
-
 export function envResized(width: number, height: number): ActionType|ThunkType {
   return {
     type: actionTypes.ENV_RESIZED,

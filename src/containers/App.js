@@ -17,7 +17,7 @@ type AppPropsType = {
 class App extends Component {
 
   componentWillMount() {
-    this.props.actions.appMounted();
+    this.props.actions.requestParticleMove();
   }
 
   renderLayers(): React.Element {
