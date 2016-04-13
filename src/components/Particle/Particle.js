@@ -19,14 +19,25 @@ class Particle extends Component {
     );
   }
 
+  getStyleValue(value: number|string, unit: string): number|string {
+    return unit ? '' + value + unit : value;
+  }
+
+  mapStyle(obj: Object, unit: Object = {}): Object {
+    return Object.keys(obj).reduce((all: Object, styleProp: string): Object => {
+      all[styleProp] = this.getStyleValue(obj[styleProp], unit[styleProp] || '');
+      return all;
+    }, {});
+  }
+
   mapPropsToStyle(props: ParticleType): React.Element {
     const transform = Object.keys(props.transform).reduce((transform: string[], func: string): string[] => {
       const value = props.transform[func];
-      transform.push(func + '(' + value + props.unit[func] + ')');
+      transform.push(func + '(' + this.getStyleValue(value, props.unit[func]) + ')');
       return transform;
     }, []).join(' ');
     return {
-      ...props.style,
+      ...this.mapStyle(props.style, props.unit),
       transform
     };
   }
