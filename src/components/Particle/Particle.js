@@ -6,6 +6,12 @@ import type {ParticleType} from 'constants/Types';
 
 class Particle extends Component {
 
+  static defaultProps = {
+    transform: {},
+    style: {},
+    unit: {}
+  };
+
   shouldComponentUpdate(nextProps: ParticleType): boolean {
     return nextProps.sn !== this.props.sn;
   }

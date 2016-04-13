@@ -4,16 +4,31 @@ import TestUtils from 'react-addons-test-utils';
 import Particle from './Particle';
 import {assert} from 'chai';
 
-function getNode(props: Object): Node {
-  // Render a checkbox with label in the document
+function getNode(element: React.Element): Node {
   const node = TestUtils.renderIntoDocument(
-    <Particle {...props}  />
+    element
   );
   return ReactDOM.findDOMNode(node);
 }
 
-// @phantomjs only
 describe('Particle', () => {
+
+  it('can be created without props', () => {
+    const node = getNode(<Particle />);
+    assert.equal(node.nodeType, 1);
+  });
+
+  it('has className particle', () => {
+    const node = getNode(<Particle />);
+    assert.equal(node.className, 'particle');
+  });
+
+  it('supports children', () => {
+    const node = getNode(<Particle><div className="test" /></Particle>);
+    assert.equal(node.firstChild.className, 'test');
+  });
+
+  // @phantomjs only
   it('displays normal styles from props', () => {
     const props = {
       transform: {},
@@ -36,7 +51,7 @@ describe('Particle', () => {
         invalidWithUnit: 'pt'
       }
     };
-    const node = getNode(props);
+    const node = getNode(<Particle {...props} />);
     assert.equal(node.style.opacity, 1);
     assert.equal(node.style.marginLeft, '2px');
     assert.equal(node.style.width, '50%');
@@ -70,7 +85,7 @@ describe('Particle', () => {
         invalidWithUnit: 'pt'
       }
     };
-    const node = getNode(props);
+    const node = getNode(<Particle {...props} />);
     assert.equal(node.style.transform, 'translateX(1) translateY(1.2324px) translateZ(-10000000%) rotateX(1deg) rotateY(falserad) invalidWithUnit(1pt) invalidWithoutUnit(2)');
   });
 });

@@ -1,3 +1,4 @@
+var path = require('path');
 var webpack = require('karma-webpack');
 
 module.exports = function (config) {
@@ -18,6 +19,7 @@ module.exports = function (config) {
     ],
     browsers: ['PhantomJS'],
     preprocessors: {
+      'src/**/*.js': ['webpack', 'sourcemap'],
       'src/**/*.spec.js': ['webpack', 'sourcemap'],
       'test/**/*.spec.js': ['webpack', 'sourcemap'],
       'test/tests.bundle.js': ['webpack'],
@@ -37,6 +39,20 @@ module.exports = function (config) {
           loader: 'css?sass',
           exclude: /node_modules/
         }]
+      },
+
+      resolve: {
+        extensions: ['', '.js', '.scss'],
+
+        alias: {
+          constants: path.join(__dirname, 'src', 'constants'),
+          actions: path.join(__dirname, 'src', 'actions'),
+          components: path.join(__dirname, 'src', 'components'),
+          reducers: path.join(__dirname, 'src', 'reducers'),
+          containers: path.join(__dirname, 'src', 'containers'),
+          styles: path.join(__dirname, 'src', 'assets', 'styles'),
+          utils: path.join(__dirname, 'src', 'utils'),
+        }
       }
     },
     webpackMiddleware: { noInfo: true }

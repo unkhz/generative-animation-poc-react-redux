@@ -11,6 +11,15 @@ type LayerPropsType = {
 
 class Layer extends Component {
 
+  static defaultProps = {
+    particles: [],
+    color: {
+      r: 0,
+      g: 0,
+      b: 0,
+    },
+  };
+
   shouldComponentUpdate(nextProps: Object): boolean {
     return nextProps.sn !== this.props.sn;
   }
