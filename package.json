@@ -6,7 +6,7 @@
   "license": "MIT",
   "version": "0.0.2",
   "scripts": {
-    "test": "karma start  --single-run --no-auto-watch karma.config.js",
+    "test": "node_modules/.bin/karma start  --single-run --no-auto-watch karma.config.js",
     "clean": "node_modules/.bin/rimraf build/",
     "build": "npm run clean && node_modules/.bin/webpack --config webpack/production.config.babel.js",
     "dev-server": "node_modules/.bin/webpack-dev-server --config webpack/development.config.babel.js",
@@ -36,7 +36,9 @@
     "karma": "^0.13.22",
     "karma-babel-preprocessor": "^6.0.1",
     "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^0.2.3",
     "karma-mocha": "^0.2.2",
+    "karma-mocha-reporter": "^2.0.0",
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",

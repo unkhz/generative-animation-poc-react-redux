@@ -4,24 +4,28 @@ module.exports = function (config) {
   config.set({
     frameworks: ['chai', 'mocha'],
     files: [
-      //'./node_modules/phantomjs-polyfill/bind-polyfill.js',
-      'src/**/*.spec.js'
+      'test/tests.bundle.js'
     ],
     plugins: [
       webpack,
-      'karma-chrome-launcher',
       'karma-chai',
       'karma-mocha',
       'karma-sourcemap-loader',
       'karma-webpack',
-      'karma-phantomjs-launcher'
+      'karma-chrome-launcher',
+      'karma-phantomjs-launcher',
+      'karma-mocha-reporter',
     ],
     browsers: ['PhantomJS'],
     preprocessors: {
-      'src/**/*.spec.js': ['webpack'],
-      'src/**/*': ['webpack']
+      'src/**/*.spec.js': ['webpack', 'sourcemap'],
+      'test/**/*.spec.js': ['webpack', 'sourcemap'],
+      'test/tests.bundle.js': ['webpack'],
     },
-    reporters: ['dots'],
+    reporters: ['mocha'],
+    mochaReporter: {
+      output: 'minimal'
+    },
     webpack: {
       module: {
         loaders: [{
