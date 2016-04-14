@@ -2,6 +2,7 @@ import * as actions from 'actions/Actions';
 import * as actionTypes from 'constants/ActionTypes';
 import {particles} from 'reducers/particles';
 import {assert} from 'chai';
+import {stub} from 'sinon';
 
 describe('particles reducer', () => {
   it('returns initial state', () => {
@@ -104,19 +105,18 @@ describe('particles reducer', () => {
     // nth pass (second pass has speed 0)
     reducedState = particles(firstState, {type: actionTypes.MOVE_PARTICLE});
     reducedState = particles(reducedState, {type: actionTypes.MOVE_PARTICLE});
+    reducedState = particles(reducedState, {type: actionTypes.MOVE_PARTICLE});
+    reducedState = particles(reducedState, {type: actionTypes.MOVE_PARTICLE});
+    reducedState = particles(reducedState, {type: actionTypes.MOVE_PARTICLE});
+    reducedState = particles(reducedState, {type: actionTypes.MOVE_PARTICLE});
+    reducedState = particles(reducedState, {type: actionTypes.MOVE_PARTICLE});
 
     const firstParticle = firstState.particles[0];
     const reducedParticle = reducedState.particles[0];
-
-    Object.keys(reducedParticle.style).forEach((prop: string) => {
-      const val = reducedParticle.style[prop];
-      assert.notEqual(val, firstParticle.style[prop]);
-    });
 
     Object.keys(reducedParticle.transform).forEach((prop: string) => {
       const val = reducedParticle.transform[prop];
       assert.notEqual(val, firstParticle.transform[prop]);
     });
-
   });
 });
