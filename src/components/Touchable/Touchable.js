@@ -80,7 +80,7 @@ class Touchable extends Component {
   }
 
   getDelta(evt: Event): TouchableDeltaType {
-    const evtTouches = Array.prototype.slice.call(evt.touches);
+    const evtTouches = [...evt.touches];
     const stateTouches = this.state.touches;
     const stateDelta = this.state.delta;
     const clientX = evtTouches.map((touch: Touch, id: number) => touch.clientX - stateTouches[id].clientX);
