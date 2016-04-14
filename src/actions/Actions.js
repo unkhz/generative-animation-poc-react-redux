@@ -26,7 +26,7 @@ export function addParticle(count: number): ActionType|ThunkType {
   };
 }
 
-export function requestParticleMove(frameRequestId?: Number): ActionType|ThunkType {
+export function requestParticleMove(frameRequestId?: number): ActionType|ThunkType {
   return function(dispatch: Function){
     if (frameRequestId) {
       cancelAnimationFrame(frameRequestId);
