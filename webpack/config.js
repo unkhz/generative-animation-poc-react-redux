@@ -35,6 +35,7 @@ export const CONFIG = {
       containers: `${ APP_PATH }/containers`,
       styles: `${ APP_PATH }/assets/styles`,
       utils: `${ APP_PATH }/utils`,
+      store: `${ APP_PATH }/store`,
     }
   },
 

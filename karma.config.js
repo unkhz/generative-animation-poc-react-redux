@@ -13,6 +13,7 @@ module.exports = function (config) {
       'karma-mocha',
       'karma-sourcemap-loader',
       'karma-webpack',
+      'karma-coverage',
       'karma-chrome-launcher',
       'karma-phantomjs-launcher',
       'karma-mocha-reporter',
@@ -24,23 +25,23 @@ module.exports = function (config) {
       'test/**/*.spec.js': ['webpack', 'sourcemap'],
       'test/tests.bundle.js': ['webpack'],
     },
-    reporters: ['mocha'],
-    mochaReporter: {
-      output: 'minimal'
-    },
     webpack: {
       module: {
         loaders: [{
-          test: /\.(js|jsx)$/, exclude: /(bower_components|node_modules)/,
+          test: /\.(js|jsx)$/, exclude: /node_modules/,
           loader: 'babel-loader'
         },
         {
           test: /\.scss$/,
           loader: 'css?sass',
           exclude: /node_modules/
+        }],
+        postLoaders: [{
+          test: /\.js$/,
+          exclude: /(spec\.js|node_modules\/|test\/)/,
+          loader: 'istanbul-instrumenter'
         }]
       },
-
       resolve: {
         extensions: ['', '.js', '.scss'],
 
@@ -52,9 +53,22 @@ module.exports = function (config) {
           containers: path.join(__dirname, 'src', 'containers'),
           styles: path.join(__dirname, 'src', 'assets', 'styles'),
           utils: path.join(__dirname, 'src', 'utils'),
+          store: path.join(__dirname, 'src', 'store'),
         }
       }
     },
-    webpackMiddleware: { noInfo: true }
+    webpackMiddleware: { noInfo: true },
+
+    reporters: ['mocha', 'coverage'],
+
+    mochaReporter: {
+      output: 'minimal'
+    },
+
+    coverageReporter: {
+      type: 'lcovonly',
+      subdir: '.',
+      file: 'lcov.info'
+    }
   });
 };
