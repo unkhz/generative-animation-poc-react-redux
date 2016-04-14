@@ -27,13 +27,10 @@ describe('particles reducer', () => {
   });
 
   it('adds particles on addParticle', () => {
-    const oldState = {
-      particles: []
-    };
     let state;
 
     // first pass
-    state = particles(oldState, {
+    state = particles(undefined, {
       type: actionTypes.ADD_PARTICLE,
       count: 2,
       moveRules: {
@@ -57,13 +54,10 @@ describe('particles reducer', () => {
   });
 
   it('schedules a specific particle for deletion on deleteParticle', () => {
-    const oldState = {
-      particles: []
-    };
     let state;
 
     // first pass
-    state = particles(oldState, {
+    state = particles(undefined, {
       type: actionTypes.ADD_PARTICLE,
       count: 3
     });
@@ -81,13 +75,10 @@ describe('particles reducer', () => {
   });
 
   it('schedules a number of particles for deletion on deleteSomeParticles', () => {
-    const oldState = {
-      particles: []
-    };
     let state;
 
     // first pass
-    state = particles(oldState, {
+    state = particles(undefined, {
       type: actionTypes.ADD_PARTICLE,
       count: 5
     });
@@ -102,5 +93,30 @@ describe('particles reducer', () => {
     assert.equal(state.particles.length, 5);
     const toBeDestroyedCount = state.particles.filter((p: Object) => p.isToBeDestroyed).length;
     assert.equal(toBeDestroyedCount, 2);
+  });
+
+  it('reduces state based on individual Rules on moveParticle', () => {
+    let reducedState;
+
+    // first pass
+    const firstState = particles(undefined, actions.addParticle(1));
+
+    // nth pass (second pass has speed 0)
+    reducedState = particles(firstState, {type: actionTypes.MOVE_PARTICLE});
+    reducedState = particles(reducedState, {type: actionTypes.MOVE_PARTICLE});
+
+    const firstParticle = firstState.particles[0];
+    const reducedParticle = reducedState.particles[0];
+
+    Object.keys(reducedParticle.style).forEach((prop: string) => {
+      const val = reducedParticle.style[prop];
+      assert.notEqual(val, firstParticle.style[prop]);
+    });
+
+    Object.keys(reducedParticle.transform).forEach((prop: string) => {
+      const val = reducedParticle.transform[prop];
+      assert.notEqual(val, firstParticle.transform[prop]);
+    });
+
   });
 });
