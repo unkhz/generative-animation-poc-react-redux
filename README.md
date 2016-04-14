@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/unkhz/generative-animation-poc-react-redux.svg?branch=master)](https://travis-ci.org/unkhz/generative-animation-poc-react-redux)
+[![Code Climate](https://codeclimate.com/github/unkhz/generative-animation-poc-react-redux/badges/gpa.svg)](https://codeclimate.com/github/unkhz/generative-animation-poc-react-redux)
+[![Test Coverage](https://codeclimate.com/github/unkhz/generative-animation-poc-react-redux/badges/coverage.svg)](https://codeclimate.com/github/unkhz/generative-animation-poc-react-redux/coverage)
 
 # Generative animation POC with React/Redux
 
