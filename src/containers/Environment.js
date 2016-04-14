@@ -13,21 +13,31 @@ type EventHandleType = {
 };
 
 type EnvironmentPropsType = {
+  window: Object,
+  body: Node,
   actions: ActionMapType
 };
 
-class Environment extends Component {
+export class Environment extends Component {
+
+  static defaultProps = {
+    window,
+    body: document.body,
+    actions: {
+      envResized: (() => undefined)
+    }
+  };
 
   componentWillMount(nextProps: EnvironmentPropsType) {
     this.state = {
       eventListeners: []
     };
 
-    this.listenToEvent(window, 'resize', this.onWindowResize.bind(this));
+    this.listenToEvent(this.props.window, 'resize', this.onWindowResize.bind(this));
     this.onWindowResize();
 
-    this.listenToEvent(document.body, 'keyup', this.onKeyPress.bind(this));
-    this.listenToEvent(document.body, 'wheel', this.onWheel.bind(this));
+    this.listenToEvent(this.props.body, 'keyup', this.onKeyPress.bind(this));
+    this.listenToEvent(this.props.body, 'wheel', this.onWheel.bind(this));
   }
 
   componentWillUnmount() {
@@ -56,7 +66,7 @@ class Environment extends Component {
 
   onWindowResize() {
     // resize controls the environment size for particles
-    this.props.actions.envResized(window.innerWidth, window.innerHeight);
+    this.props.actions.envResized(this.props.window.innerWidth, this.props.window.innerHeight);
   }
 
   onKeyPress(evt: KeyboardEvent) {

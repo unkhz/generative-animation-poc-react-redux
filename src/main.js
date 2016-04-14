@@ -8,7 +8,7 @@ import Store from './store';
 
 ReactDOM.render(
   <Provider store={ Store() }>
-    <Environment>
+    <Environment window={window} body={document.body}>
       <App />
     </Environment>
   </Provider>,
