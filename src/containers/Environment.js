@@ -28,7 +28,7 @@ export class Environment extends Component {
     }
   };
 
-  componentWillMount(nextProps: EnvironmentPropsType) {
+  componentWillMount() {
     this.state = {
       eventListeners: []
     };
