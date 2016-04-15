@@ -28,7 +28,6 @@ class App extends Component {
           key={layer.id}
           { ...layer }
           particles={ particles.filter((p: ParticleType) => p.id%layers.length === layer.id) }
-          actions={ this.props.actions }
         />
       );
     });

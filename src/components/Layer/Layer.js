@@ -5,7 +5,6 @@ import type {ActionMapType, ParticleType, ColorType} from 'constants/Types';
 import Particle from 'components/Particle/Particle';
 
 type LayerPropsType = {
-  actions: ActionMapType,
   particles: ParticleType[],
 }
 
@@ -38,13 +37,12 @@ class Layer extends Component {
   }
 
   renderParticles(): React.Element[] {
-    const { particles, actions } = this.props;
+    const {particles} = this.props;
     return particles.map((particle: ParticleType): React.Element => {
       return (
         <Particle
           key={ particle.id }
           { ...particle }
-          actions={actions}
         >{this.renderParticleContent()}</Particle>
       );
     });
