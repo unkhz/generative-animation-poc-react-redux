@@ -14,7 +14,18 @@ type AppPropsType = {
   particles: ParticleCollectionType,
 }
 
-class App extends Component {
+export class App extends Component {
+
+  static defaultProps = {
+    actions: {
+      requestParticleMove: () => undefined
+    },
+    layers: [],
+    particles: {
+      count: 0,
+      particles: []
+    }
+  };
 
   componentWillMount() {
     this.props.actions.requestParticleMove();
