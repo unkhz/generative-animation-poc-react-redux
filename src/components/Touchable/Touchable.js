@@ -61,9 +61,7 @@ class Touchable extends Component {
   onTouchMove(evt: Event) {
     this.props.onTouchMove(evt);
     const delta = this.getDelta(evt);
-    if (this.props.onTouchDrag) {
-      this.props.onTouchDrag(evt, delta);
-    }
+    this.props.onTouchDrag(evt, delta);
     this.setState({
       delta
     });
