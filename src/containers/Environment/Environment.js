@@ -2,7 +2,7 @@ import React, { Component, Children } from 'react';
 import { bindActionCreators } from 'redux';
 import * as Actions from 'actions/Actions';
 import { connect } from 'react-redux';
-import Touchable from 'components/Touchable/Touchable';
+import Touchable from 'components/Touchable';
 import type {TouchableDeltaType} from 'components/Touchable/Touchable';
 import type {ActionMapType} from 'constants/Types';
 

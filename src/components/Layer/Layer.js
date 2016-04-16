@@ -2,7 +2,7 @@
 import './Layer.scss';
 import React, { Component } from 'react';
 import type {ActionMapType, ParticleType, ColorType} from 'constants/Types';
-import Particle from 'components/Particle/Particle';
+import Particle from 'components/Particle';
 
 type LayerPropsType = {
   particles: ParticleType[],

@@ -28,6 +28,7 @@ export const CONFIG = {
     extensions: ['', '.js', '.scss'],
 
     alias: {
+      app: `${ APP_PATH }`,
       constants: `${ APP_PATH }/constants`,
       actions: `${ APP_PATH }/actions`,
       components: `${ APP_PATH }/components`,

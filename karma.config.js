@@ -46,6 +46,7 @@ module.exports = function (config) {
         extensions: ['', '.js', '.scss'],
 
         alias: {
+          app: path.join(__dirname, 'src'),
           constants: path.join(__dirname, 'src', 'constants'),
           actions: path.join(__dirname, 'src', 'actions'),
           components: path.join(__dirname, 'src', 'components'),

@@ -1,7 +1,6 @@
 // @flow
-import { rand, constrain, reduceNestedState } from '../utils/reducerHelpers';
-import * as actionTypes from '../constants/ActionTypes';
-import { particles } from './particles';
+import { rand, constrain, reduceNestedState } from 'utils/reducerHelpers';
+import * as actionTypes from 'constants/ActionTypes';
 import type {LayerType, ActionType} from 'constants/Types';
 
 let layerId = 0;

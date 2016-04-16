@@ -5,6 +5,7 @@ esproposal.decorators=ignore
 strip_root=true
 module.ignore_non_literal_requires=true
 module.system=node
+module.name_mapper='^app\/\(.*\)$' -> '<PROJECT_ROOT>/src/\1'
 module.name_mapper='^actions\/\(.*\)$' -> '<PROJECT_ROOT>/src/actions/\1'
 module.name_mapper='^styles\/\(.*\)$' -> '<PROJECT_ROOT>/src/assets/styles/\1'
 module.name_mapper='^images\/\(.*\)$' -> '<PROJECT_ROOT>/src/assets/images/\1'
