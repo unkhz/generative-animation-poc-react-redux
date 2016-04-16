@@ -6,11 +6,12 @@
   "license": "MIT",
   "version": "0.0.2",
   "scripts": {
-    "test": "node_modules/.bin/karma start  --single-run --no-auto-watch karma.config.js",
-    "clean": "node_modules/.bin/rimraf build/",
-    "build": "npm run clean && node_modules/.bin/webpack --config webpack/production.config.babel.js",
-    "dev-server": "node_modules/.bin/webpack-dev-server --config webpack/development.config.babel.js",
-    "start": "npm run build && node_modules/.bin/http-server build/ -p 9999 -o"
+    "test": "node_modules/.bin/karma start  --single-run --no-auto-watch build/karma.config.js",
+    "test-watch": "node_modules/.bin/karma start build/karma.config.js",
+    "clean": "node_modules/.bin/rimraf dist/",
+    "build": "npm run clean && node_modules/.bin/webpack --config build/webpack.config.production.babel.js",
+    "dev-server": "node_modules/.bin/webpack-dev-server --config build/webpack.config.development.babel.js",
+    "start": "npm run build && node_modules/.bin/http-server dist/ -p 9999 -o"
   },
   "devDependencies": {
     "babel": "^6.5.2",

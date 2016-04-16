@@ -1,4 +1,4 @@
-import { CONFIG, APP_PATH } from './config';
+import { CONFIG, APP_PATH } from './webpack.config.base';
 import merge from './helpers/merge';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import WebpackNotifierPlugin from 'webpack-notifier';

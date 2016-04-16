@@ -1,11 +1,12 @@
-var path = require('path');
 var webpack = require('karma-webpack');
+var paths = require('./paths');
+var path = require('path');
 
 module.exports = function (config) {
   config.set({
     frameworks: ['chai', 'mocha'],
     files: [
-      'test/tests.bundle.js'
+      '../test/tests.bundle.js'
     ],
     plugins: [
       webpack,
@@ -20,10 +21,10 @@ module.exports = function (config) {
     ],
     browsers: ['PhantomJS'],
     preprocessors: {
-      'src/**/*.js': ['webpack', 'sourcemap'],
-      'src/**/*.spec.js': ['webpack', 'sourcemap'],
-      'test/**/*.spec.js': ['webpack', 'sourcemap'],
-      'test/tests.bundle.js': ['webpack'],
+      '../src/**/*.js': ['webpack', 'sourcemap'],
+      '../src/**/*.spec.js': ['webpack', 'sourcemap'],
+      '../test/**/*.spec.js': ['webpack', 'sourcemap'],
+      '../test/tests.bundle.js': ['webpack'],
     },
     webpack: {
       module: {
@@ -44,18 +45,7 @@ module.exports = function (config) {
       },
       resolve: {
         extensions: ['', '.js', '.scss'],
-
-        alias: {
-          app: path.join(__dirname, 'src'),
-          constants: path.join(__dirname, 'src', 'constants'),
-          actions: path.join(__dirname, 'src', 'actions'),
-          components: path.join(__dirname, 'src', 'components'),
-          reducers: path.join(__dirname, 'src', 'reducers'),
-          containers: path.join(__dirname, 'src', 'containers'),
-          styles: path.join(__dirname, 'src', 'assets', 'styles'),
-          utils: path.join(__dirname, 'src', 'utils'),
-          store: path.join(__dirname, 'src', 'store'),
-        }
+        alias: paths
       }
     },
     webpackMiddleware: { noInfo: true },
@@ -69,6 +59,7 @@ module.exports = function (config) {
     coverageReporter: {
       type: 'lcovonly',
       subdir: '.',
+      dir: '../dist',
       file: 'lcov.info'
     }
   });

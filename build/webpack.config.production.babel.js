@@ -1,4 +1,4 @@
-import { CONFIG, ROOT_PATH } from './config';
+import { CONFIG, ROOT_PATH } from './webpack.config.base';
 import webpack from 'webpack';
 import merge from './helpers/merge';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
@@ -6,7 +6,7 @@ import CompressionPlugin from 'compression-webpack-plugin';
 
 export default merge({
   output: {
-    path: `${ ROOT_PATH }/build`,
+    path: `${ ROOT_PATH }/dist`,
     publicPath: '',
     filename: 'bundle-[hash].js'
   },
@@ -24,7 +24,7 @@ export default merge({
         comments: false
       }
     }),
-    new CompressionPlugin({ asset: '{file}.gz', algorithm: 'gzip' }),
+    new CompressionPlugin({ asset: '[file].gz', algorithm: 'gzip' }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production')
