@@ -25,10 +25,11 @@ http://un.khz.fi/generative-animation-poc-react-redux/
 
 ### NPM tasks
 
-- `npm run dev-server` - starts local development web server in port 9999
-- `npm start`- starts production build and run local web server in port 9999
-- `npm run build` - starts production build
-- `npm test` - runs tests
+- `npm run dev-server` starts local development web server in port 9999
+- `npm start` starts production build and run local web server in port 9999
+- `npm run build` starts production build
+- `npm test` runs tests once
+- `npm test-watch` runs tests and watches for changes
 
 ### Findings
 
