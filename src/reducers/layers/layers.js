@@ -1,7 +1,7 @@
 // @flow
 import { rand, constrain, reduceNestedState } from 'utils/reducerHelpers';
 import * as actionTypes from 'constants/ActionTypes';
-import type {LayerType, ActionType} from 'constants/Types';
+import type {LayerType, ActionType, GlobalStateType} from 'constants/Types';
 
 let layerId = 0;
 function createLayer(): LayerType {
@@ -17,12 +17,12 @@ function createLayer(): LayerType {
   };
 }
 
-// $FlowFixMe: Can't cope with Array.apply
 const initialState = {
+  // $FlowFixMe: Can't cope with Array.apply
   layers: Array.apply(null, {length: 8}).map(() => createLayer())
 };
 
-export function layers (state: Object = {}, action: ActionType): Object {
+export function layers (state: GlobalStateType = {}, action: ActionType): GlobalStateType {
   const {layers} = state.layers === undefined ? initialState : state;
   return {
     layers: reduceLayers(layers, action),

@@ -1,7 +1,7 @@
 // @flow
 import { rand, constrain, reduceNestedState } from 'utils/reducerHelpers';
 import * as actionTypes from 'constants/ActionTypes';
-import {RulesType, ParticleType, ParticleCollectionType, ActionType} from 'constants/Types';
+import {RulesType, ParticleType, ParticleCollectionType, ActionType, GlobalStateType} from 'constants/Types';
 
 let particleId = 0;
 function createParticle({moveRules}: {[id: string]: RulesType}): ParticleType {
@@ -54,34 +54,24 @@ function createParticle({moveRules}: {[id: string]: RulesType}): ParticleType {
 }
 
 const initialState = {
-  count: 0,
-  isPaused: false,
   env: {
-    radius: 100
+    radius: 100,
   },
+  isPaused: false,
   particles: []
 };
 
-export function particles(state: Object = {}, action: ActionType): Object {
-  const {count, isPaused, env, particles} = state.particles === undefined ? initialState : state;
+export function particles(state: GlobalStateType = {}, action: ActionType): GlobalStateType {
+  const {isPaused, particles, env} = state.particles === undefined ? initialState : state;
   return reduceParticles({
-    count,
-    isPaused,
     env,
+    isPaused,
     particles
   }, action);
 }
 
 function reduceParticles(state: ParticleCollectionType, action: ActionType): ParticleCollectionType {
   switch (action.type) {
-
-    case actionTypes.ENV_RESIZED:
-      return {
-        ...state,
-        env: {
-          radius: Math.min(action.width, action.height)/2
-        }
-      };
 
     case actionTypes.MOVE_PARTICLE:
       return moveParticle(state, action);
@@ -113,7 +103,7 @@ function moveParticle(state: ParticleCollectionType, action: ActionType): Partic
     particles = state.particles.map((particle: ParticleType): ParticleType => {
       return reduceNestedState({
         ...particle,
-        env: state.env,
+        env: state.env || particle.env,
       }, particle.moveRules);
     });
   }
@@ -137,7 +127,6 @@ function addParticle(state: ParticleCollectionType, action: ActionType): Particl
   return {
     ...state,
     particles,
-    count: countParticles(particles),
   };
 }
 
@@ -151,7 +140,6 @@ function deleteParticle(state: ParticleCollectionType, action: ActionType): Part
   return {
     ...state,
     particles,
-    count: countParticles(particles),
   };
 }
 
@@ -167,10 +155,5 @@ function deleteSomeParticles(state: ParticleCollectionType, action: ActionType):
   return {
     ...state,
     particles,
-    count: countParticles(particles),
   };
-}
-
-function countParticles(particles: ParticleType[]): number {
-  return particles.filter((p: ParticleType) => !p.isToBeDestroyed).length;
 }

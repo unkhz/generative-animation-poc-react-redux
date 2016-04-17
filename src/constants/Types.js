@@ -3,7 +3,7 @@ export type ThunkType = Function
 export type ActionMapType = {[id: string]: ActionType|ThunkType}
 
 export type ParticleCollectionType = {
-  count: number,
+  aliveParticleCount: number,
   isPaused: boolean,
   env: {[id: string]: number},
   particles: ParticleType[],
@@ -35,3 +35,15 @@ export type ColorType = {
 }
 
 export type RulesType = {[id: string]: Function | RulesType}
+
+export type GlobalStateType = {
+  env: EnvironmentType,
+  isPaused: boolean,
+  aliveParticleCount: number,
+  layers: LayerType[],
+  particles: ParticleType[]
+}
+
+export type EnvironmentType = {
+  radius: number
+}

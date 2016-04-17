@@ -36,7 +36,7 @@ describe('App', () => {
 
   it('contains help with particle count', () => {
     const props = {
-      count: 2,
+      aliveParticleCount: 2,
       particles: [{
         id: 0,
       },{

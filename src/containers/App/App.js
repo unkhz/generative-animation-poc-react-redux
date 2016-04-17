@@ -21,7 +21,7 @@ export class App extends Component {
       requestParticleMove: () => undefined
     },
     layers: [],
-    count: 0,
+    aliveParticleCount: 0,
     particles: []
   };
 
@@ -43,16 +43,16 @@ export class App extends Component {
   }
 
   renderHelp(): React.Element {
-    const {layers, count, particles} = this.props;
-    if (count === 0) {
+    const {layers, aliveParticleCount, particles} = this.props;
+    if (aliveParticleCount === 0) {
       return (
-        <div className="help" data-count={count}><div>
+        <div className="help" data-count={aliveParticleCount}><div>
           scroll to add particles<br/>
           space to pause
         </div></div>
       );
     } else {
-      return <div className="layer help" data-count={count}><div>{count}</div></div>;
+      return <div className="layer help" data-count={aliveParticleCount}><div>{aliveParticleCount}</div></div>;
     }
   }
 

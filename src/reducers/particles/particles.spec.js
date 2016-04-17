@@ -4,11 +4,16 @@ import {particles} from 'reducers/particles';
 import {assert} from 'chai';
 import {stub} from 'sinon';
 
+// returns the amount of particles not scheduled for destruction
+function countAliveParticles(particles: array): number {
+  return particles.filter((p: ParticleType) => !p.isToBeDestroyed).length;
+}
+
 describe('particles reducer', () => {
   it('returns initial state', () => {
     const state = particles({}, {type: null});
     assert.isObject(state);
-    assert.equal(state.count, 0);
+    assert.equal(countAliveParticles(state.particles), 0);
     assert.deepEqual(state.particles, []);
   });
 
@@ -38,7 +43,7 @@ describe('particles reducer', () => {
         sn: 'fakeFunction',
       }
     });
-    assert.equal(state.count, 2);
+    assert.equal(countAliveParticles(state.particles), 2);
     assert.equal(state.particles[0].moveRules.sn, 'fakeFunction');
 
     // second pass
@@ -49,7 +54,7 @@ describe('particles reducer', () => {
         sn: 'fakeFunction2',
       }
     });
-    assert.equal(state.count, 5);
+    assert.equal(countAliveParticles(state.particles), 5);
     assert.equal(state.particles[0].moveRules.sn, 'fakeFunction');
     assert.equal(state.particles[2].moveRules.sn, 'fakeFunction2');
   });
@@ -69,8 +74,8 @@ describe('particles reducer', () => {
       type: actionTypes.DELETE_PARTICLE,
       id: state.particles[1].id
     });
-    assert.equal(state.count, 2);
     assert.equal(state.particles.length, 3);
+    assert.equal(countAliveParticles(state.particles), 2);
     assert.equal(state.particles[1].id, deletedId);
     assert.equal(state.particles[1].isToBeDestroyed, true);
   });
@@ -90,8 +95,8 @@ describe('particles reducer', () => {
       type: actionTypes.DELETE_SOME_PARTICLES,
       count: 2
     });
-    assert.equal(state.count, 3);
     assert.equal(state.particles.length, 5);
+    assert.equal(countAliveParticles(state.particles), 3);
     const toBeDestroyedCount = state.particles.filter((p: Object) => p.isToBeDestroyed).length;
     assert.equal(toBeDestroyedCount, 2);
   });

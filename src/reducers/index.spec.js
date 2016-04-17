@@ -11,7 +11,7 @@ describe('rootReducer', () => {
   });
   it('contains particles from partial reducers', () => {
     const state = rootReducer({}, initAction);
-    assert.isNumber(state.count);
+    assert.isNumber(state.aliveParticleCount);
     assert.isBoolean(state.isPaused);
     assert.isArray(state.particles);
   });
