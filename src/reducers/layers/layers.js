@@ -18,9 +18,18 @@ function createLayer(): LayerType {
 }
 
 // $FlowFixMe: Can't cope with Array.apply
-const initialState = Array.apply(null, {length: 8}).map(() => createLayer());
+const initialState = {
+  layers: Array.apply(null, {length: 8}).map(() => createLayer())
+};
 
-export function layers(state: LayerType[] = initialState, action: ActionType): LayerType[] {
+export function layers (state: Object = {}, action: ActionType): Object {
+  const {layers} = state.layers === undefined ? initialState : state;
+  return {
+    layers: reduceLayers(layers, action),
+  };
+}
+
+function reduceLayers(state: LayerType[], action: ActionType): LayerType[] {
   switch (action.type) {
     case actionTypes.MOVE_PARTICLE:
       return state.map((layer: LayerType): LayerType => {

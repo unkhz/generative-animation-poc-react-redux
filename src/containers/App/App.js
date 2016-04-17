@@ -21,10 +21,8 @@ export class App extends Component {
       requestParticleMove: () => undefined
     },
     layers: [],
-    particles: {
-      count: 0,
-      particles: []
-    }
+    count: 0,
+    particles: []
   };
 
   componentWillMount() {
@@ -32,7 +30,7 @@ export class App extends Component {
   }
 
   renderLayers(): React.Element {
-    const { layers, particles: { particles } } = this.props;
+    const {layers, particles} = this.props;
     return layers.map((layer: LayerType): React.Element => {
       return (
         <Layer
@@ -45,7 +43,7 @@ export class App extends Component {
   }
 
   renderHelp(): React.Element {
-    const { layers, particles: { count, particles } } = this.props;
+    const {layers, count, particles} = this.props;
     if (count === 0) {
       return (
         <div className="help" data-count={count}><div>

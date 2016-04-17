@@ -62,7 +62,17 @@ const initialState = {
   particles: []
 };
 
-export function particles(state: ParticleCollectionType = initialState, action: ActionType): ParticleCollectionType {
+export function particles(state: Object = {}, action: ActionType): Object {
+  const {count, isPaused, env, particles} = state.particles === undefined ? initialState : state;
+  return reduceParticles({
+    count,
+    isPaused,
+    env,
+    particles
+  }, action);
+}
+
+function reduceParticles(state: ParticleCollectionType, action: ActionType): ParticleCollectionType {
   switch (action.type) {
 
     case actionTypes.ENV_RESIZED:

@@ -6,7 +6,7 @@ import {stub} from 'sinon';
 
 describe('particles reducer', () => {
   it('returns initial state', () => {
-    const state = particles(undefined, {type: null});
+    const state = particles({}, {type: null});
     assert.isObject(state);
     assert.equal(state.count, 0);
     assert.deepEqual(state.particles, []);
@@ -31,7 +31,7 @@ describe('particles reducer', () => {
     let state;
 
     // first pass
-    state = particles(undefined, {
+    state = particles({}, {
       type: actionTypes.ADD_PARTICLE,
       count: 2,
       moveRules: {
@@ -58,7 +58,7 @@ describe('particles reducer', () => {
     let state;
 
     // first pass
-    state = particles(undefined, {
+    state = particles({}, {
       type: actionTypes.ADD_PARTICLE,
       count: 3
     });
@@ -79,7 +79,7 @@ describe('particles reducer', () => {
     let state;
 
     // first pass
-    state = particles(undefined, {
+    state = particles({}, {
       type: actionTypes.ADD_PARTICLE,
       count: 5
     });
@@ -100,7 +100,7 @@ describe('particles reducer', () => {
     let reducedState;
 
     // first pass
-    const firstState = particles(undefined, actions.addParticle(1));
+    const firstState = particles({}, actions.addParticle(1));
 
     // nth pass (second pass has speed 0)
     reducedState = particles(firstState, {type: actionTypes.MOVE_PARTICLE});

@@ -3,9 +3,14 @@ import * as actionTypes from 'constants/ActionTypes';
 import {layers} from 'reducers/layers';
 import {assert} from 'chai';
 
+const initAction = {
+  type: '@@redux/INIT'
+};
+
 describe('layers reducer', () => {
   it('returns initial state', () => {
-    const state = layers(undefined, {type: null});
+    const fullState = layers({}, initAction);
+    const state = fullState.layers;
     assert.isArray(state);
     assert.equal(state[0].id, 0);
     assert.equal(state[0].sn, 0);
@@ -15,17 +20,20 @@ describe('layers reducer', () => {
   });
 
   it('updates serial number on moveParticle', () => {
-    const state = layers([{sn: 0}], {
+    const fullState = layers([{sn: 0}], {
       type: actionTypes.MOVE_PARTICLE
     });
+    const state = fullState.layers;
+
     assert.equal(state[0].sn, 1);
   });
 
   it('updates frameRequestId on particleMoveRequested', () => {
-    const state = layers([{frameRequestId: 0}], {
+    const fullState = layers([{frameRequestId: 0}], {
       type: actionTypes.PARTICLE_MOVE_REQUESTED,
       frameRequestId: 1234,
     });
+    const state = fullState.layers;
     assert.equal(state[0].frameRequestId, 1234);
   });
 });

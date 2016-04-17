@@ -36,14 +36,12 @@ describe('App', () => {
 
   it('contains help with particle count', () => {
     const props = {
-      particles: {
-        count: 2,
-        particles: [{
-          id: 0,
-        },{
-          id: 1,
-        }]
-      }
+      count: 2,
+      particles: [{
+        id: 0,
+      },{
+        id: 1,
+      }]
     };
     const node = getNode(<App {...props} />);
     assert.equal(node.firstChild.className, 'layer help');
@@ -71,14 +69,12 @@ describe('App', () => {
         id: 1,
         color: {r: 3, g: 44, b: 42},
       }],
-      particles: {
-        particles: [
-          {id: 0},
-          {id: 1},
-          {id: 2},
-          {id: 3},
-        ]
-      }
+      particles: [
+        {id: 0},
+        {id: 1},
+        {id: 2},
+        {id: 3},
+      ]
     };
     const node = getNode(<App {...props} />);
     const layerNodes = getLayerNodes(node);
@@ -96,18 +92,16 @@ describe('App', () => {
         {id: 1},
         {id: 2},
       ],
-      particles: {
-        particles: [
-          {id: 0},
-          {id: 1},
-          {id: 2},
-          {id: 3},
-          {id: 4},
-          {id: 5},
-          {id: 6},
-          {id: 7},
-        ]
-      }
+      particles: [
+        {id: 0},
+        {id: 1},
+        {id: 2},
+        {id: 3},
+        {id: 4},
+        {id: 5},
+        {id: 6},
+        {id: 7},
+      ]
     };
     const node = getNode(<App {...props} />);
     const layerNodes = getLayerNodes(node);
