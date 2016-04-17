@@ -2,13 +2,6 @@ export type ActionType = {type: string}
 export type ThunkType = Function
 export type ActionMapType = {[id: string]: ActionType|ThunkType}
 
-export type ParticleCollectionType = {
-  aliveParticleCount: number,
-  isPaused: boolean,
-  env: {[id: string]: number},
-  particles: ParticleType[],
-}
-
 export type ParticleType = {
   id: number,
   sn: number,

@@ -1,6 +1,6 @@
 import React, { Component, Children } from 'react';
 import { bindActionCreators } from 'redux';
-import * as Actions from 'actions/Actions';
+import * as actions from 'actions/Actions';
 import { connect } from 'react-redux';
 import Touchable from 'components/Touchable';
 import type {TouchableDeltaType} from 'components/Touchable/Touchable';
@@ -109,13 +109,13 @@ export class Environment extends Component {
   }
 }
 
-function mapStateToProps(state: Object): Object {
-  return state;
+function mapStateToProps(state: GlobalStateType): GlobalStateType {
+  return {};
 }
 
 function mapDispatchToProps(dispatch: Function): Object {
   return {
-    actions: bindActionCreators(Actions, dispatch)
+    actions: bindActionCreators(actions, dispatch)
   };
 }
 

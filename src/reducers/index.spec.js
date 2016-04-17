@@ -5,14 +5,22 @@ const initAction = {
 };
 
 describe('rootReducer', () => {
-  it('contains layers from partial reducers', () => {
+  it('produces layers', () => {
     const state = rootReducer({}, initAction);
     assert.isArray(state.layers);
   });
-  it('contains particles from partial reducers', () => {
+  it('produces particles', () => {
     const state = rootReducer({}, initAction);
-    assert.isNumber(state.aliveParticleCount);
     assert.isBoolean(state.isPaused);
     assert.isArray(state.particles);
+  });
+  it('produces env', () => {
+    const state = rootReducer({}, initAction);
+    assert.isObject(state.env);
+    assert.isNumber(state.env.radius);
+  });
+  it('produces aliveParticleCount', () => {
+    const state = rootReducer({}, initAction);
+    assert.isNumber(state.aliveParticleCount);
   });
 });

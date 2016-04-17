@@ -2,8 +2,8 @@
 import 'styles/main.scss';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
-import * as Actions from 'actions/Actions';
-import type {ActionMapType, LayerType, ParticleCollectionType, ParticleType} from 'constants/Types';
+import * as actions from 'actions/Actions';
+import type {ActionMapType, LayerType, GlobalStateType, ParticleType} from 'constants/Types';
 import Layer from 'components/Layer';
 import { connect } from 'react-redux';
 import './App.scss';
@@ -11,7 +11,8 @@ import './App.scss';
 type AppPropsType = {
   actions: ActionMapType,
   layers: LayerType[],
-  particles: ParticleCollectionType,
+  particles: ParticleType[],
+  aliveParticleCount: number,
 }
 
 export class App extends Component {
@@ -67,13 +68,18 @@ export class App extends Component {
   }
 }
 
-function mapStateToProps(state: Object): Object {
-  return state;
+function mapStateToProps(state: GlobalStateType): GlobalStateType {
+  const {layers, particles, aliveParticleCount} = state;
+  return {
+    layers,
+    particles,
+    aliveParticleCount
+  };
 }
 
 function mapDispatchToProps(dispatch: Function): Object {
   return {
-    actions: bindActionCreators(Actions, dispatch)
+    actions: bindActionCreators(actions, dispatch)
   };
 }
 

@@ -1,7 +1,7 @@
 // @flow
 import { rand, constrain, reduceNestedState, initPartialState } from 'utils/reducerHelpers';
 import * as actionTypes from 'constants/ActionTypes';
-import {RulesType, ParticleType, ParticleCollectionType, ActionType, GlobalStateType} from 'constants/Types';
+import {RulesType, ParticleType, ActionType, GlobalStateType} from 'constants/Types';
 
 let particleId = 0;
 function createParticle({moveRules}: {[id: string]: RulesType}): ParticleType {
@@ -89,7 +89,7 @@ export function particles(state: GlobalStateType, action: ActionType): GlobalSta
   }
 }
 
-function moveParticle(state: ParticleCollectionType, action: ActionType): ParticleCollectionType {
+function moveParticle(state: GlobalStateType, action: ActionType): GlobalStateType {
   let particles = state.particles;
 
   if (!state.isPaused) {
@@ -107,7 +107,7 @@ function moveParticle(state: ParticleCollectionType, action: ActionType): Partic
   };
 }
 
-function addParticle(state: ParticleCollectionType, action: ActionType): ParticleCollectionType {
+function addParticle(state: GlobalStateType, action: ActionType): GlobalStateType {
   const particles = [
     ...state.particles,
     // $FlowFixMe: Can't cope with Array.apply
@@ -123,7 +123,7 @@ function addParticle(state: ParticleCollectionType, action: ActionType): Particl
   };
 }
 
-function deleteParticle(state: ParticleCollectionType, action: ActionType): ParticleCollectionType {
+function deleteParticle(state: GlobalStateType, action: ActionType): GlobalStateType {
   const particles = state.particles.map((particle: ParticleType): ParticleType => {
     if (particle.id === action.id) {
       particle.isToBeDestroyed = true;
@@ -136,7 +136,7 @@ function deleteParticle(state: ParticleCollectionType, action: ActionType): Part
   };
 }
 
-function deleteSomeParticles(state: ParticleCollectionType, action: ActionType): ParticleCollectionType {
+function deleteSomeParticles(state: GlobalStateType, action: ActionType): GlobalStateType {
   let count = action.count;
   const particles = state.particles.map((particle: ParticleType): ParticleType => {
     if (!particle.isToBeDestroyed && count > 0) {
