@@ -1,5 +1,5 @@
 // @flow
-import { rand, constrain, reduceNestedState } from 'utils/reducerHelpers';
+import {initPartialState} from 'utils/reducerHelpers';
 import * as actionTypes from 'constants/ActionTypes';
 import type {LayerType, ActionType, GlobalStateType} from 'constants/Types';
 
@@ -22,29 +22,29 @@ const initialState = {
   layers: Array.apply(null, {length: 8}).map(() => createLayer())
 };
 
-export function layers (state: GlobalStateType = {}, action: ActionType): GlobalStateType {
-  const {layers} = state.layers === undefined ? initialState : state;
-  return {
-    layers: reduceLayers(layers, action),
-  };
-}
-
-function reduceLayers(state: LayerType[], action: ActionType): LayerType[] {
+export function layers(state: GlobalStateType, action: ActionType): GlobalStateType {
+  state = initPartialState(state, initialState, 'layers');
   switch (action.type) {
     case actionTypes.MOVE_PARTICLE:
-      return state.map((layer: LayerType): LayerType => {
-        return {
-          ...layer,
-          sn: layer.sn+1
-        };
-      });
+      return {
+        ...state,
+        layers: state.layers.map((layer: LayerType): LayerType => {
+          return {
+            ...layer,
+            sn: layer.sn+1
+          };
+        })
+      };
     case actionTypes.PARTICLE_MOVE_REQUESTED:
-      return state.map((layer: LayerType): LayerType => {
-        return {
-          ...layer,
-          frameRequestId: action.frameRequestId,
-        };
-      });
+      return {
+        ...state,
+        layers: state.layers.map((layer: LayerType): LayerType => {
+          return {
+            ...layer,
+            frameRequestId: action.frameRequestId,
+          };
+        })
+      };
     default:
       return state;
   }

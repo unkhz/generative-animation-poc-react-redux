@@ -1,4 +1,5 @@
 // @flow
+import {initPartialState} from 'utils/reducerHelpers';
 import {ActionType, GlobalStateType} from 'constants/Types';
 import * as actionTypes from 'constants/ActionTypes';
 
@@ -9,13 +10,7 @@ const initialState = {
 };
 
 export function environment(state: GlobalStateType, action: ActionType): GlobalStateType {
-  const {env} = state.env === undefined ? initialState : state;
-  return reduce({
-    env
-  }, action);
-}
-
-function reduce(state: GlobalStateType, action: ActionType): GlobalStateType {
+  state = initPartialState(state, initialState, 'env');
   switch (action.type) {
     case actionTypes.ENV_RESIZED:
       return {

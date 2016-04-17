@@ -1,5 +1,5 @@
 // @flow
-import { rand, constrain, reduceNestedState } from 'utils/reducerHelpers';
+import { rand, constrain, reduceNestedState, initPartialState } from 'utils/reducerHelpers';
 import * as actionTypes from 'constants/ActionTypes';
 import {RulesType, ParticleType, ParticleCollectionType, ActionType, GlobalStateType} from 'constants/Types';
 
@@ -61,16 +61,9 @@ const initialState = {
   particles: []
 };
 
-export function particles(state: GlobalStateType = {}, action: ActionType): GlobalStateType {
-  const {isPaused, particles, env} = state.particles === undefined ? initialState : state;
-  return reduceParticles({
-    env,
-    isPaused,
-    particles
-  }, action);
-}
+export function particles(state: GlobalStateType, action: ActionType): GlobalStateType {
+  state = initPartialState(state, initialState, 'particles');
 
-function reduceParticles(state: ParticleCollectionType, action: ActionType): ParticleCollectionType {
   switch (action.type) {
 
     case actionTypes.MOVE_PARTICLE:
