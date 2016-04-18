@@ -56,13 +56,15 @@ per particle update.
 #### Design
 
 I wanted to try out moving the decision of the state structure from the root
-reducer to the partial reducers. So, I've dropped combineReducers and use
-lodash/fp/flow to pipe output from a partial reducer to the next reducer, giving
-the reducers full control over which pieces of state the want to A) modify or B)
-use as an input for business logic. This should allow less duplication in the
+reducer to the partial reducers. Initially I replaced combineReducers with a
+custom  monad reducer component, but it was unnecessarily complex for something
+that is anyway happening synchronously. I converted to simply using
+lodash/fp/flow to pipe output from one partial reducer to the other, giving the
+reducers full control over which pieces of state the want to A) modify or B) use
+as an input or intermediate state. This should allow less duplication in the
 state tree and make it easier to keep the structure flat.
 
-The drawback is slightly more complicated reducers as there needs to be logic for
-deciding if the state has been initialized for a particular reducer or not.
+The drawback is slightly more complicated reducers as there needs to be logic
+for deciding if the state has been initialized for a particular reducer or not.
 Also, the dependencies caused by shared parts of the state are not clearly
 visible in this approach. Fixing that needs some more thought.
