@@ -90,7 +90,7 @@ export class Environment extends Component {
 
   addOrRemoveParticles(delta: TouchableDeltaType) {
     if (delta > 0) {
-      this.props.actions.addParticle(1);
+      this.props.actions.addParticle(1, 'frontRotater');
     } else if (delta < 0) {
       this.props.actions.deleteSomeParticles(1);
     }

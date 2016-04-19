@@ -4,6 +4,7 @@ import {ParticleType, ActionType, GlobalStateType} from 'constants/Types';
 import {environment} from './environment';
 import {layers} from './layers';
 import {particles} from './particles';
+import {styles} from './styles';
 
 /**
  * Pipe partial reducers together, so that they can chain modifications
@@ -19,6 +20,7 @@ function pipeReduce(reducers: Function[], state: GlobalStateType, action: Action
 export default function(state: GlobalStateType, action: ActionType): GlobalStateType {
   return pipeReduce([
     environment,
+    styles,
     layers,
     particles,
     countParticles

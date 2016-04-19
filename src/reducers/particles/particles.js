@@ -1,55 +1,22 @@
 // @flow
 import { rand, constrain, reduceNestedState, initPartialState } from 'utils/reducerHelpers';
+import cloneDeep from 'lodash.cloneDeep';
 import * as actionTypes from 'constants/ActionTypes';
-import {RulesType, ParticleType, ActionType, GlobalStateType} from 'constants/Types';
+import {RulesType, ParticleType, ActionType, StyleType, StyleValueType, GlobalStateType} from 'constants/Types';
 
 let particleId = 0;
-function createParticle({moveRules}: {[id: string]: RulesType}): ParticleType {
+function createParticle(style: StyleType): ParticleType {
   return {
     id: particleId++,
     sn: 0,
     isToBeDestroyed: false,
-    style: {
-      opacity: 0,
+    styleName: style.name,
+    ...cloneDeep(style.initialState),
+    rules: {
+      sn: (state: StyleType, value: StyleValueType) => value+1
     },
-    env: {
-      radius: 100
-    },
-    transform: {
-      scaleX: 1,
-      scaleY: 1,
-      scaleZ: 1,
-      rotateX: 0,
-      rotateY: 0,
-      rotateZ: 0,
-      translateX: 0,
-      translateY: 0,
-      translateZ: 0,
-    },
-    speed: {
-      rotateX: 0,
-      rotateY: 0,
-      rotateZ: 0,
-      translateX: 0,
-      translateY: 0,
-      translateZ: 0,
-      opacity: 0,
-      general: 0,
-      slow: 0,
-    },
-    unit: {
-      translateX: 'px',
-      translateY: 'px',
-      translateZ: 'px',
-      scaleX: '',
-      scaleY: '',
-      scaleZ: '',
-      rotateX: 'deg',
-      rotateY: 'deg',
-      rotateZ: 'deg',
-      opacity: '',
-    },
-    moveRules
+    // intentionally reference rather than clone
+    unit: style.unit
   };
 }
 
@@ -60,6 +27,17 @@ const initialState = {
   isPaused: false,
   particles: []
 };
+
+function getStyle(state: GlobalStateType, name: string): StyleType {
+  const style = state.styles.filter((style: StyleType): StyleType => {
+    return style.name === name;
+  })[0];
+
+  if (!style) {
+    throw new Error('Invalid style');
+  }
+  return style;
+}
 
 export function particles(state: GlobalStateType, action: ActionType): GlobalStateType {
   state = initPartialState(state, initialState, 'particles');
@@ -94,10 +72,15 @@ function moveParticle(state: GlobalStateType, action: ActionType): GlobalStateTy
 
   if (!state.isPaused) {
     particles = state.particles.map((particle: ParticleType): ParticleType => {
+      const style = getStyle(state, particle.styleName);
+      const rules = {
+        ...(style ? style.rules : {}),
+        ...particle.rules
+      };
       return reduceNestedState({
         ...particle,
         env: state.env || particle.env,
-      }, particle.moveRules);
+      }, rules);
     });
   }
 
@@ -112,9 +95,7 @@ function addParticle(state: GlobalStateType, action: ActionType): GlobalStateTyp
     ...state.particles,
     // $FlowFixMe: Can't cope with Array.apply
     ...Array.apply(null, {length: action.count}).map((): ParticleType  => {
-      return createParticle({
-        moveRules: action.moveRules
-      });
+      return createParticle(getStyle(state, action.styleName));
     })
   ];
   return {

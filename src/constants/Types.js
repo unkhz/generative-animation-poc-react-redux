@@ -40,3 +40,12 @@ export type GlobalStateType = {
 export type EnvironmentType = {
   radius: number
 }
+
+export type StyleType = {
+  id: number,
+  name: string,
+  style: {[id: string]: number|string},
+  transform: {[id: string]: number|string},
+}
+
+type StyleValueType = number | string;

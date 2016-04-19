@@ -1,5 +1,5 @@
 import * as actions from 'actions/Actions';
-import * as actionTypes from 'constants/ActionTypes';
+import {initiateStateWithStyles} from 'reducers/styles/styles.spec';
 import {particles} from 'reducers/particles';
 import {assert} from 'chai';
 import {stub} from 'sinon';
@@ -11,24 +11,26 @@ function countAliveParticles(particles: array): number {
 
 describe('particles reducer', () => {
   it('returns initial state', () => {
-    const state = particles({}, {type: null});
+    const state = particles(initiateStateWithStyles('testStyle1', 'testStyle2'),
+      {type: null});
     assert.isObject(state);
     assert.equal(countAliveParticles(state.particles), 0);
     assert.deepEqual(state.particles, []);
   });
 
-  it('updates a piece of state on moveParticle using a reducer defined in moveRules', () => {
+  it('updates a piece of state on moveParticle using a reducer defined in rules', () => {
     const oldState = {
+      ...initiateStateWithStyles('testStyle1', 'testStyle2'),
+
       particles: [{
         sn: 0,
-        moveRules: {
+        styleName: 'testStyle1',
+        rules: {
           sn: (state: Object, value: number) => value+1,
         }
       }]
     };
-    const state = particles(oldState, {
-      type: actionTypes.MOVE_PARTICLE
-    });
+    const state = particles(oldState, actions.moveParticle());
     assert.equal(state.particles[0].sn, 1);
   });
 
@@ -36,44 +38,28 @@ describe('particles reducer', () => {
     let state;
 
     // first pass
-    state = particles({}, {
-      type: actionTypes.ADD_PARTICLE,
-      count: 2,
-      moveRules: {
-        sn: 'fakeFunction',
-      }
-    });
+    state = particles(initiateStateWithStyles('testStyle1', 'testStyle2'),
+      actions.addParticle(2, 'testStyle1'));
     assert.equal(countAliveParticles(state.particles), 2);
-    assert.equal(state.particles[0].moveRules.sn, 'fakeFunction');
+    assert.equal(state.particles[0].styleName, 'testStyle1');
 
     // second pass
-    state = particles(state, {
-      type: actionTypes.ADD_PARTICLE,
-      count: 3,
-      moveRules: {
-        sn: 'fakeFunction2',
-      }
-    });
+    state = particles(state, actions.addParticle(3, 'testStyle2'));
     assert.equal(countAliveParticles(state.particles), 5);
-    assert.equal(state.particles[0].moveRules.sn, 'fakeFunction');
-    assert.equal(state.particles[2].moveRules.sn, 'fakeFunction2');
+    assert.equal(state.particles[0].styleName, 'testStyle1');
+    assert.equal(state.particles[2].styleName, 'testStyle2');
   });
 
   it('schedules a specific particle for deletion on deleteParticle', () => {
     let state;
 
     // first pass
-    state = particles({}, {
-      type: actionTypes.ADD_PARTICLE,
-      count: 3
-    });
+    state = particles(initiateStateWithStyles('testStyle1', 'testStyle2'),
+      actions.addParticle(3, 'testStyle1'));
 
     // second pass
     const deletedId = state.particles[1].id;
-    state = particles(state, {
-      type: actionTypes.DELETE_PARTICLE,
-      id: state.particles[1].id
-    });
+    state = particles(state, actions.deleteParticle(state.particles[1].id));
     assert.equal(state.particles.length, 3);
     assert.equal(countAliveParticles(state.particles), 2);
     assert.equal(state.particles[1].id, deletedId);
@@ -84,44 +70,39 @@ describe('particles reducer', () => {
     let state;
 
     // first pass
-    state = particles({}, {
-      type: actionTypes.ADD_PARTICLE,
-      count: 5
-    });
+    state = particles(initiateStateWithStyles('testStyle1', 'testStyle2'),
+      actions.addParticle(5, 'testStyle1'));
 
     // second pass
     const deletedId = state.particles[1].id;
-    state = particles(state, {
-      type: actionTypes.DELETE_SOME_PARTICLES,
-      count: 2
-    });
+    state = particles(state, actions.deleteSomeParticles(2));
     assert.equal(state.particles.length, 5);
     assert.equal(countAliveParticles(state.particles), 3);
     const toBeDestroyedCount = state.particles.filter((p: Object) => p.isToBeDestroyed).length;
     assert.equal(toBeDestroyedCount, 2);
   });
 
-  it('reduces state based on individual Rules on moveParticle', () => {
+  it('reduces state based on style rules on moveParticle', () => {
     let reducedState;
 
     // first pass
-    const firstState = particles({}, actions.addParticle(1));
+    const firstState = particles(initiateStateWithStyles({
+      name: 'testStyle1',
+      initialState: {
+        testThing: 0,
+      },
+      rules: {
+        testThing: (s: string, v: number) => v + 1,
+      }
+    }), actions.addParticle(1, 'testStyle1'));
 
-    // nth pass (second pass has speed 0)
-    reducedState = particles(firstState, {type: actionTypes.MOVE_PARTICLE});
-    reducedState = particles(reducedState, {type: actionTypes.MOVE_PARTICLE});
-    reducedState = particles(reducedState, {type: actionTypes.MOVE_PARTICLE});
-    reducedState = particles(reducedState, {type: actionTypes.MOVE_PARTICLE});
-    reducedState = particles(reducedState, {type: actionTypes.MOVE_PARTICLE});
-    reducedState = particles(reducedState, {type: actionTypes.MOVE_PARTICLE});
-    reducedState = particles(reducedState, {type: actionTypes.MOVE_PARTICLE});
+    reducedState = particles(firstState,  actions.moveParticle());
+    assert.equal(reducedState.particles[0].testThing, 1);
 
-    const firstParticle = firstState.particles[0];
-    const reducedParticle = reducedState.particles[0];
+    reducedState = particles(reducedState, actions.moveParticle());
+    assert.equal(reducedState.particles[0].testThing, 2);
 
-    Object.keys(reducedParticle.transform).forEach((prop: string) => {
-      const val = reducedParticle.transform[prop];
-      assert.notEqual(val, firstParticle.transform[prop]);
-    });
+    reducedState = particles(reducedState, actions.moveParticle());
+    assert.equal(reducedState.particles[0].testThing, 3);
   });
 });

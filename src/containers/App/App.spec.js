@@ -27,11 +27,23 @@ describe('App', () => {
   it('dispatches requestParticleMove on start', () => {
     const props = {
       actions: {
-        requestParticleMove: spy()
+        requestParticleMove: spy(),
+        addStyle: spy(),
       }
     };
     const node = getNode(<App {...props} />);
     assert.isTrue(props.actions.requestParticleMove.calledOnce);
+  });
+
+  it('dispatches requestParticleMove on start', () => {
+    const props = {
+      actions: {
+        requestParticleMove: spy(),
+        addStyle: spy(),
+      }
+    };
+    const node = getNode(<App {...props} />);
+    assert.isTrue(props.actions.addStyle.calledOnce);
   });
 
   it('contains help with particle count', () => {

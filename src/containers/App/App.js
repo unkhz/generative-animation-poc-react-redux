@@ -3,6 +3,7 @@ import 'styles/main.scss';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import * as actions from 'actions/Actions';
+import * as styles from 'constants/Rules';
 import type {ActionMapType, LayerType, GlobalStateType, ParticleType} from 'constants/Types';
 import Layer from 'components/Layer';
 import { connect } from 'react-redux';
@@ -19,7 +20,8 @@ export class App extends Component {
 
   static defaultProps = {
     actions: {
-      requestParticleMove: () => undefined
+      requestParticleMove: () => undefined,
+      addStyle: () => undefined,
     },
     layers: [],
     aliveParticleCount: 0,
@@ -28,6 +30,7 @@ export class App extends Component {
 
   componentWillMount() {
     this.props.actions.requestParticleMove();
+    this.props.actions.addStyle(styles.frontRotaterStyleFactory());
   }
 
   renderLayers(): React.Element {
