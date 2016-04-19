@@ -35,7 +35,7 @@ describe('App', () => {
     assert.isTrue(props.actions.requestParticleMove.calledOnce);
   });
 
-  it('dispatches requestParticleMove on start', () => {
+  it('dispatches addStyle on start', () => {
     const props = {
       actions: {
         requestParticleMove: spy(),
@@ -43,7 +43,7 @@ describe('App', () => {
       }
     };
     const node = getNode(<App {...props} />);
-    assert.isTrue(props.actions.addStyle.calledOnce);
+    assert.isTrue(props.actions.addStyle.calledTwice);
   });
 
   it('contains help with particle count', () => {

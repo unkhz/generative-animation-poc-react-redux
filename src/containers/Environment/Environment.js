@@ -90,7 +90,7 @@ export class Environment extends Component {
 
   addOrRemoveParticles(delta: TouchableDeltaType) {
     if (delta > 0) {
-      this.props.actions.addParticle(1, 'frontRotater');
+      this.props.actions.addParticle(1, Math.random() > 0.67 ? 'frontRotater' : 'backBlinker');
     } else if (delta < 0) {
       this.props.actions.deleteSomeParticles(1);
     }

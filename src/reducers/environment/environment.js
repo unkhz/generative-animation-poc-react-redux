@@ -16,7 +16,9 @@ export function environment(state: GlobalStateType, action: ActionType): GlobalS
       return {
         ...state,
         env: {
-          radius: Math.min(action.width, action.height)/2
+          radius: Math.min(action.width, action.height)/2,
+          width: action.width,
+          height: action.height,
         }
       };
     default:

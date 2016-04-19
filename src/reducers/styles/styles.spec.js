@@ -6,14 +6,14 @@ import {stub} from 'sinon';
 export function createStyle(name: string): Object {
   return {
     name,
-    initialState: {
+    getInitialState: () => ({
       style: {
         opacity: 0
       },
       transform: {
         translateX: 0
       }
-    },
+    }),
     unit: {
       opacity: '',
       translateX: 'px',

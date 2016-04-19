@@ -1,17 +1,16 @@
 // @flow
 import { rand, constrain, reduceNestedState, initPartialState } from 'utils/reducerHelpers';
-import cloneDeep from 'lodash/cloneDeep';
 import * as actionTypes from 'constants/ActionTypes';
 import {RulesType, ParticleType, ActionType, StyleType, StyleValueType, GlobalStateType} from 'constants/Types';
 
 let particleId = 0;
-function createParticle(style: StyleType): ParticleType {
+function createParticle(style: StyleType, state: GlobalStateType): ParticleType {
   return {
     id: particleId++,
     sn: 0,
     isToBeDestroyed: false,
     styleName: style.name,
-    ...cloneDeep(style.initialState),
+    ...style.getInitialState(state),
     rules: {
       sn: (state: StyleType, value: StyleValueType) => value+1
     },
@@ -34,7 +33,7 @@ function getStyle(state: GlobalStateType, name: string): StyleType {
   })[0];
 
   if (!style) {
-    throw new Error('Invalid style');
+    throw new Error(`Invalid style ${name}`);
   }
   return style;
 }
@@ -95,7 +94,7 @@ function addParticle(state: GlobalStateType, action: ActionType): GlobalStateTyp
     ...state.particles,
     // $FlowFixMe: Can't cope with Array.apply
     ...Array.apply(null, {length: action.count}).map((): ParticleType  => {
-      return createParticle(getStyle(state, action.styleName));
+      return createParticle(getStyle(state, action.styleName), state);
     })
   ];
   return {

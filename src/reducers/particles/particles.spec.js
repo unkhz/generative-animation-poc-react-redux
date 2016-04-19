@@ -88,9 +88,9 @@ describe('particles reducer', () => {
     // first pass
     const firstState = particles(initiateStateWithStyles({
       name: 'testStyle1',
-      initialState: {
+      getInitialState: () => ({
         testThing: 0,
-      },
+      }),
       rules: {
         testThing: (s: string, v: number) => v + 1,
       }

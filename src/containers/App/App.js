@@ -31,6 +31,7 @@ export class App extends Component {
   componentWillMount() {
     this.props.actions.requestParticleMove();
     this.props.actions.addStyle(styles.frontRotaterStyleFactory());
+    this.props.actions.addStyle(styles.backBlinkerStyleFactory());
   }
 
   renderLayers(): React.Element {
