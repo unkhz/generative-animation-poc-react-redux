@@ -38,15 +38,6 @@ export function reduceNestedState(state: Object, reducers: RulesType, rootState?
 }
 
 /**
- * Create a pipeable version of a reducer function with a bound action
- */
-export function pipe(reducer: Function, action: ActionType): Function {
-  return ((reducer: Function, action: ActionType, state: GlobalStateType): GlobalStateType => {
-    return reducer(state, action);
-  }).bind(null, reducer, action);
-}
-
-/**
  * Check if a part of the global state has been initialised and return initialState if not
  */
 export function initPartialState(state: GlobalStateType, initialState: GlobalStateType, testProp: string): GlobalStateType {

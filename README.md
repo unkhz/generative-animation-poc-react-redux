@@ -58,8 +58,8 @@ per particle update.
 I wanted to try out moving the decision of the state structure from the root
 reducer to the partial reducers. Initially I replaced combineReducers with a
 custom  monad reducer component, but it was unnecessarily complex for something
-that is anyway happening synchronously. I converted to simply using
-lodash/fp/flow to pipe output from one partial reducer to the other, giving the
+that is anyway happening synchronously. I converted to simply reducing an Array
+of reducers to pipe output from one partial reducer to the other, giving the
 reducers full control over which pieces of state the want to A) modify or B) use
 as an input or intermediate state. This should allow less duplication in the
 state tree and make it easier to keep the structure flat.
