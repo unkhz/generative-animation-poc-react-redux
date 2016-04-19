@@ -1,6 +1,6 @@
 // @flow
 import { rand, constrain, reduceNestedState, initPartialState } from 'utils/reducerHelpers';
-import cloneDeep from 'lodash.cloneDeep';
+import cloneDeep from 'lodash/cloneDeep';
 import * as actionTypes from 'constants/ActionTypes';
 import {RulesType, ParticleType, ActionType, StyleType, StyleValueType, GlobalStateType} from 'constants/Types';
 
