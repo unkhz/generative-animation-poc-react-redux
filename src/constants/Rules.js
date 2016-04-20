@@ -1,4 +1,4 @@
-import { rand, constrain, reduceNestedState, gradualConstrain } from 'utils/reducerHelpers';
+import { rand, constrain,  isNotConstrained, reduceNestedState, gradualConstrain } from 'utils/reducerHelpers';
 import type {StyleType, StyleValueType} from 'constants/Types';
 
 export function frontRotaterStyleFactory(): StyleType {
@@ -59,9 +59,9 @@ export function frontRotaterStyleFactory(): StyleType {
         scaleX: (state: StyleType, value: StyleValueType) => gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033),
         scaleY: (state: StyleType, value: StyleValueType) => gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033),
         scaleZ: (state: StyleType, value: StyleValueType) => gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033),
-        translateX: (state: StyleType, value: StyleValueType) => gradualConstrain(value, state.speed.translateX, -state.env.radius/10, state.env.radius/10, 0.1),
-        translateY: (state: StyleType, value: StyleValueType) => gradualConstrain(value, state.speed.translateY, -state.env.radius/10, state.env.radius/10, 0.1),
-        translateZ: (state: StyleType, value: StyleValueType) => gradualConstrain(value, state.speed.translateZ, -state.env.radius/10, state.env.radius/10, 0.1),
+        translateX: (state: StyleType, value: StyleValueType) => gradualConstrain(value, state.speed.translateX, -state.env.radius/5, state.env.radius/5, 0.1),
+        translateY: (state: StyleType, value: StyleValueType) => gradualConstrain(value, state.speed.translateY, -state.env.radius/5, state.env.radius/5, 0.1),
+        translateZ: (state: StyleType, value: StyleValueType) => gradualConstrain(value, state.speed.translateZ, -state.env.radius/5, state.env.radius/5, 0.1),
         rotateX: (state: StyleType, value: StyleValueType) => value + state.speed.rotateX,
         rotateY: (state: StyleType, value: StyleValueType) => value + state.speed.rotateY,
         rotateZ: (state: StyleType, value: StyleValueType) => value + state.speed.rotateZ,
@@ -99,8 +99,11 @@ export function backBlinkerStyleFactory(): StyleType {
           rotateZ: 0,
           translateZ: 0,
         },
+        shouldBeDestroyed: false,
         const: {
           scale,
+          x,
+          y
         },
         speed: {
           rotateZ: 0,
@@ -127,6 +130,7 @@ export function backBlinkerStyleFactory(): StyleType {
           }
         }
       },
+      shouldBeDestroyed: (state: StyleType, value: StyleValueType) => isNotConstrained(state.const.x, -state.env.width/2, state.env.width/2) || isNotConstrained(state.const.y, -state.env.height/2, state.env.height/2),
       transform: {
         scale: (state: StyleType, value: StyleValueType) => gradualConstrain(value, 0.033, 0, state.env.radius*state.const.scale, 0.033),
         rotateZ: (state: StyleType, value: StyleValueType) => value + state.speed.rotateZ,

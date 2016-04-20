@@ -12,7 +12,8 @@ function createParticle(style: StyleType, state: GlobalStateType): ParticleType 
     styleName: style.name,
     ...style.getInitialState(state),
     rules: {
-      sn: (state: StyleType, value: StyleValueType) => value+1
+      sn: (state: StyleType, value: StyleValueType) => value+1,
+      isToBeDestroyed: (state: StyleType, value: StyleValueType) => state.isToBeDestroyed || state.shouldBeDestroyed,
     },
     // intentionally reference rather than clone
     unit: style.unit

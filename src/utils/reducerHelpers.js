@@ -1,6 +1,11 @@
 // @flow
 import type {RulesType, GlobalStateType, ActionType} from 'constants/Types';
 
+
+export function isNotConstrained(value: number, min: number, max: number): boolean {
+  return value < min || value > max;
+}
+
 export function constrain(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
@@ -27,9 +32,10 @@ export function reduceNestedState(state: Object, reducers: RulesType, rootState?
   return Object.keys(state).reduce((memo: Object, key: string): Object => {
     const value = state[key];
     const reducer = reducers[key];
+    rootState = rootState || state;
 
     if (typeof value === 'object' && typeof reducer === 'object') {
-      memo[key] = reduceNestedState(value, reducer, rootState ? rootState : state);
+      memo[key] = reduceNestedState(value, reducer, rootState);
     } else {
       memo[key] = reducer ? reducer(rootState, value) : value;
     }
