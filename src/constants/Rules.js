@@ -97,6 +97,7 @@ export function backBlinkerStyleFactory(): StyleType {
         transform: {
           scale,
           rotateZ: 0,
+          translateZ: 0,
         },
         const: {
           scale,
