@@ -1,23 +1,45 @@
 // @flow
 import { rand, constrain, reduceNestedState, initPartialState } from 'utils/reducerHelpers';
 import * as actionTypes from 'constants/ActionTypes';
+import {merge} from 'lodash';
 import {RuleType, ParticleType, ActionType, StyleType, StyleValueType, GlobalStateType} from 'constants/Types';
 
 let particleId = 0;
 export function createParticle(style: StyleType, state: GlobalStateType): ParticleType {
   return {
+    ...merge({
+      style: {
+        opacity: 0,
+      },
+      const: {
+        minOpacity: 0.11,
+        maxOpacity: 0.22,
+      },
+      speed: {
+        opacity: 0,
+      },
+    }, style.getInitialState(state)),
     id: particleId++,
     sn: 0,
     isToBeDestroyed: false,
     styleName: style.name,
-    ...style.getInitialState(state),
     rules: [
       ...style.rules,
       ['sn', (state: StyleType, value: StyleValueType) => value+1],
       ['isToBeDestroyed', (state: StyleType, value: StyleValueType) => !!state.isToBeDestroyed || !!state.shouldBeDestroyed],
+      ['speed.opacity', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.slow + rand(1000), -0.005, 0.005)],
+      ['style.opacity', (state: StyleType, value: StyleValueType): StyleValueType => {
+        if (state.isToBeDestroyed) {
+          return Math.max(value - 0.005, 0);
+        } else {
+          return constrain(
+            value + state.speed.opacity,
+            Math.min(value, state.const.minOpacity || 0.11),
+            state.const.maxOpacity || 0.22
+          );
+        }
+      }]
     ],
-    // intentionally reference rather than clone
-    unit: style.unit
   };
 }
 
@@ -26,7 +48,7 @@ const initialState = {
     radius: 100,
   },
   isPaused: false,
-  particles: []
+  particles: [],
 };
 
 function getStyle(state: GlobalStateType, name: string): StyleType {
