@@ -1,5 +1,5 @@
 // @flow
-import type {RulesType, GlobalStateType, ActionType} from 'constants/Types';
+import type {RuleType, ParticleType, GlobalStateType, ActionType} from 'constants/Types';
 
 
 export function isNotConstrained(value: number, min: number, max: number): boolean {
@@ -28,19 +28,24 @@ export function rand(slowness: number): number {
   return (Math.random()-0.5) / slowness;
 }
 
-export function reduceNestedState(state: Object, reducers: RulesType, rootState?: Object): Object {
-  return Object.keys(state).reduce((memo: Object, key: string): Object => {
-    const value = state[key];
-    const reducer = reducers[key];
+export function reduceNestedState(state: ParticleType, rules: RuleType[], rootState?: Object): Object {
+  return rules.reduce((memo: Object, [key, reducer]: [string, Function]): Object => {
+    const [rootKey, ...descendantKeys] = key.split('.');
+    const value = memo[rootKey];
     rootState = rootState || state;
 
-    if (typeof value === 'object' && typeof reducer === 'object') {
-      memo[key] = reduceNestedState(value, reducer, rootState);
+    if (value === undefined) {
+      console.warn('No value in state for', key);
+    } else if (descendantKeys.length > 0) {
+      memo[rootKey] = {
+        ...value,
+        ...reduceNestedState(value, [[descendantKeys.join('.'), reducer]], rootState)
+      };
     } else {
-      memo[key] = reducer ? reducer(rootState, value) : value;
+      memo[rootKey] = reducer(rootState, value);
     }
     return memo;
-  }, {});
+  }, state);
 }
 
 /**

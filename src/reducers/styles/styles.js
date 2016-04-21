@@ -1,7 +1,7 @@
 // @flow
 import { rand, constrain, reduceNestedState, initPartialState } from 'utils/reducerHelpers';
 import * as actionTypes from 'constants/ActionTypes';
-import {RulesType, ActionType, GlobalStateType, StyleType} from 'constants/Types';
+import {RuleType, ActionType, GlobalStateType, StyleType} from 'constants/Types';
 
 let styleId = 0;
 export function createStyle(style: StyleType): StyleType {

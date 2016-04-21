@@ -1,20 +1,21 @@
 // @flow
 import { rand, constrain, reduceNestedState, initPartialState } from 'utils/reducerHelpers';
 import * as actionTypes from 'constants/ActionTypes';
-import {RulesType, ParticleType, ActionType, StyleType, StyleValueType, GlobalStateType} from 'constants/Types';
+import {RuleType, ParticleType, ActionType, StyleType, StyleValueType, GlobalStateType} from 'constants/Types';
 
 let particleId = 0;
-function createParticle(style: StyleType, state: GlobalStateType): ParticleType {
+export function createParticle(style: StyleType, state: GlobalStateType): ParticleType {
   return {
     id: particleId++,
     sn: 0,
     isToBeDestroyed: false,
     styleName: style.name,
     ...style.getInitialState(state),
-    rules: {
-      sn: (state: StyleType, value: StyleValueType) => value+1,
-      isToBeDestroyed: (state: StyleType, value: StyleValueType) => state.isToBeDestroyed || state.shouldBeDestroyed,
-    },
+    rules: [
+      ...style.rules,
+      ['sn', (state: StyleType, value: StyleValueType) => value+1],
+      ['isToBeDestroyed', (state: StyleType, value: StyleValueType) => !!state.isToBeDestroyed || !!state.shouldBeDestroyed],
+    ],
     // intentionally reference rather than clone
     unit: style.unit
   };
@@ -72,15 +73,10 @@ function moveParticle(state: GlobalStateType, action: ActionType): GlobalStateTy
 
   if (!state.isPaused) {
     particles = state.particles.map((particle: ParticleType): ParticleType => {
-      const style = getStyle(state, particle.styleName);
-      const rules = {
-        ...(style ? style.rules : {}),
-        ...particle.rules
-      };
       return reduceNestedState({
         ...particle,
         env: state.env || particle.env,
-      }, rules);
+      }, particle.rules);
     });
   }
 

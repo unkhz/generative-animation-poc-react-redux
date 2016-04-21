@@ -1,5 +1,5 @@
 import * as actions from 'actions/Actions';
-import {initiateStateWithStyles} from 'reducers/styles/styles.spec';
+import {createStyle, initiateStateWithStyles} from 'reducers/styles/styles.spec';
 import {particles} from 'reducers/particles';
 import {assert} from 'chai';
 import {stub} from 'sinon';
@@ -19,15 +19,16 @@ describe('particles reducer', () => {
   });
 
   it('updates a piece of state on moveParticle using a reducer defined in rules', () => {
+    const style = createStyle('testStyle1')
     const oldState = {
-      ...initiateStateWithStyles('testStyle1', 'testStyle2'),
-
+      ...initiateStateWithStyles(style),
       particles: [{
         sn: 0,
         styleName: 'testStyle1',
-        rules: {
-          sn: (state: Object, value: number) => value+1,
-        }
+        ...style.getInitialState(),
+        rules: [
+          ['sn', (state: Object, value: number) => value+1],
+        ]
       }]
     };
     const state = particles(oldState, actions.moveParticle());
@@ -83,26 +84,43 @@ describe('particles reducer', () => {
   });
 
   it('reduces state based on style rules on moveParticle', () => {
-    let reducedState;
-
-    // first pass
-    const firstState = particles(initiateStateWithStyles({
+    let reducedState = particles(initiateStateWithStyles({
       name: 'testStyle1',
       getInitialState: () => ({
         testThing: 0,
+        nested: {
+          thing: '',
+          testing: {
+            thing: [99, 'bugs'],
+            otherThing: false,
+          }
+        }
       }),
-      rules: {
-        testThing: (s: string, v: number) => v + 1,
-      }
+      rules: [
+        ['testThing', (s: string, v: StyleValueType) => v + 1],
+        ['nested.testing.thing', (s: string, [value, unit]: StyleValueType) => [value - 1, unit]],
+        ['nested.testing.otherThing', (s: string, value: StyleValueType) => !value],
+        ['nested.thing', (s: string, value: StyleValueType) => value + '.'],
+      ]
     }), actions.addParticle(1, 'testStyle1'));
 
-    reducedState = particles(firstState,  actions.moveParticle());
+    reducedState = particles(reducedState,  actions.moveParticle());
     assert.equal(reducedState.particles[0].testThing, 1);
+    assert.equal(reducedState.particles[0].nested.thing, '.');
+    assert.deepEqual(reducedState.particles[0].nested.testing.thing, [98, 'bugs']);
+    assert.equal(reducedState.particles[0].nested.testing.otherThing, true);
 
     reducedState = particles(reducedState, actions.moveParticle());
+    assert.equal(reducedState.particles[0].nested.thing, '..');
     assert.equal(reducedState.particles[0].testThing, 2);
+    assert.deepEqual(reducedState.particles[0].nested.testing.thing, [97, 'bugs']);
+    assert.equal(reducedState.particles[0].nested.testing.otherThing, false);
 
     reducedState = particles(reducedState, actions.moveParticle());
+    assert.equal(reducedState.particles[0].nested.thing, '...');
     assert.equal(reducedState.particles[0].testThing, 3);
+    assert.deepEqual(reducedState.particles[0].nested.testing.thing, [96, 'bugs']);
+    assert.equal(reducedState.particles[0].nested.testing.otherThing, true);
+
   });
 });

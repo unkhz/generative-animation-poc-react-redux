@@ -6,12 +6,8 @@ export type ParticleType = {
   id: number,
   sn: number,
   isToBeDestroyed: boolean,
-  style: {[id: string]: number},
   env: {[id: string]: number},
-  transform: {[id: string]: number},
-  speed: {[id: string]: number},
-  unit: {[id: string]: string},
-  moveRules: {[id: string]: Function | object},
+  rules: RuleType[],
 }
 
 export type LayerType = {
@@ -26,8 +22,6 @@ export type ColorType = {
   g: number,
   b: number
 }
-
-export type RulesType = {[id: string]: Function | RulesType}
 
 export type GlobalStateType = {
   env: EnvironmentType,
@@ -44,8 +38,10 @@ export type EnvironmentType = {
 export type StyleType = {
   id: number,
   name: string,
-  style: {[id: string]: number|string},
-  transform: {[id: string]: number|string},
+  getInitialState: Function,
+  rules: RuleType[],
 }
 
-type StyleValueType = number | string;
+export type StyleValueType = [number, string] | number | string;
+
+export type RuleType = [string, Function];

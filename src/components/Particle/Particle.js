@@ -1,7 +1,7 @@
 // @flow
 import './Particle.scss';
 import React, { Component } from 'react';
-import type {ParticleType} from 'constants/Types';
+import type {ParticleType, StyleValueType} from 'constants/Types';
 
 
 class Particle extends Component {
@@ -9,7 +9,6 @@ class Particle extends Component {
   static defaultProps = {
     transform: {},
     style: {},
-    unit: {}
   };
 
   shouldComponentUpdate(nextProps: ParticleType): boolean {
@@ -25,13 +24,13 @@ class Particle extends Component {
     );
   }
 
-  getStyleValue(value: number|string, unit: string): number|string {
-    return unit ? '' + value + unit : value;
+  getStyleValue(value: StyleValueType): number|string {
+    return Array.isArray(value) ? value.join('') : value;
   }
 
-  mapStyle(obj: Object, unit: Object = {}): Object {
+  mapStyle(obj: Object): Object {
     return Object.keys(obj).reduce((all: Object, styleProp: string): Object => {
-      all[styleProp] = this.getStyleValue(obj[styleProp], unit[styleProp] || '');
+      all[styleProp] = this.getStyleValue(obj[styleProp]);
       return all;
     }, {});
   }
@@ -39,11 +38,12 @@ class Particle extends Component {
   mapPropsToStyle(props: ParticleType): React.Element {
     const transform = Object.keys(props.transform).reduce((transform: string[], func: string): string[] => {
       const value = props.transform[func];
-      transform.push(func + '(' + this.getStyleValue(value, props.unit[func]) + ')');
+      transform.push(func + '(' + this.getStyleValue(value) + ')');
       return transform;
     }, []).join(' ');
+    const style = this.mapStyle(props.style);
     return {
-      ...this.mapStyle(props.style, props.unit),
+      ...style,
       transform
     };
   }

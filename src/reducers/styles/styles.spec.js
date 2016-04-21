@@ -7,25 +7,19 @@ export function createStyle(name: string): Object {
   return {
     name,
     getInitialState: () => ({
+      someBoolean: false,
       style: {
-        opacity: 0
+        opacity: [0]
       },
       transform: {
-        translateX: 0
+        translateX: [0, 'px']
       }
     }),
-    unit: {
-      opacity: '',
-      translateX: 'px',
-    },
-    rules: {
-      style: {
-        opacity: (s: string, v: number) => v+1,
-      },
-      transform: {
-        translateX: (s: string, v: number) => v-1,
-      }
-    }
+    rules: [
+      ['someBoolean', (s: string, v: boolean) => !v],
+      ['style.opacity', (s: string, [v, unit]: StyleValueType) => [v+1, unit]],
+      ['transform.translateX', (s: string, [v, unit]: StyleValueType) => [v-1, unit]],
+    ]
   };
 }
 
