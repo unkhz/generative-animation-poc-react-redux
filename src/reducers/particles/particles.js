@@ -18,6 +18,7 @@ export function createParticle(style: StyleType, state: GlobalStateType): Partic
       speed: {
         opacity: 0,
       },
+      shouldSkipAfterNFramesCount: 0,
     }, style.getInitialState(state)),
     id: particleId++,
     sn: 0,
@@ -95,6 +96,12 @@ function moveParticle(state: GlobalStateType, action: ActionType): GlobalStateTy
 
   if (!state.isPaused) {
     particles = state.particles.map((particle: ParticleType): ParticleType => {
+      if (particle.shouldSkipAfterNFramesCount > 0) {
+        return {
+          ...particle,
+          shouldSkipAfterNFramesCount: particle.shouldSkipAfterNFramesCount-1,
+        };
+      }
       return reduceNestedState({
         ...particle,
         env: state.env || particle.env,
