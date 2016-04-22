@@ -2,37 +2,56 @@ import { rand, constrain,  isNotConstrained, reduceNestedState, gradualConstrain
 import type {StyleType, StyleValueType, ParticleType, ColorType} from 'constants/Types';
 import React from 'react';
 
-function renderColorValue(color: ColorType): string {
-  return `rgb(${Math.round(color.r)},${Math.round(color.g)},${Math.round(color.b)})`;
+function renderColorValue(r: number, g: number, b: number): string {
+  return `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`;
 }
+
+function randomColor(): string {
+  return renderColorValue(Math.random() * 255, Math.random() * 255, Math.random() * 255);
+}
+
+const shapes = [
+  () => (
+    <svg width="300" height="300" viewBox="0 0 51 48" color-rendering="optimizeSpeed" shape-rendering="optimizeSpeed">
+      <path fill={randomColor()} stroke="none" d="m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z"/>
+    </svg>
+  ),
+  () => (
+    <svg width="300" height="300" viewBox="0 0 100 100" color-rendering="optimizeSpeed" shape-rendering="optimizeSpeed">
+      <circle fill={randomColor()} stroke="none"  cx="50" cy="50" r="50" />
+    </svg>
+  ),
+];
 
 export const styleFactories = [{
   name: 'frontRotater',
+  weight: 4,
   create: createFrontRotaterStyle,
 }, {
   name: 'backBlinker',
+  weight: 6,
   create: createBackBlinkerStyle
 }];
 
 export function decideStyle(): string  {
-  return styleFactories[Math.round(Math.random() * (styleFactories.length - 1))].name;
+  return decide(styleFactories, styleFactories.map((s: StyleFactoryType) => s.weight)).name;
+}
+
+function decide(collection: array, weights: array): mixed {
+  return collection[weights
+    .map((weight: number) => weight * Math.random())
+    .reduce((max: [number, number], weighted: number, index: number): [number, number] => {
+      return weighted > max[0] ? [weighted, index] : max;
+    }, [-Infinity, -1])[1]];
 }
 
 function createFrontRotaterStyle(): StyleType {
   return {
     name: 'frontRotater',
     getInitialState: (globalState: GlobalStateType): Object => {
-      const color = {
-        r: Math.random() * 255,
-        g: Math.random() * 255,
-        b: Math.random() * 255,
-      };
+    
       return {
-        content: (
-          <svg width="300" height="300" viewBox="0 0 51 48" color-rendering="optimizeSpeed" shape-rendering="optimizeSpeed">
-            <path fill={renderColorValue(color)} stroke="none" d="m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z"/>
-          </svg>
-        ),
+        content: decide(shapes, [4,1])(),
         style: {
 
         },
@@ -41,7 +60,7 @@ function createFrontRotaterStyle(): StyleType {
         },
         const: {
           minOpacity: 0.11,
-          maxOpacity: 0.22,
+          maxOpacity: 0.33,
         },
         transform: {
           scale: constrain(1, 0.033, 0, globalState.env.radius/300, 0.033),
@@ -96,12 +115,9 @@ function createBackBlinkerStyle(): StyleType {
         g: Math.random() * 255,
         b: Math.random() * 255,
       };
+
       return {
-        content: (
-          <svg width="300" height="300" viewBox="0 0 51 48" color-rendering="optimizeSpeed" shape-rendering="optimizeSpeed">
-            <path fill={renderColorValue(color)} stroke="none" d="m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z"/>
-          </svg>
-        ),
+        content: decide(shapes, [5,2])(),
         style: {
           marginLeft: [x - 150, 'px'],
           marginTop: [y - 150, 'px'],
