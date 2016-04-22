@@ -9,8 +9,14 @@ function renderColorValue(color: ColorType): string {
 export function frontRotaterStyleFactory(): StyleType {
   return {
     name: 'frontRotater',
-    getInitialState: (): Object => {
+    getInitialState: (globalState: GlobalStateType): Object => {
       return {
+        style: {
+
+        },
+        env: {
+          ...globalState.env
+        },
         const: {
           minOpacity: 0.11,
           maxOpacity: 0.22,
@@ -71,9 +77,9 @@ export function frontRotaterStyleFactory(): StyleType {
 export function backBlinkerStyleFactory(): StyleType {
   return {
     name: 'backBlinker',
-    getInitialState: (state: GlobalStateType): Object => {
-      const x = rand(1) * state.env.width;
-      const y = rand(1) * state.env.height;
+    getInitialState: (globalState: GlobalStateType): Object => {
+      const x = rand(1) * globalState.env.width;
+      const y = rand(1) * globalState.env.height;
       const scale = 1/2000 - rand(1000);
       return {
         style: {
@@ -87,12 +93,15 @@ export function backBlinkerStyleFactory(): StyleType {
         },
         shouldBeDestroyed: false,
         shouldSkipAfterNFramesCount: 0,
+        env: {
+          ...globalState,
+        },
         const: {
           scale,
           x,
           y,
           minOpacity: 0.03,
-          maxOpacity: 0.14
+          maxOpacity: 0.14,
         },
         speed: {
           rotateZ: 0,
