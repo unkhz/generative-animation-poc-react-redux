@@ -68,3 +68,9 @@ The drawback is slightly more complicated reducers as there needs to be logic
 for deciding if the state has been initialized for a particular reducer or not.
 Also, the dependencies caused by shared parts of the state are not clearly
 visible in this approach. Fixing that needs some more thought.
+
+The more state dependencies I add, the more clear it becomes that the free
+piping of reducers leads to a wild west of coupled state, for which no guidance
+is given by the framework. Just so happens that a solution might already exist.
+Next step is to try the combination of combineReducers with named dependencies,
+for which work has been started in [topologically-combine-reducers](https://github.com/KodersLab/topologically-combine-reducers).
