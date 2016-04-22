@@ -10,7 +10,17 @@ export function frontRotaterStyleFactory(): StyleType {
   return {
     name: 'frontRotater',
     getInitialState: (globalState: GlobalStateType): Object => {
+      const color = {
+        r: Math.random() * 255,
+        g: Math.random() * 255,
+        b: Math.random() * 255,
+      };
       return {
+        content: (
+          <svg width="300" height="300" viewBox="0 0 51 48" color-rendering="optimizeSpeed" shape-rendering="optimizeSpeed">
+            <path fill={renderColorValue(color)} stroke="none" d="m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z"/>
+          </svg>
+        ),
         style: {
 
         },
@@ -62,15 +72,7 @@ export function frontRotaterStyleFactory(): StyleType {
       ['speed.translateX', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + rand(100), -0.5, 0.5)],
       ['speed.translateY', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + rand(100), -0.5, 0.5)],
       ['speed.translateZ', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.slow + rand(1000), -0.005, 0.005)],
-    ],
-    renderParticleContent: (props: ParticleType): React.Element => {
-      const { color } = props;
-      return (
-        <svg width="300" height="300" viewBox="0 0 51 48" color-rendering="optimizeSpeed" shape-rendering="optimizeSpeed">
-          <path fill={renderColorValue(color)} stroke="none" d="m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z"/>
-        </svg>
-      );
-    }
+    ]
   };
 }
 
@@ -81,7 +83,17 @@ export function backBlinkerStyleFactory(): StyleType {
       const x = rand(1) * globalState.env.width;
       const y = rand(1) * globalState.env.height;
       const scale = 1/2000 - rand(1000);
+      const color = {
+        r: Math.random() * 255,
+        g: Math.random() * 255,
+        b: Math.random() * 255,
+      };
       return {
+        content: (
+          <svg width="300" height="300" viewBox="0 0 51 48" color-rendering="optimizeSpeed" shape-rendering="optimizeSpeed">
+            <path fill={renderColorValue(color)} stroke="none" d="m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z"/>
+          </svg>
+        ),
         style: {
           marginLeft: [x - 150, 'px'],
           marginTop: [y - 150, 'px'],
@@ -118,14 +130,6 @@ export function backBlinkerStyleFactory(): StyleType {
       ['speed.slow', (state: StyleType, value: StyleValueType) => constrain(value + rand(1000),-0.005,0.005)],
       ['speed.general', (state: StyleType, value: StyleValueType) => constrain(value + rand(100),-0.5,0.5)],
       ['speed.rotateZ', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + rand(100), -0.5, 0.5)],
-    ],
-    renderParticleContent: (props: ParticleType): Element => {
-      const { color } = props;
-      return (
-        <svg width="300" height="300" viewBox="0 0 51 48" color-rendering="optimizeSpeed" shape-rendering="optimizeSpeed">
-          <path fill={renderColorValue(color)} stroke="none" d="m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z"/>
-        </svg>
-      );
-    }
+    ]
   };
 }

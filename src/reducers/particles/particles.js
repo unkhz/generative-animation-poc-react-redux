@@ -20,12 +20,7 @@ export function createParticle(style: StyleType, state: GlobalStateType): Partic
       },
       shouldSkipAfterNFramesCount: 0,
     }, style.getInitialState(state)),
-    color: {
-      r: Math.random() * 255,
-      g: Math.random() * 255,
-      b: Math.random() * 255
-    },
-    renderParticleContent: style.renderParticleContent,
+
     id: particleId++,
     sn: 0,
     isToBeDestroyed: false,

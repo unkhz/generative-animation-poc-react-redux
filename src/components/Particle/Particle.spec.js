@@ -31,7 +31,7 @@ describe('Particle', () => {
   it('renders a child defined in props', () => {
     const props = {
       id: 1,
-      renderParticleContent: (props: ParticleType) => <svg className='test-it'><path /></svg>,
+      content: <svg className='test-it'><path /></svg>,
     };
     const node = getNode(<Particle {...props} />);
     const svgNode = node.firstChild;
@@ -83,5 +83,5 @@ describe('Particle', () => {
     const node = getNode(<Particle {...props} />);
     assert.equal(node.style.transform, 'translateX(1) translateY(1.2324px) translateZ(-10000000%) rotateX(1deg) rotateY(falserad) invalidWithUnit(1pt) invalidWithoutUnit(2)');
   });
-  
+
 });

@@ -45,20 +45,10 @@ const initialGlobalState = {
 
     // @phantomjs only ( todo move to rules tests)
     it('renders an SVG inside with color', () => {
-      function getFillAttr(r: number, g: number, b: number): string {
-        const node = ReactDOM.render(style.renderParticleContent({
-          color: {r, g, b}
-        }), document.createElement('div'));
-        return node.firstChild.getAttribute('fill');
-      };
       const style = styleFactory();
-      const initalState = style.getInitialState(initialGlobalState);
-
-      assert.equal(getFillAttr(12, 255, 0), 'rgb(12,255,0)');
-      assert.equal(getFillAttr(12, 255, null), 'rgb(12,255,0)');
-      assert.equal(getFillAttr(12, 255, -100), 'rgb(12,255,-100)');
-      assert.equal(getFillAttr(12, false, 0), 'rgb(12,0,0)');
-      assert.equal(getFillAttr(500, 0, 0), 'rgb(500,0,0)');
+      const state = style.getInitialState(initialGlobalState);
+      const node = ReactDOM.render(state.content, document.createElement('div'));
+      assert.match(node.firstChild.getAttribute('fill'), /rgb\([0-9.]+,[0-9.]+,[0-9.]+\)/);
     });
 
   });
