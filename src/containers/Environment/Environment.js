@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import * as actions from 'actions/Actions';
 import { connect } from 'react-redux';
 import Touchable from 'components/Touchable';
+import {decideStyle} from 'constants/StyleFactories';
 import type {TouchableDeltaType} from 'components/Touchable/Touchable';
 import type {ActionMapType} from 'constants/Types';
 
@@ -90,10 +91,14 @@ export class Environment extends Component {
 
   addOrRemoveParticles(delta: TouchableDeltaType) {
     if (delta > 0) {
-      this.props.actions.addParticle(1, Math.random() > 0.67 ? 'frontRotater' : 'backBlinker');
+      this.props.actions.addParticle(1, decideStyle());
     } else if (delta < 0) {
       this.props.actions.deleteSomeParticles(1);
     }
+  }
+
+  decideStyleName(): string {
+    return Math.random() > 0.67 ? 'frontRotater' : 'backBlinker';
   }
 
   render(): React.Element {

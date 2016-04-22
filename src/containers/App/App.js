@@ -3,8 +3,8 @@ import 'styles/main.scss';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import * as actions from 'actions/Actions';
-import * as styles from 'constants/Rules';
-import type {ActionMapType, LayerType, GlobalStateType, ParticleType} from 'constants/Types';
+import {styleFactories, decideStyle} from 'constants/StyleFactories';
+import type {ActionMapType, LayerType, GlobalStateType, ParticleType, StyleFactoryType, StyleType} from 'constants/Types';
 import Layer from 'components/Layer';
 import { connect } from 'react-redux';
 import './App.scss';
@@ -30,8 +30,17 @@ export class App extends Component {
 
   componentWillMount() {
     this.props.actions.requestParticleMove();
-    this.props.actions.addStyle(styles.frontRotaterStyleFactory());
-    this.props.actions.addStyle(styles.backBlinkerStyleFactory());
+    styleFactories.map(({create}: StyleFactoryType) => {
+      this.props.actions.addStyle(create());
+    });
+    setInterval(this.weedParticles.bind(this), 200);
+  }
+
+  weedParticles() {
+    if (this.props.particles.length > 10) {
+      this.props.actions.deleteSomeParticles(1);
+      this.props.actions.addParticle(1, decideStyle());
+    }
   }
 
   renderLayers(): React.Element {

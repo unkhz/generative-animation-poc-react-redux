@@ -35,6 +35,11 @@ export type EnvironmentType = {
   radius: number
 }
 
+export type SyleFactoryType = {
+  name: string,
+  create: () => StyleType,
+}
+
 export type StyleType = {
   id: number,
   name: string,

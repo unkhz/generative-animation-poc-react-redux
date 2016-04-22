@@ -14,16 +14,21 @@ function createLayer(styleName: string): LayerType {
 }
 
 const initialState = {
-  // todo base on styles
-  layers: [
-    createLayer('backBlinker'),
-    createLayer('frontRotater'),
-  ],
+  layers: [],
 };
 
 export function layers(state: GlobalStateType, action: ActionType): GlobalStateType {
   state = initPartialState(state, initialState, 'layers');
   switch (action.type) {
+    case actionTypes.ADD_STYLE:
+      return {
+        ...state,
+        layers: [
+          ...state.layers,
+          createLayer(action.style.name),
+        ],
+      };
+
     case actionTypes.MOVE_PARTICLE:
       return {
         ...state,

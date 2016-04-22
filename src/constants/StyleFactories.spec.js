@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import {assert} from 'chai';
-import {frontRotaterStyleFactory, backBlinkerStyleFactory} from 'constants/Rules';
+import {styleFactories} from 'constants/StyleFactories';
 import {reduceNestedState} from 'utils/reducerHelpers';
 
 const initialGlobalState = {
@@ -11,19 +11,16 @@ const initialGlobalState = {
   }
 };
 
-[
-  ['frontRotaterStyle', frontRotaterStyleFactory],
-  ['backBlinkerStyle', backBlinkerStyleFactory]
-].map(([styleName, styleFactory]: [string, Function]) => {
-  describe(styleName, () => {
+styleFactories.map(({name, create}: StyleFactoryType ) => {
+  describe(name, () => {
 
     it('can be created without props', () => {
-      const style = styleFactory();
+      const style = create();
       assert.isObject(style);
     });
 
     it('contains initial state factory method', () => {
-      const style = styleFactory();
+      const style = create();
       const state = style.getInitialState(initialGlobalState);
       assert.isObject(state.style);
       assert.isObject(state.transform);
@@ -31,7 +28,7 @@ const initialGlobalState = {
     });
 
     it('contains rules that reduce the inital state', () => {
-      const style = styleFactory();
+      const style = create();
       const initalState = style.getInitialState(initialGlobalState);
       const state = reduceNestedState(
         initalState,
@@ -45,7 +42,7 @@ const initialGlobalState = {
 
     // @phantomjs only ( todo move to rules tests)
     it('renders an SVG inside with color', () => {
-      const style = styleFactory();
+      const style = create();
       const state = style.getInitialState(initialGlobalState);
       const node = ReactDOM.render(state.content, document.createElement('div'));
       assert.match(node.firstChild.getAttribute('fill'), /rgb\([0-9.]+,[0-9.]+,[0-9.]+\)/);

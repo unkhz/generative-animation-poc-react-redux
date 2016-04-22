@@ -6,7 +6,19 @@ function renderColorValue(color: ColorType): string {
   return `rgb(${Math.round(color.r)},${Math.round(color.g)},${Math.round(color.b)})`;
 }
 
-export function frontRotaterStyleFactory(): StyleType {
+export const styleFactories = [{
+  name: 'frontRotater',
+  create: createFrontRotaterStyle,
+}, {
+  name: 'backBlinker',
+  create: createBackBlinkerStyle
+}];
+
+export function decideStyle(): string  {
+  return styleFactories[Math.round(Math.random() * (styleFactories.length - 1))].name;
+}
+
+function createFrontRotaterStyle(): StyleType {
   return {
     name: 'frontRotater',
     getInitialState: (globalState: GlobalStateType): Object => {
@@ -32,9 +44,7 @@ export function frontRotaterStyleFactory(): StyleType {
           maxOpacity: 0.22,
         },
         transform: {
-          scaleX: [1, ''],
-          scaleY: [1, ''],
-          scaleZ: [1, ''],
+          scale: constrain(1, 0.033, 0, globalState.env.radius/300, 0.033),
           rotateX: [Math.random()*360, 'deg'],
           rotateY: [Math.random()*360, 'deg'],
           rotateZ: [Math.random()*360, 'deg'],
@@ -55,9 +65,7 @@ export function frontRotaterStyleFactory(): StyleType {
       };
     },
     rules: [
-      ['transform.scaleX', (state: StyleType, [value, unit]: StyleValueType) => [gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033), unit]],
-      ['transform.scaleY', (state: StyleType, [value, unit]: StyleValueType) => [gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033), unit]],
-      ['transform.scaleZ', (state: StyleType, [value, unit]: StyleValueType) => [gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033), unit]],
+      ['transform.scale', (state: StyleType, value: StyleValueType) => gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033)],
       ['transform.translateX', (state: StyleType, [value, unit]: StyleValueType) => [gradualConstrain(value, state.speed.translateX, -state.env.radius/5, state.env.radius/5, 0.1), unit]],
       ['transform.translateY', (state: StyleType, [value, unit]: StyleValueType) => [gradualConstrain(value, state.speed.translateY, -state.env.radius/5, state.env.radius/5, 0.1), unit]],
       ['transform.translateZ', (state: StyleType, [value, unit]: StyleValueType) => [gradualConstrain(value, state.speed.translateZ, -state.env.radius/5, state.env.radius/5, 0.1), unit]],
@@ -76,7 +84,7 @@ export function frontRotaterStyleFactory(): StyleType {
   };
 }
 
-export function backBlinkerStyleFactory(): StyleType {
+function createBackBlinkerStyle(): StyleType {
   return {
     name: 'backBlinker',
     getInitialState: (globalState: GlobalStateType): Object => {
