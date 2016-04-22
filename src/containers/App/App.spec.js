@@ -72,54 +72,32 @@ describe('App', () => {
     assert.equal(layerNodes.length, 2);
   });
 
-  it('contains layers containing particles containing svg from props', () => {
+  it('contains layers containing particles separated based on style name', () => {
     const props = {
       layers: [{
         id: 0,
-        color: {r: 1, g: 2, b: 4},
+        styleName: 'a'
       },{
         id: 1,
-        color: {r: 3, g: 44, b: 42},
+        styleName: 'b'
       }],
       particles: [
-        {id: 0},
-        {id: 1},
-        {id: 2},
-        {id: 3},
+        {id: 0, styleName: 'a', style: {left: 1}},
+        {id: 1, styleName: 'b', style: {left: 2}},
+        {id: 2, styleName: 'a', style: {left: 3}},
+        {id: 3, styleName: 'b', style: {left: 4}},
+        {id: 4, styleName: 'b', style: {left: 5}},
+        {id: 5, styleName: 'a', style: {left: 6}},
       ]
     };
     const node = getNode(<App {...props} />);
     const layerNodes = getLayerNodes(node);
     assert.equal(layerNodes.length, 2);
-    assert.equal(layerNodes[0].children[0].firstChild.firstChild.getAttribute('fill'), 'rgb(1,2,4)');
-    assert.equal(layerNodes[0].children[1].firstChild.firstChild.getAttribute('fill'), 'rgb(1,2,4)');
-    assert.equal(layerNodes[1].children[0].firstChild.firstChild.getAttribute('fill'), 'rgb(3,44,42)');
-    assert.equal(layerNodes[1].children[1].firstChild.firstChild.getAttribute('fill'), 'rgb(3,44,42)');
-  });
-
-  it('contains layers containing evenly separated particles from props', () => {
-    const props = {
-      layers: [
-        {id: 0},
-        {id: 1},
-        {id: 2},
-      ],
-      particles: [
-        {id: 0},
-        {id: 1},
-        {id: 2},
-        {id: 3},
-        {id: 4},
-        {id: 5},
-        {id: 6},
-        {id: 7},
-      ]
-    };
-    const node = getNode(<App {...props} />);
-    const layerNodes = getLayerNodes(node);
-    assert.equal(layerNodes.length, 3, 'layers count');
-    assert.equal(layerNodes[0].children.length, 3, 'first layer particle count');
-    assert.equal(layerNodes[1].children.length, 3, 'second layer particle count');
-    assert.equal(layerNodes[2].children.length, 2, 'third layer particle count');
+    assert.equal(layerNodes[0].children[0].style.left, '1px');
+    assert.equal(layerNodes[0].children[1].style.left, '3px');
+    assert.equal(layerNodes[0].children[2].style.left, '6px');
+    assert.equal(layerNodes[1].children[0].style.left, '2px');
+    assert.equal(layerNodes[1].children[1].style.left, '4px');
+    assert.equal(layerNodes[1].children[2].style.left, '5px');
   });
 });

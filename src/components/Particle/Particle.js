@@ -9,6 +9,7 @@ class Particle extends Component {
   static defaultProps = {
     transform: {},
     style: {},
+    renderParticleContent: (props: ParticleType) => ''
   };
 
   shouldComponentUpdate(nextProps: ParticleType): boolean {
@@ -20,7 +21,7 @@ class Particle extends Component {
       <div
         className="particle"
         style={this.mapPropsToStyle(this.props)}
-      >{this.props.children}</div>
+      >{this.props.renderParticleContent(this.props)}</div>
     );
   }
 

@@ -49,31 +49,4 @@ describe('Layer', () => {
     const node = getNode(<Layer {...props} />);
     assert.equal(node.children.length, 2);
   });
-
-  it('renders an SVG inside the child particle', () => {
-    const props = {
-      particles: [{id: 1}],
-    };
-    const node = getNode(<Layer {...props} />);
-    const svgNode = node.firstChild.firstChild;
-    assert.equal(svgNode.nodeName, 'svg');
-    assert.equal(svgNode.firstChild.nodeName, 'path');
-  });
-
-  // @phantomjs only
-  it('renders an SVG inside the child particle with color', () => {
-    function getFillAttr(r: number, g: number, b: number): Node {
-      const props = {
-        particles: [{id: 1}],
-        color: {r,g,b}
-      };
-      const node = getNode(<Layer {...props} />);
-      return node.firstChild.firstChild.firstChild.getAttribute('fill');
-    };
-    assert.equal(getFillAttr(12, 255, 0), 'rgb(12,255,0)');
-    assert.equal(getFillAttr(12, 255, null), 'rgb(12,255,0)');
-    assert.equal(getFillAttr(12, 255, -100), 'rgb(12,255,-100)');
-    assert.equal(getFillAttr(12, false, 0), 'rgb(12,0,0)');
-    assert.equal(getFillAttr(500, 0, 0), 'rgb(500,0,0)');
-  });
 });

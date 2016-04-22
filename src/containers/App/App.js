@@ -41,7 +41,7 @@ export class App extends Component {
         <Layer
           key={layer.id}
           { ...layer }
-          particles={ particles.filter((p: ParticleType) => p.id%layers.length === layer.id) }
+          particles={ particles.filter((particle: ParticleType) => particle.styleName === layer.styleName) }
         />
       );
     });

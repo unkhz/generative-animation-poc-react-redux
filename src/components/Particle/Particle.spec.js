@@ -23,9 +23,20 @@ describe('Particle', () => {
     assert.equal(node.className, 'particle');
   });
 
-  it('supports children', () => {
-    const node = getNode(<Particle><div className="test" /></Particle>);
-    assert.equal(node.firstChild.className, 'test');
+  it('does not support children', () => {
+    const node = getNode(<Particle><strong className="test" /></Particle>);
+    assert.isNull(node.firstChild);
+  });
+
+  it('renders a child defined in props', () => {
+    const props = {
+      id: 1,
+      renderParticleContent: (props: ParticleType) => <svg className='test-it'><path /></svg>,
+    };
+    const node = getNode(<Particle {...props} />);
+    const svgNode = node.firstChild;
+    assert.equal(svgNode.nodeName, 'svg');
+    assert.equal(svgNode.firstChild.nodeName, 'path');
   });
 
   // @phantomjs only
@@ -72,4 +83,30 @@ describe('Particle', () => {
     const node = getNode(<Particle {...props} />);
     assert.equal(node.style.transform, 'translateX(1) translateY(1.2324px) translateZ(-10000000%) rotateX(1deg) rotateY(falserad) invalidWithUnit(1pt) invalidWithoutUnit(2)');
   });
+
+  // @phantomjs only ( todo move to rules tests)
+  it('renders an SVG inside with color', () => {
+    function getFillAttr(r: number, g: number, b: number): Node {
+      const props = {
+        id: 1,
+        color: {r,g,b},
+        renderParticleContent: (props: ParticleType): Element => {
+          const { color } = props;
+          return (
+            <svg width="300" height="300" viewBox="0 0 51 48" color-rendering="optimizeSpeed" shape-rendering="optimizeSpeed">
+              <path fill={`rgb(${r},${g},${b})`} stroke="none" d="m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z"/>
+            </svg>
+          );
+        }
+      };
+      const node = getNode(<Particle {...props} />);
+      return node.firstChild.firstChild.getAttribute('fill');
+    };
+    assert.equal(getFillAttr(12, 255, 0), 'rgb(12,255,0)');
+    assert.equal(getFillAttr(12, 255, null), 'rgb(12,255,null)');
+    assert.equal(getFillAttr(12, 255, -100), 'rgb(12,255,-100)');
+    assert.equal(getFillAttr(12, false, 0), 'rgb(12,false,0)');
+    assert.equal(getFillAttr(500, 0, 0), 'rgb(500,0,0)');
+  });
+
 });

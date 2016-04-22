@@ -4,22 +4,21 @@ import * as actionTypes from 'constants/ActionTypes';
 import type {LayerType, ActionType, GlobalStateType} from 'constants/Types';
 
 let layerId = 0;
-function createLayer(): LayerType {
+function createLayer(styleName: string): LayerType {
   return {
     id: layerId++,
     sn: 0,
     frameRequestId: 0,
-    color: {
-      r: Math.random() * 255,
-      g: Math.random() * 255,
-      b: Math.random() * 255
-    }
+    styleName,
   };
 }
 
 const initialState = {
-  // $FlowFixMe: Can't cope with Array.apply
-  layers: Array.apply(null, {length: 8}).map(() => createLayer())
+  // todo base on styles
+  layers: [
+    createLayer('backBlinker'),
+    createLayer('frontRotater'),
+  ],
 };
 
 export function layers(state: GlobalStateType, action: ActionType): GlobalStateType {

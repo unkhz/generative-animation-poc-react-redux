@@ -14,9 +14,6 @@ describe('layers reducer', () => {
     assert.isArray(state);
     assert.equal(state[0].id, 0);
     assert.equal(state[0].sn, 0);
-    assert.isNumber(state[0].color.r);
-    assert.isNumber(state[0].color.g);
-    assert.isNumber(state[0].color.b);
   });
 
   it('updates serial number on moveParticle', () => {
