@@ -3,8 +3,8 @@ import 'styles/main.scss';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import * as actions from 'actions/Actions';
-import {styleFactories, decideStyle} from 'constants/StyleFactories';
-import type {ActionMapType, LayerType, GlobalStateType, ParticleType, StyleFactoryType, StyleType} from 'constants/Types';
+import {styleDefinitions, decideStyle} from 'reducers/styles/definitions';
+import type {ActionMapType, LayerType, GlobalStateType, ParticleType, StyleDefinitionType, StyleType} from 'constants/Types';
 import Layer from 'components/Layer';
 import { connect } from 'react-redux';
 import {find} from 'lodash';
@@ -31,22 +31,21 @@ export class App extends Component {
 
   componentWillMount() {
     this.props.actions.requestParticleMove();
-    styleFactories.map(({create}: StyleFactoryType) => {
-      this.props.actions.addStyle(create());
+    styleDefinitions.map((styleDefinition: StyleDefinitionType) => {
+      this.props.actions.addStyle(styleDefinition);
     });
     setInterval(this.recycleParticles.bind(this), 200);
   }
 
   recycleParticles() {
-    const recyclableStyles = styleFactories.filter((s: StyleFactoryType) => s.allowRecycling);
-    const recyclableStyleNames = recyclableStyles.map((s: StyleFactoryType) => s.name);
-    if ( recyclableStyles.length > 0 && this.props.particles.length > 10) {
+    if (this.props.particles.length > 10) {
+      const styleName = decideStyle((s: StyleDefinitionType) => s.allowRecycling);
       const particleToDelete = find(this.props.particles, (p: ParticleType) => (
-        !p.isToBeDestroyed && recyclableStyleNames.indexOf(p.styleName) !== -1
+        !p.isToBeDestroyed && p.styleName === styleName
       ));
       if (particleToDelete) {
         this.props.actions.deleteParticle(particleToDelete.id);
-        this.props.actions.addParticle(1, decideStyle(recyclableStyles));
+        this.props.actions.addParticle(1, styleName);
       }
     }
   }

@@ -1,7 +1,7 @@
 // @flow
 import type {ActionType, ThunkType, StyleType} from 'constants/Types';
 import * as actionTypes from 'constants/ActionTypes';
-import * as rules from 'constants/StyleFactories';
+import * as rules from 'reducers/styles/definitions';
 import { requestAnimationFrame, cancelAnimationFrame } from 'utils/animationFrameHelpers';
 
 export function envResized(width: number, height: number): ActionType {

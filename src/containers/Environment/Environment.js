@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import * as actions from 'actions/Actions';
 import { connect } from 'react-redux';
 import Touchable from 'components/Touchable';
-import {decideStyle} from 'constants/StyleFactories';
+import {decideStyle} from 'reducers/styles/definitions';
 import type {TouchableDeltaType} from 'components/Touchable/Touchable';
 import type {ActionMapType} from 'constants/Types';
 

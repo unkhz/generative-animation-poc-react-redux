@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import ConnectedApp, {App} from './App';
-import {styleFactories} from 'constants/StyleFactories';
+import {styleDefinitions} from 'reducers/styles/definitions';
 import {assert} from 'chai';
 import {spy} from 'sinon';
 
@@ -44,7 +44,7 @@ describe('App', () => {
       }
     };
     const node = getNode(<App {...props} />);
-    assert.equal(props.actions.addStyle.callCount, styleFactories.length);
+    assert.equal(props.actions.addStyle.callCount, styleDefinitions.length);
   });
 
   it('contains help with particle count', () => {

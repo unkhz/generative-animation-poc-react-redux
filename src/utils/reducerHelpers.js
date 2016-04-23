@@ -76,3 +76,23 @@ export function initPartialState(state: GlobalStateType, initialState: GlobalSta
     return state;
   }
 }
+
+export function renderColorValue(r: number, g: number, b: number): string {
+  return `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`;
+}
+
+export function randomColor(r?: number, g?: number, b?: number): string {
+  return renderColorValue(
+    r ? r : Math.random() * 255,
+    g ? g : Math.random() * 255,
+    b ? b : Math.random() * 255
+  );
+}
+
+export function decide(collection: Object[], weights: number[]): Object {
+  return collection[weights
+    .map((weight: number) => weight * Math.random())
+    .reduce((max: [number, number], weighted: number, index: number): [number, number] => {
+      return weighted > max[0] ? [weighted, index] : max;
+    }, [-Infinity, -1])[1]];
+}
