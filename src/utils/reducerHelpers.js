@@ -28,6 +28,10 @@ export function rand(slowness: number): number {
   return (Math.random()-0.5) / slowness;
 }
 
+export function distance(x1: number, y1: number, x2: number, y2: number): number {
+  return Math.sqrt(Math.pow(x2-x1,2) + Math.pow(y2-y1,2));
+}
+
 export function reduceNestedState(state: ParticleType, rules: RuleType[], rootState?: Object): Object {
   return rules.reduce((memo: Object, [key, reducer]: [string, Function]): Object => {
     const [rootKey, ...descendantKeys] = key.split('.');
