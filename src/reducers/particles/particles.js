@@ -16,6 +16,7 @@ export function createParticle(style: StyleType, state: GlobalStateType): Partic
         maxOpacity: 0.22,
       },
       speed: {
+        particle: 0,
         opacity: 0,
       },
       shouldSkipAfterNFramesCount: 0,
@@ -29,7 +30,8 @@ export function createParticle(style: StyleType, state: GlobalStateType): Partic
       ...style.rules,
       ['sn', (state: StyleType, value: StyleValueType) => value+1],
       ['isToBeDestroyed', (state: StyleType, value: StyleValueType) => !!state.isToBeDestroyed || !!state.shouldBeDestroyed],
-      ['speed.opacity', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.slow + rand(1000), -0.005, 0.005)],
+      ['speed.particle', (state: StyleType, value: StyleValueType) => constrain(value + rand(1000),-0.005,0.005)],
+      ['speed.opacity', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.particle + rand(1000), -0.005, 0.005)],
       ['style.opacity', (state: StyleType, value: StyleValueType): StyleValueType => {
         if (state.isToBeDestroyed) {
           return Math.max(value - 0.005, 0);

@@ -7,6 +7,7 @@ import {styleFactories, decideStyle} from 'constants/StyleFactories';
 import type {ActionMapType, LayerType, GlobalStateType, ParticleType, StyleFactoryType, StyleType} from 'constants/Types';
 import Layer from 'components/Layer';
 import { connect } from 'react-redux';
+import {find} from 'lodash';
 import './App.scss';
 
 type AppPropsType = {
@@ -33,13 +34,19 @@ export class App extends Component {
     styleFactories.map(({create}: StyleFactoryType) => {
       this.props.actions.addStyle(create());
     });
-    setInterval(this.weedParticles.bind(this), 200);
+    setInterval(this.recycleParticles.bind(this), 200);
   }
 
-  weedParticles() {
-    if (this.props.particles.length > 10) {
-      this.props.actions.deleteSomeParticles(1);
-      this.props.actions.addParticle(1, decideStyle());
+  recycleParticles() {
+    const recyclableStyles = styleFactories.filter((s: StyleFactoryType) => s.allowRecycling);
+    if ( recyclableStyles.length > 0 && this.props.particles.length > 10) {
+      const particleToDelete = find(this.props.particles, (p: ParticleType) => (
+        recyclableStyles.indexOf(p) !== -1
+      ));
+      if (particleToDelete) {
+        this.props.actions.deleteParticle(particleToDelete.id);
+        this.props.actions.addParticle(1, decideStyle(recyclableStyles));
+      }
     }
   }
 

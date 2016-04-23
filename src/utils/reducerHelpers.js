@@ -10,6 +10,15 @@ export function constrain(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
 
+export function normalizeRad(value: number): number {
+  const r = Math.PI*2;
+  if (value < 0) {
+    return r - Math.abs(value)%r;
+  } else {
+    return value%r;
+  }
+}
+
 export function gradualConstrain(originalValue: number, deltaValue: number, min: number, max: number, nudgeAmount: number): number {
   let modifiedValue =  originalValue + deltaValue;
   if (modifiedValue > max) {
@@ -33,7 +42,8 @@ export function distance(x1: number, y1: number, x2: number, y2: number): number
 }
 
 /**
- * Reduce nested state according to a collection of rules (partial reducers)
+ * Reduce nested state according to a collection of rules (partial reducers) that
+ * consist of a path (e.g. style.opacity) and a reducer method
  */
 export function reduceNestedState(state: ParticleType, rules: RuleType[], rootState?: Object, rootPath?: string): Object {
   return rules.reduce((memo: Object, [path, reducer]: [string, Function]): Object => {

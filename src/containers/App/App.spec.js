@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import ConnectedApp, {App} from './App';
+import {styleFactories} from 'constants/StyleFactories';
 import {assert} from 'chai';
 import {spy} from 'sinon';
 
@@ -35,7 +36,7 @@ describe('App', () => {
     assert.isTrue(props.actions.requestParticleMove.calledOnce);
   });
 
-  it('dispatches addStyle on start', () => {
+  it('dispatches addStyle on start for each possible style', () => {
     const props = {
       actions: {
         requestParticleMove: spy(),
@@ -43,7 +44,7 @@ describe('App', () => {
       }
     };
     const node = getNode(<App {...props} />);
-    assert.isTrue(props.actions.addStyle.calledTwice);
+    assert.equal(props.actions.addStyle.callCount, styleFactories.length);
   });
 
   it('contains help with particle count', () => {
