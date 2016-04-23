@@ -30,10 +30,7 @@ export function gradualConstrain(originalValue: number, deltaValue: number, min:
   }
 }
 
-export function rand(slowness: number): number {
-  if (typeof slowness !== 'number') {
-    throw Error('Invalid slowness ' + typeof slowness);
-  }
+export function noise(slowness: number): number {
   return (Math.random()-0.5) / slowness;
 }
 

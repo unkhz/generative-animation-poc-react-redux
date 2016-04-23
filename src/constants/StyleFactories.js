@@ -1,4 +1,4 @@
-import { rand, constrain, normalizeRad, isNotConstrained, reduceNestedState, gradualConstrain, distance} from 'utils/reducerHelpers';
+import { noise, constrain, normalizeRad, isNotConstrained, reduceNestedState, gradualConstrain, distance} from 'utils/reducerHelpers';
 import type {StyleType, StyleValueType, ParticleType, ColorType} from 'constants/Types';
 import React from 'react';
 
@@ -25,18 +25,18 @@ const shapes = [
 
 export const styleFactories = [{
   name: 'backBlinker',
-  weight: 5,
-  allowRecycling: false,
+  weight: 50,
+  allowRecycling: true,
   create: createBackBlinkerStyle
 }, {
   name: 'traveller',
-  weight: 3,
+  weight: 38,
   allowRecycling: false,
   create: createTravellerStyle
 }, {
   name: 'frontRotater',
-  weight: 5,
-  allowRecycling: false,
+  weight: 50,
+  allowRecycling: true,
   create: createFrontRotaterStyle,
 }];
 
@@ -99,14 +99,14 @@ function createFrontRotaterStyle(): StyleType {
       ['transform.rotateX', (state: StyleType, [value, unit]: StyleValueType) => [value + state.speed.rotateX, unit]],
       ['transform.rotateY', (state: StyleType, [value, unit]: StyleValueType) => [value + state.speed.rotateY, unit]],
       ['transform.rotateZ', (state: StyleType, [value, unit]: StyleValueType) => [value + state.speed.rotateZ, unit]],
-      ['speed.z', (state: StyleType, value: StyleValueType) => constrain(value + rand(1000),-0.005,0.005)],
-      ['speed.general', (state: StyleType, value: StyleValueType) => constrain(value + rand(100),-0.5,0.5)],
-      ['speed.rotateX', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + rand(100), -0.5, 0.5)],
-      ['speed.rotateY', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + rand(100), -0.5, 0.5)],
-      ['speed.rotateZ', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + rand(100), -0.5, 0.5)],
-      ['speed.translateX', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + rand(100), -0.5, 0.5)],
-      ['speed.translateY', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + rand(100), -0.5, 0.5)],
-      ['speed.translateZ', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.z + rand(1000), -0.005, 0.005)],
+      ['speed.z', (state: StyleType, value: StyleValueType) => constrain(value + noise(1000),-0.005,0.005)],
+      ['speed.general', (state: StyleType, value: StyleValueType) => constrain(value + noise(100),-0.5,0.5)],
+      ['speed.rotateX', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
+      ['speed.rotateY', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
+      ['speed.rotateZ', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
+      ['speed.translateX', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
+      ['speed.translateY', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
+      ['speed.translateZ', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.z + noise(1000), -0.005, 0.005)],
     ]
   };
 }
@@ -115,9 +115,9 @@ function createBackBlinkerStyle(): StyleType {
   return {
     name: 'backBlinker',
     getInitialState: (globalState: GlobalStateType): Object => {
-      const x = rand(1) * globalState.env.width;
-      const y = rand(1) * globalState.env.height;
-      const scale = 1/2000 - rand(1000);
+      const x = noise(1) * globalState.env.width;
+      const y = noise(1) * globalState.env.height;
+      const scale = 1/2000 - noise(1000);
 
       return {
         content: decide(shapes, [5,2])(),
@@ -138,10 +138,10 @@ function createBackBlinkerStyle(): StyleType {
           scale,
           x,
           y,
-          minOpacity: 0.03,
-          maxOpacity: 0.14,
-          translateX: rand(2000),
-          translateY: rand(2000),
+          minOpacity: 0.22,
+          maxOpacity: 0.33,
+          translateX: noise(2000),
+          translateY: noise(2000),
         },
         speed: {
           translateX: 0,
@@ -158,8 +158,8 @@ function createBackBlinkerStyle(): StyleType {
       ['transform.translateY', (state: StyleType, [value, unit]: StyleValueType) => [value + state.speed.translateY, unit]],
       ['shouldBeDestroyed', (state: StyleType, value: StyleValueType) => isNotConstrained(state.const.x, -state.env.width/2, state.env.width/2) || isNotConstrained(state.const.y, -state.env.height/2, state.env.height/2)],
       ['shouldSkipAfterNFramesCount', (state: StyleType, value: StyleValueType) => 3],
-      ['speed.general', (state: StyleType, value: StyleValueType) => constrain(value + rand(100),-0.5,0.5)],
-      ['speed.rotateZ', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + rand(100), -0.5, 0.5)],
+      ['speed.general', (state: StyleType, value: StyleValueType) => constrain(value + noise(100),-0.5,0.5)],
+      ['speed.rotateZ', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
       ['speed.translateX', (state: StyleType, value: StyleValueType) => constrain(state.const.translateX * distance(state.transform.translateX[0], state.transform.translateY[0], 0, 0), -5, 5)],
       ['speed.translateY', (state: StyleType, value: StyleValueType) => constrain(state.const.translateY * distance(state.transform.translateX[0], state.transform.translateY[0], 0, 0), -5, 5)],
 
@@ -184,21 +184,24 @@ function createTravellerStyle(): StyleType {
   return {
     name: 'traveller',
     getInitialState: (globalState: GlobalStateType): Object => {
-      const x = rand(1) * globalState.env.width;
-      const y = rand(1) * globalState.env.height;
-      const scale = 1/6000 - rand(10000);
+      const x = noise(1) * globalState.env.width;
+      const y = noise(1) * globalState.env.height;
+      const scale = 0.03;
 
-      const contentColor = randomColor();
+      const contentColor = {r: Math.random() * 255, g: Math.random() * 255, b: Math.random() * 255};
 
       return {
         content: (
           <svg width="300" height="300" viewBox="0 0 100 100" color-rendering="optimizeSpeed" shape-rendering="optimizeSpeed">
-            <polygon fill={contentColor} stroke="none" points="0 100 100 50 0 0 20 50 0 100"/>
-            <polygon opacity="0.5" fill={randomColor(contentColor.r/2, contentColor.g/2)} stroke="none" points="10 90 70 50 10 10 30 50 10 90"/>
+            <polygon fill={renderColorValue(contentColor.r/4, contentColor.g/4, contentColor.b/4)} stroke="none" points="0 100 100 50 0 0 20 50 0 100"/>
+            <polygon fill={renderColorValue(contentColor.r/2, contentColor.g/2, contentColor.b/2)} stroke="none" points="10 90 70 50 10 10 30 50 10 90"/>
+            <polygon fill={renderColorValue(contentColor.r, contentColor.g, contentColor.b)} stroke="none" points="20 80 60 50 20 20 40 50 20 80"/>
           </svg>
         ),
         shouldBeDestroyed: false,
-        style: {},
+        style: {
+          opacity: 0,
+        },
         transform: {
           translateX: [x, 'px'],
           translateY: [y, 'px'],
@@ -211,8 +214,8 @@ function createTravellerStyle(): StyleType {
         },
         const: {
           scale,
-          minOpacity: 0.44,
-          maxOpacity: 0.67,
+          minOpacity: 0.22,
+          maxOpacity: 0.44,
         },
         pos: {
           x,
@@ -222,8 +225,10 @@ function createTravellerStyle(): StyleType {
           magnitude: 0.1,
           distanceToNearestEdge: Infinity,
           panic: false,
+          turningLeft: true,
         },
         speed: {
+          desiredDirection: 0,
           direction: 0,
           magnitude: 0,
           general: 0,
@@ -231,35 +236,50 @@ function createTravellerStyle(): StyleType {
       };
     },
     rules: [
-      // decide speed
-      ['speed.general', (state: StyleType, value: StyleValueType) => constrain(value + rand(100),-0.05,0.05)],
-      ['speed.direction', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + rand(1000),-0.05,0.05)],
-      ['speed.magnitude', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + rand(100),-0.5,0.5)],
+      // mutate speed
+      ['speed.general', (state: StyleType, value: StyleValueType) => constrain(value + noise(100),-0.05,0.05)],
+      ['speed.desiredDirection', (state: StyleType, value: StyleValueType) => constrain(value + noise(10000),-0.05,0.05)],
+      ['speed.direction', (state: StyleType, value: StyleValueType): StyleValueType => {
+        const diff = Math.abs(state.pos.direction - state.pos.desiredDirection) / 10;
+        return constrain(value + ((state.speed.general - value)*diff) + noise(100),-0.08,0.08);
+      }],
+      ['speed.magnitude', (state: StyleType, value: StyleValueType) => constrain(value + (state.speed.general - value)/100,-0.5,0.5)],
 
-      // decide panic levels
+      // observe danger
       ['pos.distanceToNearestEdge', (state: StyleType, value: StyleValueType): StyleValueType => {
         const [nearestEdge, nearestDistance] = getDistanceToNearestEdge(state);
         return nearestDistance;
       }],
-      ['pos.panic', (state: StyleType, value: StyleValueType) => state.pos.distanceToNearestEdge < 100],
 
-      // decide direction
+      // decide panic level
+      ['pos.panic', (state: StyleType, value: StyleValueType) => state.pos.distanceToNearestEdge < state.env.radius/6],
+
+      // decide which way to steer
+      ['pos.turningLeft', (state: StyleType, value: StyleValueType): ParticleType => {
+        const diff = Math.abs(state.pos.direction - state.pos.desiredDirection);
+        return state.pos.distanceToNearestEdge > state.env.radius/3 && diff > Math.PI/4 && diff < Math.PI * 1.75 ? diff > Math.PI : value;
+      }],
+
+      // infer direction
       ['pos.desiredDirection', (state: StyleType, value: StyleValueType): StyleValueType => {
-        if (!state.pos.panic) {
-          return normalizeRad(value + rand(10));
+        if (Math.random() < 0.01) {
+          const randomDirection = Math.atan2(noise(1) * state.env.radius - state.pos.y, noise(1) * state.env.radius - state.pos.x);
+          return randomDirection;
+        } else if (!state.pos.panic) {
+          return normalizeRad(value + state.speed.desiredDirection + noise(1000));
         } else {
           const directionToCenter = Math.atan2(-state.pos.y, -state.pos.x);
           return normalizeRad(directionToCenter);
         }
       }],
       ['pos.direction', (state: StyleType, value: StyleValueType): StyleValueType => {
-        const diff = Math.abs((value - state.pos.desiredDirection) * state.speed.direction);
-        return normalizeRad(diff < Math.PI ? value + diff : value - diff);
+        const diff = state.pos.panic ? Math.abs((value - state.pos.desiredDirection)/(state.pos.magnitude * 5)) : Math.abs(state.speed.direction);
+        return normalizeRad(state.pos.turningLeft ? value - diff : value + diff);
       }],
 
       // decide velocity
       ['pos.magnitude', (state: StyleType, value: StyleValueType): StyleValueType => {
-        return state.pos.panic ? constrain(value + 0.01, 0, 5) : gradualConstrain(value, state.speed.magnitude + rand(100), 0.66, 3, 0.005);
+        return gradualConstrain(value, state.speed.magnitude + noise(100), 0.66, 3, 0.005);
       }],
 
       // move position
@@ -270,7 +290,7 @@ function createTravellerStyle(): StyleType {
       ['shouldBeDestroyed', (state: StyleType, value: StyleValueType) => isNotConstrained(state.pos.x, -state.env.width/2, state.env.width/2) || isNotConstrained(state.pos.y, -state.env.height/2, state.env.height/2)],
 
       // output to style
-      ['transform.scale', (state: StyleType, [value, unit]: StyleValueType) => [gradualConstrain(value, 0.033, 0, state.env.radius*state.const.scale, 0.033), unit]],
+      ['transform.scale', (state: StyleType, [value, unit]: StyleValueType) => [state.const.scale, unit]],
       ['transform.translateX', (state: StyleType, [value, unit]: StyleValueType) => [state.pos.x, unit]],
       ['transform.translateY', (state: StyleType, [value, unit]: StyleValueType) => [state.pos.y, unit]],
       ['transform.rotateZ', (state: StyleType, [value, unit]: StyleValueType) => [state.pos.direction, unit]],

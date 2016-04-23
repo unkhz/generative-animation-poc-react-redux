@@ -39,9 +39,10 @@ export class App extends Component {
 
   recycleParticles() {
     const recyclableStyles = styleFactories.filter((s: StyleFactoryType) => s.allowRecycling);
+    const recyclableStyleNames = recyclableStyles.map((s: StyleFactoryType) => s.name);
     if ( recyclableStyles.length > 0 && this.props.particles.length > 10) {
       const particleToDelete = find(this.props.particles, (p: ParticleType) => (
-        recyclableStyles.indexOf(p) !== -1
+        !p.isToBeDestroyed && recyclableStyleNames.indexOf(p.styleName) !== -1
       ));
       if (particleToDelete) {
         this.props.actions.deleteParticle(particleToDelete.id);

@@ -1,5 +1,5 @@
 // @flow
-import { rand, constrain, reduceNestedState, initPartialState } from 'utils/reducerHelpers';
+import { noise, constrain, reduceNestedState, initPartialState } from 'utils/reducerHelpers';
 import * as actionTypes from 'constants/ActionTypes';
 import {merge} from 'lodash';
 import {RuleType, ParticleType, ActionType, StyleType, StyleValueType, GlobalStateType} from 'constants/Types';
@@ -30,8 +30,8 @@ export function createParticle(style: StyleType, state: GlobalStateType): Partic
       ...style.rules,
       ['sn', (state: StyleType, value: StyleValueType) => value+1],
       ['isToBeDestroyed', (state: StyleType, value: StyleValueType) => !!state.isToBeDestroyed || !!state.shouldBeDestroyed],
-      ['speed.particle', (state: StyleType, value: StyleValueType) => constrain(value + rand(1000),-0.005,0.005)],
-      ['speed.opacity', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.particle + rand(1000), -0.005, 0.005)],
+      ['speed.particle', (state: StyleType, value: StyleValueType) => constrain(value + noise(1000),-0.005,0.005)],
+      ['speed.opacity', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.particle + noise(1000), -0.005, 0.005)],
       ['style.opacity', (state: StyleType, value: StyleValueType): StyleValueType => {
         if (state.isToBeDestroyed) {
           return Math.max(value - 0.005, 0);
