@@ -89,7 +89,7 @@ export function randomColor(r?: number, g?: number, b?: number): string {
   );
 }
 
-export function decide(collection: Object[], weights: number[]): Object {
+export function decide(collection: any[], weights: number[]): any {
   return collection[weights
     .map((weight: number) => weight * Math.random())
     .reduce((max: [number, number], weighted: number, index: number): [number, number] => {

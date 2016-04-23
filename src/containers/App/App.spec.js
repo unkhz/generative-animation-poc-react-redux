@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
-import ConnectedApp, {App} from './App';
+import ConnectedApp, {App} from 'containers/App';
 import {styleDefinitions} from 'reducers/styles/definitions';
 import {assert} from 'chai';
 import {spy} from 'sinon';
@@ -47,6 +47,16 @@ describe('App', () => {
     assert.equal(props.actions.addStyle.callCount, styleDefinitions.length);
   });
 
+  it('contains help without particle count', () => {
+    const props = {
+      aliveParticleCount: 0,
+      particles: []
+    };
+    const node = getNode(<App {...props} />);
+    assert.equal(node.firstChild.className, 'help');
+    assert.equal(node.firstChild.getAttribute('data-count'), 0);
+  });
+
   it('contains help with particle count', () => {
     const props = {
       aliveParticleCount: 2,
@@ -57,7 +67,7 @@ describe('App', () => {
       }]
     };
     const node = getNode(<App {...props} />);
-    assert.equal(node.firstChild.className, 'layer help');
+    assert.equal(node.firstChild.className, 'help');
     assert.equal(node.firstChild.getAttribute('data-count'), 2);
   });
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
-import ConnectedEnvironment, {Environment} from './Environment';
+import ConnectedEnvironment, {Environment} from 'containers/Environment';
 import {assert} from 'chai';
 import {spy} from 'sinon';
 

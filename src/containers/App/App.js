@@ -73,7 +73,7 @@ export class App extends Component {
         </div></div>
       );
     } else {
-      return <div className="layer help" data-count={aliveParticleCount}><div>{aliveParticleCount}</div></div>;
+      return <div className="help" data-count={aliveParticleCount}><div>{aliveParticleCount}</div></div>;
     }
   }
 

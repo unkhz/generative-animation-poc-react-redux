@@ -1,4 +1,6 @@
-import { decide, noise, constrain, gradualConstrain, isNotConstrained, distance, renderColorValue, randomColor} from 'utils/reducerHelpers';
+// @flow weak
+import {decide, noise, constrain, gradualConstrain, isNotConstrained, distance, renderColorValue, randomColor} from 'utils/reducerHelpers';
+import {GlobalStateType, StyleType, StyleValueType} from 'constants/Types';
 import React from 'react';
 
 export const allowRecycling = true;

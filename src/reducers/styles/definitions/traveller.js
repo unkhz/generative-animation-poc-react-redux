@@ -1,8 +1,9 @@
+// @flow
 import { decide, noise, constrain, gradualConstrain, isNotConstrained, distance, renderColorValue, randomColor, normalizeRad} from 'utils/reducerHelpers';
 import React from 'react';
 import type {RuleType, StyleType, StyleValueType, GlobalStateType} from 'constants/Types';
 
-export const allowRecycling = true;
+export const allowRecycling = false;
 
 export const name = 'traveller';
 

@@ -1,3 +1,4 @@
+// @flow weak
 import { decide, noise, constrain, gradualConstrain, renderColorValue, randomColor} from 'utils/reducerHelpers';
 import React from 'react';
 import type {RuleType, StyleType, StyleValueType, GlobalStateType} from 'constants/Types';

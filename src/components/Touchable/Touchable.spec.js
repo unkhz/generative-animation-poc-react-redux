@@ -23,6 +23,11 @@ describe('Touchable', () => {
   it('can be created without props', () => {
     const node = getNode(<Touchable />);
     assert.equal(node.nodeType, 1);
+    Simulate.touchStart(node, touch({}));
+    Simulate.touchMove(node, touch({}));
+    Simulate.touchMove(node, touch({}));
+    Simulate.touchEnd(node, touch({}));
+    Simulate.touchCancel(node, touch({}));
   });
 
   it('has no default className', () => {
@@ -60,7 +65,7 @@ describe('Touchable', () => {
     const props = {
       onTouchDrag: spy(),
     };
-    
+
     function values(delta: Object): Array {
       return [
         delta.clientX,
