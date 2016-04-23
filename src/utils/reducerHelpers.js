@@ -32,21 +32,25 @@ export function distance(x1: number, y1: number, x2: number, y2: number): number
   return Math.sqrt(Math.pow(x2-x1,2) + Math.pow(y2-y1,2));
 }
 
-export function reduceNestedState(state: ParticleType, rules: RuleType[], rootState?: Object): Object {
-  return rules.reduce((memo: Object, [key, reducer]: [string, Function]): Object => {
-    const [rootKey, ...descendantKeys] = key.split('.');
-    const value = memo[rootKey];
-    rootState = rootState || state;
+/**
+ * Reduce nested state according to a collection of rules (partial reducers)
+ */
+export function reduceNestedState(state: ParticleType, rules: RuleType[], rootState?: Object, rootPath?: string): Object {
+  return rules.reduce((memo: Object, [path, reducer]: [string, Function]): Object => {
+    const [key, ...descendantKeys] = path.split('.');
+    const value = memo[key];
+    const branchState = rootState || state;
+    const branchPath = rootPath || path;
 
     if (value === undefined) {
-      console.warn('No value in state for', key);
+      throw new Error(`No value in state for ${branchPath}`);
     } else if (descendantKeys.length > 0) {
-      memo[rootKey] = {
+      memo[key] = {
         ...value,
-        ...reduceNestedState(value, [[descendantKeys.join('.'), reducer]], rootState)
+        ...reduceNestedState(value, [[descendantKeys.join('.'), reducer]], branchState, branchPath)
       };
     } else {
-      memo[rootKey] = reducer(rootState, value);
+      memo[key] = reducer(branchState, value);
     }
     return memo;
   }, state);
