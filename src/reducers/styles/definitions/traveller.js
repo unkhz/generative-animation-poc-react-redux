@@ -62,19 +62,19 @@ export function getInitialState(globalState: GlobalStateType): Object {
 
 export const rules: RuleType[] = [
   // mutate speed
-  ['speed.general', (state: StyleType, value: StyleValueType) => constrain(value + noise(100),-0.05,0.05)],
-  ['speed.desiredDirection', (state: StyleType, value: StyleValueType) => constrain(value + noise(10000),-0.05,0.05)],
+  ['speed.general', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + noise(100),-0.05,0.05)],
+  ['speed.desiredDirection', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + noise(10000),-0.05,0.05)],
   ['speed.direction', (state: StyleType, value: StyleValueType): StyleValueType => {
     const diff = Math.abs(state.pos.direction - state.pos.desiredDirection) / 10;
     return constrain(value + ((state.speed.general - value)*diff) + noise(100),-0.08,0.08);
   }],
-  ['speed.magnitude', (state: StyleType, value: StyleValueType) => constrain(value + (state.speed.general - value)/100,-0.5,0.5)],
+  ['speed.magnitude', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + (state.speed.general - value)/100,-0.5,0.5)],
 
   // observe danger
-  ['pos.distanceToNearestEdge', (state: StyleType, value: StyleValueType) => getDistanceToNearestEdge(state)],
+  ['pos.distanceToNearestEdge', (state: StyleType, value: StyleValueType): StyleValueType => getDistanceToNearestEdge(state)],
 
   // decide panic level
-  ['pos.panic', (state: StyleType, value: StyleValueType) => state.pos.distanceToNearestEdge < state.env.radius/6],
+  ['pos.panic', (state: StyleType, value: StyleValueType): StyleValueType => state.pos.distanceToNearestEdge < state.env.radius/6],
 
   // decide which way to steer
   ['pos.turningLeft', (state: StyleType, value: StyleValueType): StyleType => {
@@ -108,17 +108,17 @@ export const rules: RuleType[] = [
   }],
 
   // move position
-  ['pos.x', (state: StyleType, value: StyleValueType) => value + (Math.cos(state.pos.direction) * state.pos.magnitude)],
-  ['pos.y', (state: StyleType, value: StyleValueType) => value + (Math.sin(state.pos.direction) * state.pos.magnitude)],
+  ['pos.x', (state: StyleType, value: StyleValueType): StyleValueType => value + (Math.cos(state.pos.direction) * state.pos.magnitude)],
+  ['pos.y', (state: StyleType, value: StyleValueType): StyleValueType => value + (Math.sin(state.pos.direction) * state.pos.magnitude)],
 
   // check if we died
-  ['shouldBeDestroyed', (state: StyleType, value: StyleValueType) => isNotConstrained(state.pos.x, -state.env.width/2, state.env.width/2) || isNotConstrained(state.pos.y, -state.env.height/2, state.env.height/2)],
+  ['shouldBeDestroyed', (state: StyleType, value: StyleValueType): StyleValueType => isNotConstrained(state.pos.x, -state.env.width/2, state.env.width/2) || isNotConstrained(state.pos.y, -state.env.height/2, state.env.height/2)],
 
   // output to style
-  ['transform.scale', (state: StyleType, [value, unit]: StyleValueType) => [state.const.scale, unit]],
-  ['transform.translateX', (state: StyleType, [value, unit]: StyleValueType) => [state.pos.x, unit]],
-  ['transform.translateY', (state: StyleType, [value, unit]: StyleValueType) => [state.pos.y, unit]],
-  ['transform.rotateZ', (state: StyleType, [value, unit]: StyleValueType) => [state.pos.direction, unit]],
+  ['transform.scale', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => [state.const.scale, unit]],
+  ['transform.translateX', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => [state.pos.x, unit]],
+  ['transform.translateY', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => [state.pos.y, unit]],
+  ['transform.rotateZ', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => [state.pos.direction, unit]],
 ];
 
 function getDistanceToNearestEdge(state: StyleType): number {

@@ -25,7 +25,7 @@ export class Environment extends Component {
     window,
     body: document.body,
     actions: {
-      envResized: (() => undefined)
+      envResized: ((): undefined => undefined)
     }
   };
 
@@ -106,7 +106,7 @@ export class Environment extends Component {
       <Touchable
         className="full-screen-container"
         onTouchDrag={this.onTouchDrag.bind(this)}
-        onTouchMove={(evt: Event) => evt.preventDefault()}
+        onTouchMove={(evt: Event): undefined => evt.preventDefault()}
       >
         {this.props.children}
       </Touchable>

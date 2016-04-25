@@ -1,4 +1,4 @@
-// @flow weak
+// @flow
 import { decide, noise, constrain, gradualConstrain, renderColorValue, randomColor} from 'utils/reducerHelpers';
 import React from 'react';
 import type {RuleType, StyleType, StyleValueType, GlobalStateType} from 'constants/Types';
@@ -44,8 +44,8 @@ export function getInitialState(globalState: GlobalStateType): StyleType {
 }
 
 export const rules = [
-  ['transform.scale', (state: StyleType, value: StyleValueType) => gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033)],
-  ['transform.translateX', (state: StyleType, [value, unit]: StyleValueType) => (
+  ['transform.scale', (state: StyleType, value: StyleValueType): StyleValueType => gradualConstrain(value, 0.033, 0, state.env.radius/300, 0.033)],
+  ['transform.translateX', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => (
     [gradualConstrain(
       value,
       state.speed.translateX, -state.env.radius * state.const.largeness,
@@ -53,7 +53,7 @@ export const rules = [
       0.1
     ), unit]
   )],
-  ['transform.translateY', (state: StyleType, [value, unit]: StyleValueType) => (
+  ['transform.translateY', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => (
     [gradualConstrain(
       value,
       state.speed.translateY, -state.env.radius * state.const.largeness,
@@ -61,7 +61,7 @@ export const rules = [
       0.1
     ), unit]
   )],
-  ['transform.translateZ', (state: StyleType, [value, unit]: StyleValueType) => (
+  ['transform.translateZ', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => (
     [gradualConstrain(
       value,
       state.speed.translateZ, -state.env.radius * state.const.largeness,
@@ -69,26 +69,26 @@ export const rules = [
       0.1
     ), unit]
   )],
-  ['transform.rotateX', (state: StyleType, [value, unit]: StyleValueType) => [value + state.speed.rotateX, unit]],
-  ['transform.rotateY', (state: StyleType, [value, unit]: StyleValueType) => [value + state.speed.rotateY, unit]],
-  ['transform.rotateZ', (state: StyleType, [value, unit]: StyleValueType) => [value + state.speed.rotateZ, unit]],
-  ['speed.z', (state: StyleType, value: StyleValueType) => constrain(value + noise(1000),-0.005,0.005)],
-  ['speed.general', (state: StyleType, value: StyleValueType) => constrain(value + noise(100),-0.5,0.5)],
-  ['speed.rotateX', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
-  ['speed.rotateY', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
-  ['speed.rotateZ', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
-  ['speed.translateX', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
-  ['speed.translateY', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
-  ['speed.translateZ', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.z + noise(1000), -0.005, 0.005)],
+  ['transform.rotateX', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => [value + state.speed.rotateX, unit]],
+  ['transform.rotateY', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => [value + state.speed.rotateY, unit]],
+  ['transform.rotateZ', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => [value + state.speed.rotateZ, unit]],
+  ['speed.z', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + noise(1000),-0.005,0.005)],
+  ['speed.general', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + noise(100),-0.5,0.5)],
+  ['speed.rotateX', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
+  ['speed.rotateY', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
+  ['speed.rotateZ', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
+  ['speed.translateX', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
+  ['speed.translateY', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
+  ['speed.translateZ', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + state.speed.z + noise(1000), -0.005, 0.005)],
 ];
 
 const shapes = [
-  () => (
+  (): React.Element => (
     <svg width="300" height="300" viewBox="0 0 51 48" color-rendering="optimizeSpeed" shape-rendering="optimizeSpeed">
       <path fill={randomColor()} stroke="none" d="m25,1 6,17h18l-14,11 5,17-15-10-15,10 5-17-14-11h18z"/>
     </svg>
   ),
-  () => (
+  (): React.Element => (
     <svg width="300" height="300" viewBox="0 0 100 100" color-rendering="optimizeSpeed" shape-rendering="optimizeSpeed">
       <circle fill={randomColor()} stroke="none"  cx="50" cy="50" r="50" />
     </svg>

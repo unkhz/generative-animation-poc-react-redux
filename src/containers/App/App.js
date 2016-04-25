@@ -21,8 +21,8 @@ export class App extends Component {
 
   static defaultProps = {
     actions: {
-      requestParticleMove: () => undefined,
-      addStyle: () => undefined,
+      requestParticleMove: (): undefined => undefined,
+      addStyle: (): undefined => undefined,
     },
     layers: [],
     aliveParticleCount: 0,
@@ -39,8 +39,8 @@ export class App extends Component {
 
   recycleParticles() {
     if (this.props.particles.length > 10) {
-      const styleName = decideStyle((s: StyleDefinitionType) => s.allowRecycling);
-      const particleToDelete = find(this.props.particles, (p: ParticleType) => (
+      const styleName = decideStyle((s: StyleDefinitionType): boolean => s.allowRecycling);
+      const particleToDelete = find(this.props.particles, (p: ParticleType): boolean => (
         !p.isToBeDestroyed && p.styleName === styleName
       ));
       if (particleToDelete) {
@@ -57,7 +57,7 @@ export class App extends Component {
         <Layer
           key={layer.id}
           { ...layer }
-          particles={ particles.filter((particle: ParticleType) => particle.styleName === layer.styleName) }
+          particles={ particles.filter((particle: ParticleType): boolean => particle.styleName === layer.styleName) }
         />
       );
     });

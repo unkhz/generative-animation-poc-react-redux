@@ -28,10 +28,10 @@ export function createParticle(style: StyleType, state: GlobalStateType): Partic
     styleName: style.name,
     rules: [
       ...style.rules,
-      ['sn', (state: StyleType, value: StyleValueType) => value+1],
-      ['isToBeDestroyed', (state: StyleType, value: StyleValueType) => !!state.isToBeDestroyed || !!state.shouldBeDestroyed],
-      ['speed.particle', (state: StyleType, value: StyleValueType) => constrain(value + noise(1000),-0.005,0.005)],
-      ['speed.opacity', (state: StyleType, value: StyleValueType) => constrain(value + state.speed.particle + noise(1000), -0.005, 0.005)],
+      ['sn', (state: StyleType, value: StyleValueType): StyleValueType => value+1],
+      ['isToBeDestroyed', (state: StyleType, value: StyleValueType): StyleValueType => !!state.isToBeDestroyed || !!state.shouldBeDestroyed],
+      ['speed.particle', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + noise(1000),-0.005,0.005)],
+      ['speed.opacity', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + state.speed.particle + noise(1000), -0.005, 0.005)],
       ['style.opacity', (state: StyleType, value: StyleValueType): StyleValueType => {
         if (state.isToBeDestroyed) {
           return Math.max(value - 0.005, 0);
@@ -114,7 +114,7 @@ function moveParticle(state: GlobalStateType, action: ActionType): GlobalStateTy
 
   return {
     ...state,
-    particles: particles.filter((particle: ParticleType) => !particle.isToBeDestroyed || particle.style.opacity > 0)
+    particles: particles.filter((particle: ParticleType): ParticleType => !particle.isToBeDestroyed || particle.style.opacity > 0)
   };
 }
 

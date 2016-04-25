@@ -30,6 +30,6 @@ export default function(state: GlobalStateType, action: ActionType): GlobalState
 function countParticles(state: GlobalStateType): GlobalStateType {
   return {
     ...state,
-    aliveParticleCount: state.particles.filter((p: ParticleType) => !p.isToBeDestroyed).length
+    aliveParticleCount: state.particles.filter((p: ParticleType): boolean => !p.isToBeDestroyed).length
   };
 }

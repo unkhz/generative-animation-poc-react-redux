@@ -23,11 +23,11 @@ export type TouchableDeltaType = {
 class Touchable extends Component {
 
   static defaultProps: TouchablePropsType = {
-    onTouchStart: () => undefined,
-    onTouchMove: () => undefined,
-    onTouchDrag: () => undefined,
-    onTouchEnd: () => undefined,
-    onTouchCancel: () => undefined,
+    onTouchStart: (): undefined => undefined,
+    onTouchMove: (): undefined => undefined,
+    onTouchDrag: (): undefined => undefined,
+    onTouchEnd: (): undefined => undefined,
+    onTouchCancel: (): undefined => undefined,
   };
 
   static defaultState: TouchableStateType = {
@@ -81,9 +81,9 @@ class Touchable extends Component {
     const evtTouches = [...evt.touches];
     const stateTouches = this.state.touches;
     const stateDelta = this.state.delta;
-    const clientX = evtTouches.map((touch: Touch, id: number) => touch.clientX - stateTouches[id].clientX);
-    const clientY = evtTouches.map((touch: Touch, id: number) => touch.clientY - stateTouches[id].clientY);
-    const delta = evtTouches.map((touch: Touch, id: number) => this.createDelta(
+    const clientX = evtTouches.map((touch: Touch, id: number): number => touch.clientX - stateTouches[id].clientX);
+    const clientY = evtTouches.map((touch: Touch, id: number): number => touch.clientY - stateTouches[id].clientY);
+    const delta = evtTouches.map((touch: Touch, id: number): TouchableDeltaType => this.createDelta(
       clientX[id],
       clientY[id],
       clientX[id] - stateDelta[id].clientX,
@@ -96,7 +96,7 @@ class Touchable extends Component {
     const touches = Array.prototype.slice.call(evt.touches);
     this.setState({
       touches,
-      delta: touches.map((touch: Touch, id: number) => this.createDelta(touch.clientX, touch.clientY, 0, 0)),
+      delta: touches.map((touch: Touch, id: number): TouchableDeltaType => this.createDelta(touch.clientX, touch.clientY, 0, 0)),
     });
   }
 

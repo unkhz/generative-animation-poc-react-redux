@@ -19,5 +19,5 @@ const weights = {
 
 export function decideStyle(filter: Function, collection: StyleDefinitionType[] = styleDefinitions): string  {
   const filtered = filter ? collection.filter(filter) : styleDefinitions;
-  return (decide(filtered, filtered.map((s: StyleDefinitionType) => weights[s.name])) || {}).name;
+  return (decide(filtered, filtered.map((s: StyleDefinitionType): number => weights[s.name])) || {}).name;
 }
