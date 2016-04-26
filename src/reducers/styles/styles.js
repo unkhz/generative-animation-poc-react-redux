@@ -33,3 +33,7 @@ export function styles(state: GlobalStateType, action: ActionType): GlobalStateT
       return state;
   }
 }
+
+export const reducer = styles;
+export const exportedKeys: string[] = ['styles'];
+export const importedKeys: string[] = [];

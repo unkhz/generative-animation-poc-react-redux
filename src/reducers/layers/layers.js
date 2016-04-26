@@ -53,3 +53,7 @@ export function layers(state: GlobalStateType, action: ActionType): GlobalStateT
       return state;
   }
 }
+
+export const reducer = layers;
+export const exportedKeys: string[] = ['layers'];
+export const importedKeys: string[] = ['styles'];

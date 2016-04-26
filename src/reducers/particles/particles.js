@@ -159,3 +159,7 @@ function deleteSomeParticles(state: GlobalStateType, action: ActionType): Global
     particles,
   };
 }
+
+export const reducer = particles;
+export const exportedKeys: string[] = ['isPaused', 'particles'];
+export const importedKeys: string[] = ['env', 'styles'];

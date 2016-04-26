@@ -25,3 +25,7 @@ export function environment(state: GlobalStateType, action: ActionType): GlobalS
       return state;
   }
 }
+
+export const reducer = environment;
+export const exportedKeys: string[] = ['env'];
+export const importedKeys: string[] = [];

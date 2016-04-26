@@ -1,10 +1,30 @@
 // @flow
 import {initPartialState} from 'utils/reducerHelpers';
 import {ParticleType, ActionType, GlobalStateType} from 'constants/Types';
-import {environment} from './environment';
-import {layers} from './layers';
-import {particles} from './particles';
-import {styles} from './styles';
+import * as environment from './environment';
+import * as layers from './layers';
+import * as particles from './particles';
+import * as styles from './styles';
+import {createReducerGraph, registerReducer, getReducers} from 'utils/reducerGraph';
+
+/**
+ * Each reducer module exports the reducer function and its exports and imports.
+ * In startup we create a topologically sorted graph of reducers based on this
+ * information.
+ */
+let reducerGraph = createReducerGraph();
+reducerGraph = registerReducer(reducerGraph, environment);
+reducerGraph = registerReducer(reducerGraph, layers);
+reducerGraph = registerReducer(reducerGraph, particles);
+reducerGraph = registerReducer(reducerGraph, styles);
+reducerGraph = registerReducer(reducerGraph, {
+  reducer: countParticles,
+  exportedKeys: ['aliveParticleCount'],
+  importedKeys: ['particles']
+});
+
+// export root reducer bound with the sorted reducer array
+export default pipeReduce.bind(null, getReducers(reducerGraph));
 
 /**
  * Pipe partial reducers together, so that they can chain modifications
@@ -17,15 +37,6 @@ function pipeReduce(reducers: Function[], state: GlobalStateType, action: Action
   }, state);
 }
 
-export default function(state: GlobalStateType, action: ActionType): GlobalStateType {
-  return pipeReduce([
-    environment,
-    styles,
-    layers,
-    particles,
-    countParticles
-  ], state, action);
-};
 
 function countParticles(state: GlobalStateType): GlobalStateType {
   return {
