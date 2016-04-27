@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import ConnectedApp, {App} from 'containers/App';
+import {createWithMiddleware} from 'store';
+import {Provider} from 'react-redux';
 import {styleDefinitions} from 'reducers/styles/definitions';
 import {assert} from 'chai';
 import {spy} from 'sinon';
@@ -23,6 +25,21 @@ describe('App', () => {
   it('can be created without props', () => {
     const node = getNode(<App />);
     assert.equal(node.nodeType, 1);
+  });
+
+  it('connects to store', () => {
+    function reducer(): Object {
+      return {
+        aliveParticleCount: 1425
+      };
+    }
+    const store = createWithMiddleware(reducer, {});
+    const node = getNode(
+      <Provider store={store}>
+        <ConnectedApp />
+      </Provider>
+    );
+    assert.equal(node.firstChild.getAttribute('data-count'), 1425);
   });
 
   it('dispatches requestParticleMove on start', () => {

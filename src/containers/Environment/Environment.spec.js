@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import ConnectedEnvironment, {Environment} from 'containers/Environment';
+import {Provider} from 'react-redux';
+import {createWithMiddleware} from 'store';
 import {assert} from 'chai';
 import {spy} from 'sinon';
 
@@ -22,9 +24,9 @@ function fakeEvent(type: string, data: Object): Object {
   const evt = new Event(type);
   return {
     ...evt,
-    stopImmediatePropagation: () => undefined,
-    stopPropagation: () => undefined,
-    preventDefault: () => undefined,
+    stopImmediatePropagation: (): undefined => undefined,
+    stopPropagation: (): undefined => undefined,
+    preventDefault: (): undefined => undefined,
     ...data
   };
 }
@@ -33,7 +35,7 @@ const defaultProps = {
   window,
   body: document.body,
   actions: {
-    envResized: (() => undefined)
+    envResized: ((): undefined => undefined)
   }
 };
 
@@ -44,13 +46,26 @@ describe('Environment', () => {
     assert.equal(node.nodeType, 1);
   });
 
+  it('connects to store', () => {
+    function reducer(): Object {
+      return {};
+    }
+    const store = createWithMiddleware(reducer, {});
+    const node = getNode(
+      <Provider store={store}>
+        <ConnectedEnvironment />
+      </Provider>
+    );
+    assert.equal(node.nodeType, 1);
+  });
+
   it('dispatches envResized on start', () => {
     const props = {
       window: {
         innerWidth: 120,
         innerHeight: 125,
-        addEventListener: (() => undefined),
-        removeEventListener: (() => undefined),
+        addEventListener: ((): undefined => undefined),
+        removeEventListener: ((): undefined => undefined),
       },
       actions: {
         envResized: spy()
@@ -71,7 +86,7 @@ describe('Environment', () => {
         addEventListener: (evt: string, callback: Function) => {
           windowResizeCallback = callback;
         },
-        removeEventListener: (() => undefined),
+        removeEventListener: ((): undefined => undefined),
       },
       actions: {
         envResized: spy()
