@@ -1,15 +1,15 @@
 // @flow
 import { decide, noise, constrain, gradualConstrain, isNotConstrained, distance, renderColorValue, randomColor, normalizeRad} from 'utils/reducerHelpers';
 import React from 'react';
-import type {RuleType, StyleType, StyleValueType, GlobalStateType} from 'constants/Types';
+import type {RuleType, StyleType, StyleValueType, EnvironmentType} from 'constants/Types';
 
 export const allowRecycling = false;
 
 export const name = 'traveller';
 
-export function getInitialState(globalState: GlobalStateType): Object {
-  const x = noise(1) * globalState.env.width;
-  const y = noise(1) * globalState.env.height;
+export function getInitialState(env: EnvironmentType): Object {
+  const x = noise(1) * env.width;
+  const y = noise(1) * env.height;
   const scale = 0.03;
 
   const contentColor = {r: Math.random() * 255, g: Math.random() * 255, b: Math.random() * 255};
@@ -34,7 +34,7 @@ export function getInitialState(globalState: GlobalStateType): Object {
       translateZ: [0, ''],
     },
     env: {
-      ...globalState,
+      ...env,
     },
     const: {
       scale,

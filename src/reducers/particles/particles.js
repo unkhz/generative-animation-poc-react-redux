@@ -2,10 +2,10 @@
 import { noise, constrain, reduceNestedState, initPartialState } from 'utils/reducerHelpers';
 import * as actionTypes from 'constants/ActionTypes';
 import {merge} from 'lodash';
-import {RuleType, ParticleType, ActionType, StyleType, StyleValueType, GlobalStateType} from 'constants/Types';
+import {RuleType, ParticleType, ActionType, StyleType, StyleValueType, EnvironmentType} from 'constants/Types';
 
 let particleId = 0;
-export function createParticle(style: StyleType, state: GlobalStateType): ParticleType {
+export function createParticle(style: StyleType, env: EnvironmentType): ParticleType {
   return {
     ...merge({
       style: {
@@ -20,7 +20,7 @@ export function createParticle(style: StyleType, state: GlobalStateType): Partic
         opacity: 0,
       },
       shouldSkipAfterNFramesCount: 0,
-    }, style.getInitialState(state)),
+    }, style.getInitialState(env)),
 
     id: particleId++,
     sn: 0,
@@ -47,58 +47,38 @@ export function createParticle(style: StyleType, state: GlobalStateType): Partic
   };
 }
 
-const initialState = {
-  env: {
-    radius: 100,
-  },
-  isPaused: false,
-  particles: [],
-};
 
-function getStyle(state: GlobalStateType, name: string): StyleType {
-  const style = state.styles.filter((style: StyleType): StyleType => {
-    return style.name === name;
-  })[0];
+export const reducer = particles;
+export const exportedKey: string = 'particles';
+export const importedKeys: string[] = ['env', 'styles'];
 
-  if (!style) {
-    throw new Error(`Invalid style ${name}`);
-  }
-  return style;
-}
 
-export function particles(state: GlobalStateType, action: ActionType): GlobalStateType {
-  state = initPartialState(state, initialState, 'particles');
+const initialState = [];
 
+export function particles(state: ParticleType[] = initialState, action: ActionType, dependencies: [EnvironmentType, StyleType[]]): ParticleType[] {
   switch (action.type) {
 
     case actionTypes.MOVE_PARTICLE:
-      return moveParticle(state, action);
+      return moveParticle(state, action, dependencies);
 
     case actionTypes.ADD_PARTICLE:
-      return addParticle(state, action);
+      return addParticle(state, action, dependencies);
 
     case actionTypes.DELETE_PARTICLE:
-      return deleteParticle(state, action);
+      return deleteParticle(state, action, dependencies);
 
     case actionTypes.DELETE_SOME_PARTICLES:
-      return deleteSomeParticles(state, action);
-
-    case actionTypes.TOGGLE_ANIMATION:
-      return {
-        ...state,
-        isPaused: !state.isPaused
-      };
+      return deleteSomeParticles(state, action, dependencies);
 
     default:
       return state;
   }
 }
 
-function moveParticle(state: GlobalStateType, action: ActionType): GlobalStateType {
-  let particles = state.particles;
-
-  if (!state.isPaused) {
-    particles = state.particles.map((particle: ParticleType): ParticleType => {
+function moveParticle(state: ParticleType, action: ActionType, [env, styles]: [EnvironmentType, StyleType[]]): ParticleType {
+  let newState;
+  if (!env.isMovementPaused) {
+    newState = state.map((particle: ParticleType): ParticleType => {
       if (particle.shouldSkipAfterNFramesCount > 0) {
         return {
           ...particle,
@@ -107,59 +87,54 @@ function moveParticle(state: GlobalStateType, action: ActionType): GlobalStateTy
       }
       return reduceNestedState({
         ...particle,
-        env: state.env || particle.env,
+        env: env || particle.env,
       }, particle.rules);
     });
+  } else {
+    newState = state;
   }
 
-  return {
-    ...state,
-    particles: particles.filter((particle: ParticleType): ParticleType => !particle.isToBeDestroyed || particle.style.opacity > 0)
-  };
+  return newState.filter((particle: ParticleType): ParticleType => !particle.isToBeDestroyed || particle.style.opacity > 0);
 }
 
-function addParticle(state: GlobalStateType, action: ActionType): GlobalStateType {
-  const particles = [
-    ...state.particles,
+function addParticle(state: ParticleType, action: ActionType, [env, styles]: [EnvironmentType, StyleType[]]): ParticleType {
+  return [
+    ...state,
     // $FlowFixMe: Can't cope with Array.apply
     ...Array.apply(null, {length: action.count}).map((): ParticleType  => {
-      return createParticle(getStyle(state, action.styleName), state);
+      return createParticle(getStyle(styles, action.styleName), env);
     })
   ];
-  return {
-    ...state,
-    particles,
-  };
 }
 
-function deleteParticle(state: GlobalStateType, action: ActionType): GlobalStateType {
-  const particles = state.particles.map((particle: ParticleType): ParticleType => {
+function deleteParticle(state: ParticleType, action: ActionType): ParticleType {
+  return state.map((particle: ParticleType): ParticleType => {
     if (particle.id === action.id) {
       particle.isToBeDestroyed = true;
     }
     return particle;
   });
-  return {
-    ...state,
-    particles,
-  };
 }
 
-function deleteSomeParticles(state: GlobalStateType, action: ActionType): GlobalStateType {
+function deleteSomeParticles(state: ParticleType, action: ActionType): ParticleType {
   let count = action.count;
-  const particles = state.particles.map((particle: ParticleType): ParticleType => {
+  return state.map((particle: ParticleType): ParticleType => {
     if (!particle.isToBeDestroyed && count > 0) {
       count--;
       particle.isToBeDestroyed = true;
     }
     return particle;
   });
-  return {
-    ...state,
-    particles,
-  };
 }
 
-export const reducer = particles;
-export const exportedKeys: string[] = ['isPaused', 'particles'];
-export const importedKeys: string[] = ['env', 'styles'];
+
+function getStyle(styles: StyleType[], name: string): StyleType {
+  const [style] = styles.filter((style: StyleType): StyleType => {
+    return style.name === name;
+  });
+
+  if (!style) {
+    throw new Error(`Invalid style ${name}`);
+  }
+  return style;
+}

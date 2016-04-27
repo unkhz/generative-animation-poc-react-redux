@@ -1,20 +1,20 @@
 // @flow
 import { decide, noise, constrain, gradualConstrain, renderColorValue, randomColor} from 'utils/reducerHelpers';
 import React from 'react';
-import type {RuleType, StyleType, StyleValueType, GlobalStateType} from 'constants/Types';
+import type {RuleType, StyleType, StyleValueType, EnvironmentType} from 'constants/Types';
 
 export const allowRecycling = true;
 
 export const name: string = 'frontRotater';
 
-export function getInitialState(globalState: GlobalStateType): StyleType {
+export function getInitialState(env: EnvironmentType): StyleType {
   return {
     content: decide(shapes, [0,1])(),
     style: {
 
     },
     env: {
-      ...globalState.env
+      ...env
     },
     const: {
       minOpacity: 0.03,
@@ -22,7 +22,7 @@ export function getInitialState(globalState: GlobalStateType): StyleType {
       largeness: 0.5,
     },
     transform: {
-      scale: constrain(1, 0.033, 0, globalState.env.radius/300, 0.033),
+      scale: constrain(1, 0.033, 0, env.radius/300, 0.033),
       rotateX: [Math.random() * 360, 'deg'],
       rotateY: [Math.random() * 360, 'deg'],
       rotateZ: [Math.random() * 360, 'deg'],

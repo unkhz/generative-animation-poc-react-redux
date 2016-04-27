@@ -1,15 +1,15 @@
 // @flow
 import {decide, noise, constrain, gradualConstrain, isNotConstrained, distance, renderColorValue, randomColor} from 'utils/reducerHelpers';
-import {GlobalStateType, StyleType, StyleValueType} from 'constants/Types';
+import {StyleType, StyleValueType, EnvironmentType} from 'constants/Types';
 import React from 'react';
 
 export const allowRecycling = true;
 
 export const name: string = 'backBlinker';
 
-export function getInitialState(globalState: GlobalStateType): StyleType {
-  const x = noise(1) * globalState.env.width;
-  const y = noise(1) * globalState.env.height;
+export function getInitialState(env: EnvironmentType): StyleType {
+  const x = noise(1) * env.width;
+  const y = noise(1) * env.height;
   const scale = 1/2000 - noise(1000);
 
   return {
@@ -25,7 +25,7 @@ export function getInitialState(globalState: GlobalStateType): StyleType {
     shouldBeDestroyed: false,
     shouldSkipAfterNFramesCount: 0,
     env: {
-      ...globalState.env,
+      ...env,
     },
     const: {
       scale,

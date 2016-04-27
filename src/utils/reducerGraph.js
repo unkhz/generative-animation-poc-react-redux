@@ -5,50 +5,52 @@ type ExportKeyType = string;
 type ImportKeyType = string;
 type ReducerGraphEdgeType = [ImportKeyType, ExportKeyType];
 
-export type ReducerType = {
+export type ReducerDefinitionType = {
   reducer: Function,
-  exportedKeys: ExportKeyType[],
+  exportedKey: ExportKeyType,
   importedKeys: ImportKeyType[],
 };
 
 export type ReducerGraphType = {
-  reducers: Function[],
+  reducerDefinitions: ReducerDefinitionType[],
   idsByExportKeys: {[id: ExportKeyType]: number},
   dependencies: ReducerGraphEdgeType[],
 };
 
 export function createReducerGraph(): ReducerGraphType {
   return {
-    reducers: [],
+    reducerDefinitions: [],
     idsByExportKeys: {},
     dependencies: []
   };
 }
 
-export function registerReducer(graph: ReducerGraphType, {reducer, exportedKeys, importedKeys = []}: ReducerType): ReducerGraphType {
+export function registerReducer(graph: ReducerGraphType, reducerDefinition: ReducerDefinitionType): ReducerGraphType {
   if (!graph) {
     graph = createReducerGraph();
   }
 
-  graph.reducers.push(reducer);
-  const id = graph.reducers.length - 1;
+  const {reducer, exportedKey, importedKeys = []} = reducerDefinition;
 
-  exportedKeys.forEach((exportedKey: ExportKeyType) => {
-    graph.idsByExportKeys[exportedKey] = id;
-  });
+  graph.reducerDefinitions.push(reducerDefinition);
 
+  const id = graph.reducerDefinitions.length - 1;
+
+  graph.idsByExportKeys[exportedKey] = id;
   importedKeys.forEach((importedKey: ImportKeyType) => {
-    exportedKeys.forEach((exportedKey: ExportKeyType) => {
-      graph.dependencies.push([importedKey, exportedKey]);
-    });
+    graph.dependencies.push([importedKey, exportedKey]);
   });
 
   return graph;
 }
 
-export function getReducers(graph: ReducerGraphType): Function[] {
-  return topologicalSort(graph.dependencies.map(mapKeysToReducerIds.bind(null, graph)))
-    .map((id: number): Function => graph.reducers[id]);
+export function getReducers(graph: ReducerGraphType): ReducerDefinitionType[] {
+  const sortedIds = topologicalSort(graph.dependencies.map(mapKeysToReducerIds.bind(null, graph)));
+
+  return sortedIds
+    .map((id: number): ReducerDefinitionType => graph.reducerDefinitions[id])
+    // add missing
+    .concat(graph.reducerDefinitions.filter((def: ReducerDefinitionType, id: number): boolean => sortedIds.indexOf(id) === -1));
 }
 
 function mapKeysToReducerIds(graph: ReducerGraphType, [a, b]: ReducerGraphEdgeType): [number, number] {

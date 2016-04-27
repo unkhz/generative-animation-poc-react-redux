@@ -11,29 +11,22 @@ export function createStyle(style: StyleType): StyleType {
   };
 }
 
-const initialState = {
-  styles: []
-};
+export const reducer = styles;
+export const exportedKey: string = 'styles';
+export const importedKeys: string[] = [];
 
-export function styles(state: GlobalStateType, action: ActionType): GlobalStateType {
-  state = initPartialState(state, initialState, 'styles');
+const initialState = [];
 
+export function styles(state: StyleType[] = initialState, action: ActionType): StyleType[] {
   switch (action.type) {
 
     case actionTypes.ADD_STYLE:
-      return {
+      return [
         ...state,
-        styles: [
-          ...state.styles,
-          createStyle(action.style)
-        ]
-      };
+        createStyle(action.style)
+      ];
 
     default:
       return state;
   }
 }
-
-export const reducer = styles;
-export const exportedKeys: string[] = ['styles'];
-export const importedKeys: string[] = [];

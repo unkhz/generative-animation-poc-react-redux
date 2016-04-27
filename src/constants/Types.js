@@ -32,7 +32,10 @@ export type GlobalStateType = {
 }
 
 export type EnvironmentType = {
-  radius: number
+  radius: number,
+  width: number,
+  height: number,
+  isMovementPaused: number,
 }
 
 export type SyleFactoryType = {

@@ -13,47 +13,37 @@ function createLayer(styleName: string): LayerType {
   };
 }
 
-const initialState = {
-  layers: [],
-};
+export const reducer = layers;
+export const exportedKey: string = 'layers';
+export const importedKeys: string[] = [];
 
-export function layers(state: GlobalStateType, action: ActionType): GlobalStateType {
-  state = initPartialState(state, initialState, 'layers');
+const initialState = [];
+
+export function layers(state: LayerType[] = initialState, action: ActionType): LayerType[] {
   switch (action.type) {
     case actionTypes.ADD_STYLE:
-      return {
+      return [
         ...state,
-        layers: [
-          ...state.layers,
-          createLayer(action.style.name),
-        ],
-      };
+        createLayer(action.style.name),
+      ];
 
     case actionTypes.MOVE_PARTICLE:
-      return {
-        ...state,
-        layers: state.layers.map((layer: LayerType): LayerType => {
-          return {
-            ...layer,
-            sn: layer.sn+1
-          };
-        })
-      };
+      return state.map((layer: LayerType): LayerType => {
+        return {
+          ...layer,
+          sn: layer.sn+1
+        };
+      });
+
     case actionTypes.PARTICLE_MOVE_REQUESTED:
-      return {
-        ...state,
-        layers: state.layers.map((layer: LayerType): LayerType => {
-          return {
-            ...layer,
-            frameRequestId: action.frameRequestId,
-          };
-        })
-      };
+      return state.map((layer: LayerType): LayerType => {
+        return {
+          ...layer,
+          frameRequestId: action.frameRequestId,
+        };
+      });
+
     default:
       return state;
   }
 }
-
-export const reducer = layers;
-export const exportedKeys: string[] = ['layers'];
-export const importedKeys: string[] = ['styles'];
