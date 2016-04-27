@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import * as actions from 'actions/Actions';
 import {styleDefinitions, decideStyle} from 'reducers/styles/definitions';
 import type {ActionMapType, LayerType, GlobalStateType, ParticleType, StyleDefinitionType, StyleType} from 'constants/Types';
+import Help from 'components/Help';
 import Layer from 'components/Layer';
 import { connect } from 'react-redux';
 import {find} from 'lodash';
@@ -63,25 +64,11 @@ export class App extends Component {
     });
   }
 
-  renderHelp(): React.Element {
-    const {layers, aliveParticleCount, particles} = this.props;
-    if (aliveParticleCount === 0) {
-      return (
-        <div className="help" data-count={aliveParticleCount}><div>
-          scroll to add particles<br/>
-          space to pause
-        </div></div>
-      );
-    } else {
-      return <div className="help" data-count={aliveParticleCount}><div>{aliveParticleCount}</div></div>;
-    }
-  }
-
   render(): React.Element {
-    const { layers } = this.props;
+    const { aliveParticleCount, layers } = this.props;
     return (
       <div className="full-screen-container app">
-        {this.renderHelp()}
+        <Help aliveParticleCount={aliveParticleCount} />
         {this.renderLayers()}
       </div>
     );

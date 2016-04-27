@@ -15,7 +15,7 @@ function getNode(element: React.Element): Node {
 
 function getLayerNodes(node: Node): Array {
   return Array.prototype.slice.call(node.children)
-    .filter((n: Node) => n.className === 'layer');
+    .filter((n: Node): boolean => n.className === 'layer');
 }
 
 describe('App', () => {
@@ -49,26 +49,11 @@ describe('App', () => {
 
   it('contains help without particle count', () => {
     const props = {
-      aliveParticleCount: 0,
+      aliveParticleCount: 12,
       particles: []
     };
     const node = getNode(<App {...props} />);
-    assert.equal(node.firstChild.className, 'help');
-    assert.equal(node.firstChild.getAttribute('data-count'), 0);
-  });
-
-  it('contains help with particle count', () => {
-    const props = {
-      aliveParticleCount: 2,
-      particles: [{
-        id: 0,
-      },{
-        id: 1,
-      }]
-    };
-    const node = getNode(<App {...props} />);
-    assert.equal(node.firstChild.className, 'help');
-    assert.equal(node.firstChild.getAttribute('data-count'), 2);
+    assert.equal(node.firstChild.getAttribute('data-count'), 12);
   });
 
   it('contains layers from props', () => {
