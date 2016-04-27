@@ -84,10 +84,10 @@ describe('App', () => {
     };
     const node = getNode(<App {...props} />);
     setTimeout(() => {
-      assert.equal(props.actions.addParticle.callCount, 1);
-      assert.equal(props.actions.deleteParticle.callCount, 1);
+      assert.notEqual(props.actions.addParticle.callCount, 0);
+      assert.notEqual(props.actions.deleteParticle.callCount, 0);
       done();
-    }, 3);
+    }, 10);
   });
 
   it('contains help without particle count', () => {
