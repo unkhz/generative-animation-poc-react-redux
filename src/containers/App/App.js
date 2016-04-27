@@ -27,6 +27,7 @@ export class App extends Component {
     },
     layers: [],
     aliveParticleCount: 0,
+    recycleInterval: 200,
     particles: []
   };
 
@@ -35,7 +36,7 @@ export class App extends Component {
     styleDefinitions.map((styleDefinition: StyleDefinitionType) => {
       this.props.actions.addStyle(styleDefinition);
     });
-    setInterval(this.recycleParticles.bind(this), 200);
+    setInterval(this.recycleParticles.bind(this), this.props.recycleInterval);
   }
 
   recycleParticles() {

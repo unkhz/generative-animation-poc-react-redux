@@ -64,6 +64,32 @@ describe('App', () => {
     assert.equal(props.actions.addStyle.callCount, styleDefinitions.length);
   });
 
+  it('recycles particles on interval', (done: Function) => {
+    let id = 0;
+    const props = {
+      actions: {
+        addParticle: spy(),
+        deleteParticle: spy(),
+        addStyle: spy(),
+        requestParticleMove: spy(),
+      },
+      recycleInterval: 2,
+      particles: Array.apply(null, {length: 20}).map((): Object => {
+        return {
+          id: id++,
+          // need one of each style as the decision is randomized
+          styleName: styleDefinitions[id%styleDefinitions.length].name
+        };
+      })
+    };
+    const node = getNode(<App {...props} />);
+    setTimeout(() => {
+      assert.equal(props.actions.addParticle.callCount, 1);
+      assert.equal(props.actions.deleteParticle.callCount, 1);
+      done();
+    }, 3);
+  });
+
   it('contains help without particle count', () => {
     const props = {
       aliveParticleCount: 12,
