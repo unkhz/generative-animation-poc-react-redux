@@ -65,7 +65,6 @@ describe('particles reducer', () => {
     let state;
 
     // first pass
-    console.log(particles);
     state = particles(undefined, actions.addParticle(3, 'testStyle1'),
       mockDependencies('testStyle1', 'testStyle2'));
 

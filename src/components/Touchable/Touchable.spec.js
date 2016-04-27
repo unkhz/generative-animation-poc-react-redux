@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
-import Touchable from './Touchable';
+import Touchable from 'components/Touchable';
 import {assert} from 'chai';
 import {spy} from 'sinon';
 

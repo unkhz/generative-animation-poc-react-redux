@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import Layer from './Layer';
+import Layer from 'components/Layer';
 import {assert} from 'chai';
 
 function getNode(element: React.Element): Node {

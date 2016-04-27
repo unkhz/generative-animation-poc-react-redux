@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import Particle from './Particle';
+import Particle from 'components/Particle';
 import {assert} from 'chai';
 
 function getNode(element: React.Element): Node {
