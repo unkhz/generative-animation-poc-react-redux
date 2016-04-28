@@ -53,24 +53,58 @@ particles the difference is still noticeable to [pure Javascript
 version](https://embed.plnkr.co/cR14fu/) albeit not as drastic as with one frame
 per particle update.
 
-#### Design
+#### State management
 
-I wanted to try out moving the decision of the state structure from the root
-reducer to the partial reducers. Initially I replaced combineReducers with a
-custom  monad reducer component, but it was unnecessarily complex for something
-that is anyway happening synchronously. I converted to simply reducing an Array
-of reducers to pipe output from one partial reducer to the other, giving the
-reducers full control over which pieces of state the want to A) modify or B) use
-as an input or intermediate state. This should allow less duplication in the
-state tree and make it easier to keep the structure flat.
+##### Piped reducers
+
+My first instinct was to try moving the decision of the state structure from
+the root reducer to the partial reducers. Initially I replaced combineReducers
+with a custom  monad reducer component, but it was unnecessarily complex for
+something that is anyway happening synchronously. I converted to simply reducing
+an Array of reducers to pipe output from one partial reducer to the other,
+giving the reducers full control over which pieces of state the want to A)
+modify or B) use as an input or intermediate state. This should allow less
+duplication in the state tree and make it easier to keep the structure flat.
 
 The drawback is slightly more complicated reducers as there needs to be logic
 for deciding if the state has been initialized for a particular reducer or not.
 Also, the dependencies caused by shared parts of the state are not clearly
 visible in this approach. Fixing that needs some more thought.
 
-The more state dependencies I add, the more clear it becomes that the free
-piping of reducers leads to a wild west of coupled state, for which no guidance
-is given by the framework. Just so happens that a solution might already exist.
-Next step is to try the combination of combineReducers with named dependencies,
-for which work has been started in [topologically-combine-reducers](https://github.com/KodersLab/topologically-combine-reducers).
+The more state dependencies I kept adding, the more clear it became that the
+free piping of reducers leads to a wild west of coupled state, for which no
+guidance is given by the framework. Also, there's a lot of unnecessary
+boilerplate needed when every reducer has to make sure that the global state is
+intact. Even with ES7 object rest/spread extension it is tedious and
+error-prone. The most significant impact is on the testability of the reducers,
+as all the coupled state needs to be mocked or otherwise initialized in tests.
+
+##### Reducer graph
+
+I decided to use a more explicit approach inspired by [topologically-combine-reducers](https://github.com/KodersLab/topologically-combine-reducers).
+Individual reducers can still have dependencies on pieces of state exported by
+other reducers, but the dependencies become explicit by the following rules being
+enforced:
+
+  * A reducer must define exactly one export, which is used as the prop key in the root reducer
+  * A reducer may define zero or more imports, which will be given to them as a parameter
+  * Reducers are organized into a graph and sorted topologically
+  * Circular dependencies cause a failure
+
+The rules imply that the coupling of the state is one-directional, which makes
+the approach more easily understood and most importantly testable. With this design
+I still did not lose the original benefit of the reducers having the full control
+over which pieces of state they output and which they use an an input.
+
+##### Rule based reducers
+
+Fourth pattern I've used is rule based reducing. Each animating particle on the
+screen is essentially just a DOM element with each individual style property
+being constantly evolved in the reducer. This happens via a set of rules that each
+mutate only the value of a single property, by taking the current root state of
+the particle as an input. The simplest chain of rules is how particle opacity is managed.
+
+  * one rule constantly modifies speed.opacity with a tiny random increment
+  * a second rule modifies style.opacity with an increment mostly consisting of speed.opacity
+  * a third rule verifies if the particle is marked for deletion and gradually fades it out if it is
+  * the particle component takes style.opacity as a prop and applies it to the style prop of a div element
