@@ -13,7 +13,7 @@
 
 http://un.khz.fi/generative-animation-poc-react-redux/
 
-### Dependencies
+### Key ingredients
 
   * [React](https://facebook.github.io/react)
   * [Redux](https://github.com/rackt/redux)
@@ -53,7 +53,25 @@ particles the difference is still noticeable to [pure Javascript
 version](https://embed.plnkr.co/cR14fu/) albeit not as drastic as with one frame
 per particle update.
 
-#### State management
+After moving from performance analysis to trying out more things related to
+state management, the performance kept degrading. This is expected, as new logic
+gets added. I still wanted to try if I could improve it by using a WebGL canvas
+instead of DOM elements with and SVG shapes. The result can be tried out in [a
+WebGL spinoff
+project](https://github.com/unkhz/generative-animation-poc-react-redux-threejs).
+
+In this case the performance is actually slightly worse than with DOM, which is
+not too surprising as the animation is done only using CSS 3D transforms and
+opacity, which are already heavily optimized in Chrome. Using CSS properties
+that do not need a reflow of the surrounding page or even their own descendants
+is extremely fast, as the DOM elements get rendered to images which are then
+manipulated at the GPU level same way as WebGL calls are. The real benefit of
+WebGL and canvas is found by taking full control of the lower level optimization
+possibilities rather than just repeating the exact same thing that's don with DOM
+already. E.g. re-rendering only a tiny part of an image when the surrounding
+area is static.
+
+#### State design
 
 ##### Piped reducers
 
@@ -92,19 +110,26 @@ enforced:
   * Circular dependencies cause a failure
 
 The rules imply that the coupling of the state is one-directional, which makes
-the approach more easily understood and most importantly testable. With this design
-I still did not lose the original benefit of the reducers having the full control
-over which pieces of state they output and which they use an an input.
+the approach more easily understood and most importantly testable. With this
+design I still did not lose the original benefit of the reducers having the full
+control over which pieces of state they output and which they use an an input.
 
-##### Rule based reducers
+##### Rule based pipe reducers
 
 Fourth pattern I've used is rule based reducing. Each animating particle on the
 screen is essentially just a DOM element with each individual style property
-being constantly evolved in the reducer. This happens via a set of rules that each
-mutate only the value of a single property, by taking the current root state of
-the particle as an input. The simplest chain of rules is how particle opacity is managed.
+being constantly evolved in the reducer. This happens via a set of rules that
+each mutate only the value of a single property, by taking the current root
+state of the particle as an input. The simplest chain of rules is how particle
+opacity is managed.
 
   * one rule constantly modifies speed.opacity with a tiny random increment
   * a second rule modifies style.opacity with an increment mostly consisting of speed.opacity
   * a third rule verifies if the particle is marked for deletion and gradually fades it out if it is
   * the particle component takes style.opacity as a prop and applies it to the style prop of a div element
+
+This works extremely well for the generative animation use case I have, where
+individual style properties are quite isolated but do depend heavily on higher
+order variables like speed or speed of the change in speed. It seems that the
+principle of multiple read-only dependencies and a single export is keeping this
+pattern clean. Similar findings as with the reducer graph on root level.
