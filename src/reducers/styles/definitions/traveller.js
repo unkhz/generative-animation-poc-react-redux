@@ -51,7 +51,7 @@ export function getInitialState(env: EnvironmentType): Object {
       panic: false,
       turningLeft: true,
     },
-    speed: {
+    velocity: {
       desiredDirection: 0,
       direction: 0,
       magnitude: 0,
@@ -61,14 +61,14 @@ export function getInitialState(env: EnvironmentType): Object {
 }
 
 export const rules: RuleType[] = [
-  // mutate speed
-  ['speed.general', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + noise(100),-0.05,0.05)],
-  ['speed.desiredDirection', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + noise(10000),-0.05,0.05)],
-  ['speed.direction', (state: StyleType, value: StyleValueType): StyleValueType => {
+  // mutate velocity
+  ['velocity.general', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + noise(100),-0.05,0.05)],
+  ['velocity.desiredDirection', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + noise(10000),-0.05,0.05)],
+  ['velocity.direction', (state: StyleType, value: StyleValueType): StyleValueType => {
     const diff = Math.abs(state.pos.direction - state.pos.desiredDirection) / 10;
-    return constrain(value + ((state.speed.general - value)*diff) + noise(100),-0.08,0.08);
+    return constrain(value + ((state.velocity.general - value)*diff) + noise(100),-0.08,0.08);
   }],
-  ['speed.magnitude', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + (state.speed.general - value)/100,-0.5,0.5)],
+  ['velocity.magnitude', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + (state.velocity.general - value)/100,-0.5,0.5)],
 
   // observe danger
   ['pos.distanceToNearestEdge', (state: StyleType, value: StyleValueType): StyleValueType => getDistanceToNearestEdge(state)],
@@ -91,20 +91,20 @@ export const rules: RuleType[] = [
       );
       return randomDirection;
     } else if (!state.pos.panic) {
-      return normalizeRad(value + state.speed.desiredDirection + noise(1000));
+      return normalizeRad(value + state.velocity.desiredDirection + noise(1000));
     } else {
       const directionToCenter = Math.atan2(-state.pos.y, -state.pos.x);
       return normalizeRad(directionToCenter);
     }
   }],
   ['pos.direction', (state: StyleType, value: StyleValueType): StyleValueType => {
-    const diff = state.pos.panic ? Math.abs((value - state.pos.desiredDirection)/(state.pos.magnitude * 5)) : Math.abs(state.speed.direction);
+    const diff = state.pos.panic ? Math.abs((value - state.pos.desiredDirection)/(state.pos.magnitude * 5)) : Math.abs(state.velocity.direction);
     return normalizeRad(state.pos.turningLeft ? value - diff : value + diff);
   }],
 
   // decide velocity
   ['pos.magnitude', (state: StyleType, value: StyleValueType): StyleValueType => {
-    return gradualConstrain(value, state.speed.magnitude + noise(100), 0.66, 3, 0.005);
+    return gradualConstrain(value, state.velocity.magnitude + noise(100), 0.66, 3, 0.005);
   }],
 
   // move position

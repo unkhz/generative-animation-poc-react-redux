@@ -116,20 +116,33 @@ control over which pieces of state they output and which they use an an input.
 
 ##### Rule based pipe reducers
 
-Fourth pattern I've used is rule based reducing. Each animating particle on the
-screen is essentially just a DOM element with each individual style property
-being constantly evolved in the reducer. This happens via a set of rules that
-each mutate only the value of a single property, by taking the current root
-state of the particle as an input. The simplest chain of rules is how particle
-opacity is managed.
+Fourth pattern I've used is rule based reducing. It's a way of organizing
+business logic of a document into orthogonal statements, which allows extension
+without needing to modify the root reducer of the document.
 
-  * one rule constantly modifies speed.opacity with a tiny random increment
-  * a second rule modifies style.opacity with an increment mostly consisting of speed.opacity
-  * a third rule verifies if the particle is marked for deletion and gradually fades it out if it is
-  * the particle component takes style.opacity as a prop and applies it to the style prop of a div element
+Each animating particle on the screen is essentially just a DOM element with
+constantly evolving style properties. This happens via a set of rules that each
+mutate only the value of a single property, by taking the current root state of
+the particle document as an input. Opacity is possibly the simplest example of a
+chain of rules that affect the document.
+
+  * 1st rule constantly modifies accelerationOfOpacity with a tiny random increment
+  * 2nd rule constantly increments velocityOfOpacity with the value of accelerationOfOpacity
+  * 3rd rule forces velocityOfOpacity to be negative in case the particle is marked for deletion
+  * 4th rule increments the actual opacity with the value of velocityOfOpacity
+  * the particle component takes opacity as a prop and applies it to the style prop of a div element
 
 This works extremely well for the generative animation use case I have, where
 individual style properties are quite isolated but do depend heavily on higher
-order variables like speed or speed of the change in speed. It seems that the
-principle of multiple read-only dependencies and a single export is keeping this
-pattern clean. Similar findings as with the reducer graph on root level.
+order variables like velocity or velocity of velocity (acceleration). It seems
+that the principle of multiple read-only dependencies and a single export is
+keeping the individual reducers clean. Similar findings as with the reducer
+graph on root level.
+
+However, the single export rule is not enforced in context of the whole document
+as there might be multiple rules exporting the same property. Enforcing single
+export on document level appears too restricting e.g. when observing the 2nd and
+3rd rule of the opacity example. Extracting the logic of particle deletion into
+a separate entity is enabled here by that freedom. The possibility of breaking
+other rules is left open. There is also a time dependency between the rules.
+It's a tradeoff, which makes the design of the document state important.

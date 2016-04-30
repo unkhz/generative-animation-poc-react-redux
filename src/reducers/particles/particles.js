@@ -15,11 +15,10 @@ export function createParticle(style: StyleType, env: EnvironmentType): Particle
         minOpacity: 0.11,
         maxOpacity: 0.22,
       },
-      speed: {
-        particle: 0,
-        opacity: 0,
-      },
       shouldSkipAfterNFramesCount: 0,
+      limitsOfOpacity: [0,1],
+      accelerationOfOpacity: 0,
+      velocityOfOpacity: 0,
     }, style.getInitialState(env)),
 
     id: particleId++,
@@ -30,19 +29,11 @@ export function createParticle(style: StyleType, env: EnvironmentType): Particle
       ...style.rules,
       ['sn', (state: StyleType, value: StyleValueType): StyleValueType => value+1],
       ['isToBeDestroyed', (state: StyleType, value: StyleValueType): StyleValueType => !!state.isToBeDestroyed || !!state.shouldBeDestroyed],
-      ['speed.particle', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + noise(1000),-0.005,0.005)],
-      ['speed.opacity', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + state.speed.particle + noise(1000), -0.005, 0.005)],
-      ['style.opacity', (state: StyleType, value: StyleValueType): StyleValueType => {
-        if (state.isToBeDestroyed) {
-          return Math.max(value - 0.005, 0);
-        } else {
-          return constrain(
-            value + state.speed.opacity,
-            Math.min(value, state.const.minOpacity || 0.11),
-            state.const.maxOpacity || 0.22
-          );
-        }
-      }]
+      ['accelerationOfOpacity', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + noise(1000),-0.005,0.005)],
+      ['velocityOfOpacity', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + state.accelerationOfOpacity + noise(1000), -0.005, 0.005)],
+      ['velocityOfOpacity', (state: StyleType, value: StyleValueType): StyleValueType => state.isToBeDestroyed ? -0.005 : value],
+      ['limitsOfOpacity', (state: StyleType, value: StyleValueType): StyleValueType => [state.isToBeDestroyed ? 0 : state.const.minOpacity, state.const.maxOpacity]],
+      ['style.opacity', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + state.velocityOfOpacity, Math.min(value, state.limitsOfOpacity[0]), state.limitsOfOpacity[1])]
     ],
   };
 }

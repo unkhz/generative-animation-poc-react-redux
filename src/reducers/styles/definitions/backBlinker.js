@@ -36,7 +36,7 @@ export function getInitialState(env: EnvironmentType): StyleType {
       translateX: noise(2000),
       translateY: noise(2000),
     },
-    speed: {
+    velocity: {
       translateX: 0,
       translateY: 0,
       rotateZ: 0,
@@ -47,15 +47,15 @@ export function getInitialState(env: EnvironmentType): StyleType {
 
 export const rules = [
   ['transform.scale', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => [gradualConstrain(value, 0.033, 0, state.env.radius*state.const.scale, 0.033), unit]],
-  ['transform.rotateZ', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => [value + state.speed.rotateZ, unit]],
-  ['transform.translateX', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => [value + state.speed.translateX, unit]],
-  ['transform.translateY', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => [value + state.speed.translateY, unit]],
+  ['transform.rotateZ', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => [value + state.velocity.rotateZ, unit]],
+  ['transform.translateX', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => [value + state.velocity.translateX, unit]],
+  ['transform.translateY', (state: StyleType, [value, unit]: StyleValueType): StyleValueType => [value + state.velocity.translateY, unit]],
   ['shouldBeDestroyed', (state: StyleType, value: StyleValueType): StyleValueType => isNotConstrained(state.const.x, -state.env.width/2, state.env.width/2) || isNotConstrained(state.const.y, -state.env.height/2, state.env.height/2)],
   ['shouldSkipAfterNFramesCount', (state: StyleType, value: StyleValueType): StyleValueType => 3],
-  ['speed.general', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + noise(100),-0.5,0.5)],
-  ['speed.rotateZ', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + state.speed.general + noise(100), -0.5, 0.5)],
-  ['speed.translateX', (state: StyleType, value: StyleValueType): StyleValueType => constrain(state.const.translateX * distance(state.transform.translateX[0], state.transform.translateY[0], 0, 0), -5, 5)],
-  ['speed.translateY', (state: StyleType, value: StyleValueType): StyleValueType => constrain(state.const.translateY * distance(state.transform.translateX[0], state.transform.translateY[0], 0, 0), -5, 5)],
+  ['velocity.general', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + noise(100),-0.5,0.5)],
+  ['velocity.rotateZ', (state: StyleType, value: StyleValueType): StyleValueType => constrain(value + state.velocity.general + noise(100), -0.5, 0.5)],
+  ['velocity.translateX', (state: StyleType, value: StyleValueType): StyleValueType => constrain(state.const.translateX * distance(state.transform.translateX[0], state.transform.translateY[0], 0, 0), -5, 5)],
+  ['velocity.translateY', (state: StyleType, value: StyleValueType): StyleValueType => constrain(state.const.translateY * distance(state.transform.translateX[0], state.transform.translateY[0], 0, 0), -5, 5)],
 ];
 
 const shapes = [

@@ -35,7 +35,7 @@ styleDefinitions.map((style: StyleDefinitionType ) => {
       assert.equal(Object.keys(state.style).length, Object.keys(initialState.style).length);
       assert.equal(Object.keys(state.transform).length, Object.keys(initialState.transform).length);
       initialState.const && assert.equal(Object.keys(state.const).length, Object.keys(initialState.const).length);
-      initialState.speed && assert.equal(Object.keys(state.speed).length, Object.keys(initialState.speed).length);
+      initialState.velocity && assert.equal(Object.keys(state.velocity).length, Object.keys(initialState.velocity).length);
     });
 
     it('renders content inside', () => {
