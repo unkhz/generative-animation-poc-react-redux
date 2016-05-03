@@ -73,7 +73,7 @@ area is static.
 
 #### State design
 
-##### Piped reducers
+##### Reducer reducer
 
 My first instinct was to try moving the decision of the state structure from
 the root reducer to the partial reducers. Initially I replaced combineReducers
@@ -114,11 +114,11 @@ the approach more easily understood and most importantly testable. With this
 design I still did not lose the original benefit of the reducers having the full
 control over which pieces of state they output and which they use an an input.
 
-##### Rule based pipe reducers
+##### Reducer collection
 
-Fourth pattern I've used is rule based reducing. It's a way of organizing
-business logic of a document into orthogonal statements, which allows extension
-without needing to modify the root reducer of the document.
+Fourth pattern I've used is reducer written as a collection of rules. It's a way
+of organizing business logic of a document into orthogonal statements, which
+allows extension without needing to modify the root reducer of the document.
 
 Each animating particle on the screen is essentially just a DOM element with
 constantly evolving style properties. This happens via a set of rules that each
